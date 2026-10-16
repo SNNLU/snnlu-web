@@ -15,13 +15,13 @@ npm run preview  # 预览构建产物
 
 | 改动类型 | 谁负责 | 结果 |
 | --- | --- | --- |
-| **纯 Markdown**（`md-fastlane.yml`） | GitHub Actions + 大模型审查 | 审查结论为 `[PASS]` 就审批并**自动合并**；`[REJECT]` 则 Request Changes 挡住 |
+| **`content/` 下的 Markdown**（`md-fastlane.yml`） | GitHub Actions + 大模型审查 | 审查结论为 `[PASS]` 就审批并**自动合并**；`[REJECT]` 则 Request Changes 挡住 |
 | **含代码/配置的 PR** | CodeRabbit（`.coderabbit.yaml`） | 专家级代码审查，**不会自动合并** —— 测试与审查都通过后由维护者亲自合并 |
 | **合并到 main 之后** | `deploy-on-merge.yml` | `npm ci` → `npm run build` → 部署（部署步骤是占位，待按宿主机补全） |
 
 ### 发文章要注意什么
 
-快车道只放行"改动文件全部是 `.md`"的 PR；只要出现一个非 `.md` 文件（含 `content/layout/*.json`、`site.json`、图片等），就自动退出快车道转人工审查。
+快车道的白名单很窄：**改动文件必须全部位于 `content/` 下且是 `.md`**。只要出现一个其它文件——`README.md`、`docs/` 下的 md、`content/layout/*.json`、`site.json`、图片、代码——就自动退出快车道转人工审查。（`.mdx` 也不放行：渲染器只处理 `.md`。）
 
 头部块必须用 `---` 包住，新闻类必须写全这几个字段：
 
