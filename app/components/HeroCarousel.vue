@@ -1,6 +1,6 @@
 <!-- 横幅：baidufocus，5 秒一换，淡入淡出 300ms；悬停暂停，悬停圆点即切换 -->
 <template>
-  <CmsBox fixed box-style="z-index:9;height:465px;width:100%;left:0;min-width:1920px;top:185px">
+  <CmsBox fixed box-style="z-index:9;height:465px;width:100%;left:0;top:185px;overflow:hidden">
     <div>
       <div class="baidufocus" style="width:1920px;height:465px">
         <ul class="baidufocus_list">
@@ -44,7 +44,9 @@ onUnmounted(hold)
 .baidufocus {
   position: relative;
   overflow: hidden;
-  margin: 0 auto;
+  /* 原站在窗宽不足 1920 时靠左；这里以视口中线对齐，与页头背景一致 */
+  left: 50%;
+  margin: 0 0 0 -960px;
   padding: 0;
   font: 12px/180% Arial, Helvetica, sans-serif, 宋体;
 }
