@@ -49,14 +49,14 @@
   "8": "https://naiwa.win/", "32": "https://naiwa.win/"
  },
  "hero": [
-  { "src": "/img/banner-1.svg", "alt": "奶龙大学校园全景" },
-  { "src": "/img/banner-2.svg", "alt": "奶黄湖" },
-  { "src": "/img/banner-3.svg", "alt": "龙门图书馆" }
+  { "src": "/img/banner-1.jpg", "alt": "戴着墨镜的奶龙" },
+  { "src": "/img/banner-2.jpg", "alt": "在沙地上开怀大笑的奶龙" },
+  { "src": "/img/banner-3.jpg", "alt": "从绿叶间探出头的奶龙" }
  ],
  "gallery": [
-  "/img/scene-01.svg", "/img/scene-02.svg", "/img/scene-03.svg", "/img/scene-04.svg", "/img/scene-07.svg",
-  "/img/scene-09.svg", "/img/scene-10.svg", "/img/scene-12.svg", "/img/scene-13.svg", "/img/scene-16.svg",
-  "/img/scene-20.svg", "/img/scene-21.svg", "/img/scene-25.svg", "/img/scene-30.svg"
+  "/img/scene-01.jpg", "/img/scene-02.jpg", "/img/scene-03.jpg", "/img/scene-04.jpg", "/img/scene-07.jpg",
+  "/img/scene-09.jpg", "/img/scene-10.jpg", "/img/scene-12.jpg", "/img/scene-13.jpg", "/img/scene-16.jpg",
+  "/img/scene-20.jpg", "/img/scene-21.jpg", "/img/scene-25.jpg", "/img/scene-30.jpg"
  ],
  "quick": [
   { "label": "图书信息", "href": "/p/14/" },
