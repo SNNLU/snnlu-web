@@ -25,15 +25,16 @@
 </template>
 
 <script setup lang="ts">
-import type { Paging, Row, Widget } from '#shared/cms'
+import { pageOf, type Widget } from '#shared/cms'
 
 const props = defineProps<{ w: Extract<Widget, { kind: 'list' }> }>()
 const rows = ref(props.w.rows)
 const paging = ref(props.w.paging)
 
-async function turn(page: number) {
-  const got = await loading($fetch<{ rows: Row[]; paging: Paging | null }>('/api/list', { query: { ...props.w.query, PageNum: page } }))
-  rows.value = got.rows
+/* 整栏条目已随页面带来，翻页只是切片 */
+function turn(page: number) {
+  const got = pageOf(props.w.all!, page, props.w.size)
+  rows.value = got.items
   paging.value = got.paging
 }
 </script>

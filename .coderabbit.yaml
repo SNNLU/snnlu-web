@@ -18,10 +18,11 @@ reviews:
   path_instructions:
     - path: "server/**/*.ts"
       instructions: |
-        这是 Nuxt 服务端代码。重点检查：
-        - 空值与类型边界（例如列表排序依赖 meta.date，缺字段会在请求时抛异常导致 500）；
-        - 把用户输入当 HTML 或代码使用（注入）、路径穿越、越权；
-        - 同步 I/O 或计数写入（.data/ 下的 bump）在高并发下的一致性问题。
+        这是 Nuxt 服务端代码，只在构建时运行（nuxt generate 生成静态站），线上没有服务端。重点检查：
+        - 空值与类型边界（例如列表排序依赖 meta.date，缺字段会让生成失败）；
+        - 把文章内容当 HTML 输出时的转义（注入）；
+        - 新增页面是否进了 nuxt.config.ts 的预生成清单，漏了线上就是 404；
+        - 任何依赖请求时状态（计数、查询串、写文件）的写法，静态站上都不会生效。
     - path: ".github/workflows/**"
       instructions: |
         这是 CI / 自动合并的门禁本身。重点检查：

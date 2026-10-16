@@ -71,11 +71,3 @@ export async function folderById(id: string) {
   const s = await site()
   return Object.entries(s.folders).find(([, f]) => String(f.id) === id)
 }
-
-/* 浏览与访客计数存在 .data 里 */
-export async function bump(key: string, base: number) {
-  const data = useStorage('data')
-  const n = ((await data.getItem<number>(key)) ?? base) + 1
-  await data.setItem(key, n)
-  return n
-}

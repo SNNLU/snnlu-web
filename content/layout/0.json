@@ -18,7 +18,7 @@
         "more": {
          "label": "More>>",
          "target": "_blank",
-         "href": "/p/9/?StId=st_app_news_search_x101_x__x__x_0_x_0"
+         "href": "/list/101/"
         }
        },
        "cell": "width:auto",
@@ -58,7 +58,7 @@
         "more": {
          "label": "More>>",
          "target": "_blank",
-         "href": "/p/9/?StId=st_app_news_search_x102_x__x__x_0_x_0"
+         "href": "/list/102/"
         }
        },
        "cell": "width:auto",
@@ -101,7 +101,7 @@
           "more": {
            "label": "More>>",
            "target": "_blank",
-           "href": "/p/9/?StId=st_app_news_search_x103_x__x__x_0_x_0"
+           "href": "/list/103/"
           }
          },
          "cell": "width:auto",
@@ -132,7 +132,7 @@
           "more": {
            "label": "More>>",
            "target": "_blank",
-           "href": "/p/9/?StId=st_app_news_search_x104_x__x__x_0_x_0"
+           "href": "/list/104/"
           }
          },
          "cell": "width:auto",
@@ -192,7 +192,7 @@
               "more": {
                "label": "More>>",
                "target": "_blank",
-               "href": "/p/9/?StId=st_app_news_search_x105_x__x__x_0_x_0"
+               "href": "/list/105/"
               }
              },
              "cell": "width:auto",
@@ -223,7 +223,7 @@
               "more": {
                "label": "More>>",
                "target": "_blank",
-               "href": "/p/9/?StId=st_app_news_search_x106_x__x__x_0_x_0"
+               "href": "/list/106/"
               }
              },
              "cell": "width:auto",

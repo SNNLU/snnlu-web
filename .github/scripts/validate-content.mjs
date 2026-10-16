@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // 校验 content/ 下 markdown 的结构。
-// 为什么必须独立于构建：server/utils/content.ts 用 meta.date 排序（b.date.localeCompare），
-// 头部块缺 date 会让新闻列表接口在请求时抛 TypeError（500），而 nuxt build 完全不报错。
-// 头部块本身也由 frontMatter() 用正则解析，首尾 --- 不完整就整篇退化成正文。
-import { readFileSync, existsSync } from 'node:fs'
+// 生成静态站时缺 date 会直接失败，但报错只是一串堆栈；这里提前给出看得懂的提示。
+// 另外几类错误生成时根本不报：头部块首尾 --- 不完整会整篇退化成正文，
+// folder 写错文章会从所有栏目里消失，文件名数字重复会让两篇文章抢同一个地址。
+import { readFileSync, readdirSync, existsSync } from 'node:fs'
 
 const listFile = process.argv[2] ?? '.changed.txt'
 const files = existsSync(listFile)
@@ -14,6 +14,18 @@ const targets = files.filter((f) => /^content\/.+\.mdx?$/.test(f) && existsSync(
 if (!targets.length) {
   console.log(files.length ? '本次改动未涉及 content/ 下的 markdown' : '没有拿到改动文件清单')
   process.exit(0)
+}
+
+/* 可填的栏目代号：site.json 里的 folders，去掉只做合并用的（带 include 的，如 league） */
+const folders = Object.entries(JSON.parse(readFileSync('content/site.json', 'utf8')).folders)
+  .filter(([, f]) => !f.include)
+  .map(([k, f]) => ({ key: k, label: `${k}（${f.name}）` }))
+
+/* 文章 id = 文件名里的数字；统计全部文章，查重 */
+const idOf = (name) => String(+name.replace(/\D/g, '')) // 001.md 与 1.md 是同一篇
+const owners = {}
+for (const name of readdirSync('content/news').filter((n) => n.endsWith('.md'))) {
+  (owners[idOf(name)] ??= []).push(name)
 }
 
 const FM = /^---\n([\s\S]*?)\n---\n?([\s\S]*)$/
@@ -40,7 +52,7 @@ for (const f of targets) {
   for (const k of isNews ? ['title', 'date', 'folder'] : ['title']) {
     if (!meta[k]) {
       err(f, isNews
-        ? `头部缺少 ${k}：新闻列表按 date 排序，缺 date 会让列表接口在运行时崩掉`
+        ? `头部缺少 ${k}：新闻列表按 date 排序，缺 date 会让整站生成失败`
         : `头部缺少 ${k}：页面标题用于菜单与标题栏`)
     }
   }
@@ -49,11 +61,14 @@ for (const f of targets) {
   }
 
   if (isNews) {
-    if (!/\d/.test(f.split('/').pop() ?? '')) {
+    const name = f.split('/').pop() ?? ''
+    if (!/\d/.test(name)) {
       err(f, '文章 id 由文件名中的数字推导，文件名需含数字（如 1005.md）')
+    } else if (owners[idOf(name)]?.length > 1) {
+      err(f, `文件名数字 ${idOf(name)} 与 ${owners[idOf(name)].filter((n) => n !== name).join('、')} 重复，两篇文章会抢同一个地址 /news/${idOf(name)}/`)
     }
-    if (meta.folder && meta.folder !== 'news') {
-      warn(f, `folder 是 "${meta.folder}"，与所在目录 news 不一致，文章会归到别的栏目`)
+    if (meta.folder && !folders.some((x) => x.key === meta.folder)) {
+      err(f, `folder "${meta.folder}" 不存在，文章不会出现在任何栏目。可填：${folders.map((x) => x.label).join('、')}`)
     }
     if (!m[2].trim()) warn(f, '正文为空')
   }

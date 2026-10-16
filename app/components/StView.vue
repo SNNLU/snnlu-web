@@ -37,27 +37,42 @@
             <hr v-if="r.rule">
           </template>
         </div>
-        <Pager v-bind="paging" @turn="turn" />
+        <Pager v-if="ready" v-bind="paging" @turn="turn" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { St, StList, Tool } from '#shared/cms'
+import { mark, pageOf, type St, type Tool } from '#shared/cms'
+
+const SIZE = 30 // 每页条数，五条一道线
 
 const props = defineProps<{ st: St }>()
 const v = computed(() => props.st.view)
 
 const list = props.st.view.kind === 'list' ? props.st.view : null
-const rows = ref(list?.rows ?? [])
-const paging = ref(list?.paging ?? { page: 1, pages: 0, total: 0 })
+/* 检索词只在地址栏里，静态页面里没有：检索页的结果等到浏览器里再出 */
+const ready = ref(!list?.search)
+const kw = ref('')
+const page = ref(1)
 
-async function turn(page: number) {
-  const got = await loading($fetch<Pick<StList, 'rows' | 'paging'>>('/api/list', { query: { ...list!.query, PageNum: page } }))
-  rows.value = got.rows
-  paging.value = got.paging
-}
+const hits = computed(() => (list ? (kw.value ? list.rows.filter((r) => r.tip.includes(kw.value)) : list.rows) : []))
+const shown = computed(() => pageOf(hits.value, page.value, SIZE))
+const rows = computed(() => (ready.value ? shown.value.items.map((r, i) => ({ ...r, title: mark(r.tip, kw.value), date: r.date.trim(), rule: i % 5 === 4 })) : []))
+const paging = computed(() => shown.value.paging)
+
+const route = useRoute()
+onMounted(() => {
+  if (!list?.search) return
+  watch(() => route.query.kw, (q) => {
+    kw.value = typeof q === 'string' ? q : ''
+    page.value = 1
+  }, { immediate: true })
+  ready.value = true
+})
+
+const turn = (n: number) => (page.value = n)
 
 const dialog = ref<NonNullable<Tool['dialog']> | null>(null)
 const use = (t: Tool) => (t.dialog ? (dialog.value = t.dialog) : print())
