@@ -22,4 +22,4 @@ npm run preview  # 预览构建产物
 
 `main` 受 ruleset `protect-main` 保护：**只能通过 PR 合入**，且 `build` 检查必须通过，禁止强推与删除分支。
 
-自动化在组织级 `.github` 仓库中有完整说明（含 bot 身份、secret 配置与安全边界）。
+自动化在组织级 `.github` 仓库中有完整说明（含 bot 身份、secret 配置与安全边界）。审查逻辑以复用工作流形式集中在那里，本仓库只保留调用者，改逻辑只需改一处。
