@@ -2,7 +2,7 @@
 <template>
   <nav>
     <ul class="pagination pagination-sm mt-1 mb-1 justify-content-end">
-      <li v-if="page > 1" class="page-item"><a class="page-link text-secondary" href="javascript:void(0);" title="首页" @click="go(1)"><svg class="text-dark" width="13" height="13" fill="currentColor"><use :href="`${ICONS}#chevron-bar-left`" /></svg>&nbsp;</a></li>
+      <li v-if="page > 1" class="page-item"><a class="page-link text-secondary" href="javascript:void(0);" title="首页" @click="go(1)"><svg class="text-dark" width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M11.854 3.646a.5.5 0 0 1 0 .708L8.207 8l3.647 3.646a.5.5 0 0 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 0 1 .708 0zM4.5 1a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 1 0v-13a.5.5 0 0 0-.5-.5z" /></svg>&nbsp;</a></li>
       <li v-if="from > 1" class="page-item"><a class="page-link text-secondary" href="javascript:void(0);" title="上一段" @click="go(from - 10)">&laquo;</a></li>
       <li v-if="page > 1" class="page-item"><a class="page-link text-secondary" href="javascript:void(0);" title="" @click="go(page - 1)">上一页</a></li>
       <li v-for="n in numbers" :key="n" class="page-item" :class="{ disabled: n === page }">
@@ -11,15 +11,13 @@
       </li>
       <li v-if="page < pages" class="page-item"><a class="page-link text-secondary" href="javascript:void(0);" title="" @click="go(page + 1)">下一页</a></li>
       <li v-if="from + 10 <= pages" class="page-item"><a class="page-link text-secondary" href="javascript:void(0);" title="下一段" @click="go(from + 10)">&raquo;</a></li>
-      <li v-if="page < pages" class="page-item"><a class="page-link text-secondary" href="javascript:void(0);" title="尾页" @click="go(pages)">&nbsp;<svg class="text-dark" width="13" height="13" fill="currentColor"><use :href="`${ICONS}#chevron-bar-right`" /></svg></a></li>
+      <li v-if="page < pages" class="page-item"><a class="page-link text-secondary" href="javascript:void(0);" title="尾页" @click="go(pages)">&nbsp;<svg class="text-dark" width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M4.146 3.646a.5.5 0 0 0 0 .708L7.793 8l-3.647 3.646a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708 0zM11.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z" /></svg></a></li>
       <li class="page-item disabled"><a class="page-link bg-light" href="javascript:void(0);">{{ page }}/{{ pages }}页&nbsp;共{{ total }}条</a></li>
     </ul>
   </nav>
 </template>
 
 <script setup lang="ts">
-const ICONS = '/_tools/bi1131/bootstrap-icons.svg'
-
 const props = defineProps<{ page: number; pages: number; total: number }>()
 const emit = defineEmits<{ turn: [page: number] }>()
 
