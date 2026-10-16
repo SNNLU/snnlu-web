@@ -7,12 +7,12 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'zh-CN' },
-      title: '四川师范大学遂宁校区',
+      title: '遂宁奶龙大学',
       meta: [
         { name: 'renderer', content: 'webkit' },
         { name: 'viewport', content: 'width=1920' },
-        { name: 'keywords', content: '四川师范大学遂宁校区' },
-        { name: 'description', content: '四川师范大学遂宁校区' },
+        { name: 'keywords', content: '遂宁奶龙大学' },
+        { name: 'description', content: '遂宁奶龙大学' },
       ],
     },
   },
