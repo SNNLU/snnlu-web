@@ -1,5 +1,3 @@
-const SRC = 'https://sn.sicnu.edu.cn'
-
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: false },
@@ -17,16 +15,6 @@ export default defineNuxtConfig({
         { name: 'description', content: '四川师范大学遂宁校区' },
       ],
     },
-  },
-  // 图片、附件、手机版页面原样取自原站
-  routeRules: {
-    '/files/**': { proxy: `${SRC}/files/**` },
-    '/_db_file/**': { proxy: `${SRC}/_db_file/**` },
-    '/_images/**': { proxy: `${SRC}/_images/**` },
-    '/_tools/**': { proxy: `${SRC}/_tools/**` },
-    '/_wx/**': { proxy: `${SRC}/_wx/**` },
-    '/_rest/linker_allfile.ashx': { proxy: `${SRC}/_rest/linker_allfile.ashx` },
-    '/_ps/linker_qrcode.aspx': { proxy: `${SRC}/_ps/linker_qrcode.aspx` },
   },
   // 站内图文都在 content/，随服务端一起打包
   nitro: {

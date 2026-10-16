@@ -1,5 +1,3 @@
-export const SRC = 'https://sn.sicnu.edu.cn'
-
 export interface Link {
   label: string
   href: string
