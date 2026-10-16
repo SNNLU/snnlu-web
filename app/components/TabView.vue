@@ -29,12 +29,11 @@ import type { Tab, Visit } from '#shared/cms'
 
 const LOADING = '/img/loading.svg'
 
-const props = defineProps<{ id: number }>()
+/* src 是本页数据接口：/api/tab/<id>、/api/st/news/<id>、/api/st/list/<id>、/api/st/search，构建时都已生成好 */
+const props = defineProps<{ src: string }>()
 const route = useRoute()
-const query = computed(() => route.fullPath.match(/\?.*/)?.[0] ?? '')
 
-// 跳转与缺页已由 server/middleware/tab.ts 处理
-const { data, error } = await useFetch<Tab | Visit>(() => `/api/tab/${props.id}${query.value}`)
+const { data, error } = await useFetch<Tab | Visit>(() => props.src)
 if (error.value) throw createError(error.value)
 
 const visit = computed(() => (data.value && 'redirect' in data.value ? data.value.redirect : ''))

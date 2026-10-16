@@ -1,3 +1,3 @@
 <template>
-  <TabView :id="0" />
+  <TabView src="/api/tab/0" />
 </template>

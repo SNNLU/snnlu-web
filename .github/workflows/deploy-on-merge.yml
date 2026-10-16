@@ -1,4 +1,4 @@
-name: 部署（合并到 main 后构建并上线）
+name: 部署（合并到 main 后生成静态站并发布到 GitHub Pages）
 
 on:
   push:
@@ -8,15 +8,17 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 # 部署串行执行、不互相取消（避免两次部署交错把线上搞成半新半旧）
 concurrency:
-  group: deploy-main
+  group: pages
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
-    name: build-and-deploy
+  build:
+    name: build
     runs-on: ubuntu-latest
     steps:
       - name: 拉取代码
@@ -27,54 +29,31 @@ jobs:
       - name: 安装 Node
         uses: actions/setup-node@v4
         with:
-          # 注意：仓库 CI（ci.yml）用的是 22。两处版本不一致会出现
-          # “PR 上 build 绿、部署时 build 失败”的情况，建议统一。
-          node-version: 20
+          node-version: 22 # 与 ci.yml 保持一致
           cache: npm
 
       - name: 安装依赖
         run: npm ci
 
-      - name: 构建
-        run: npm run build
+      - name: 生成静态站
+        run: npm run generate
 
       - name: 校验产物
-        run: test -f .output/server/index.mjs
+        run: test -f .output/public/index.html
 
-      # ── 部署步骤：按你的宿主机替换下面这段 ────────────────────────────────
-      # 产物是 Node 服务（.output/server/index.mjs），构建后可用
-      #   node .output/server/index.mjs
-      # 启动。注意本站的访问计数写在 .data/ 里（server/utils/content.ts 的 bump()），
-      # 部署到无状态平台时要么挂持久卷，要么把计数改到 KV/数据库，否则计数会归零。
-      - name: 部署（占位，待替换）
-        env:
-          # 按需在 Settings → Secrets and variables → Actions 里添加，示例：
-          # SSH_HOST / SSH_USER / SSH_KEY      —— 自建服务器或云主机
-          # DEPLOY_HOOK                       —— 平台提供的部署 Webhook
-          # REGISTRY_USER / REGISTRY_TOKEN    —— 镜像仓库
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-          DEPLOY_HOOK: ${{ secrets.DEPLOY_HOOK }}
-        run: |
-          echo "TODO：把下面任一种方案的注释打开并按你的环境改好后，删掉这行 echo"
+      - name: 打包给 Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .output/public
 
-          # 方案 A：自建服务器 / 云主机（rsync 上传产物 + 远端重启）
-          # 需要 secrets：SSH_HOST, SSH_USER, SSH_KEY
-          # - mkdir -p ~/.ssh && printf '%s' "$SSH_KEY" > ~/.ssh/id_ed25519 && chmod 600 ~/.ssh/id_ed25519
-          # - ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
-          # - rsync -az --delete .output/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/srv/snnlu-web/"
-          # - ssh "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" 'pm2 restart snnlu-web || pm2 start /srv/snnlu-web/server/index.mjs --name snnlu-web'
-
-          # 方案 B：Docker 镜像（推送到 GHCR 后在服务器上拉取重启）
-          # - docker build -t ghcr.io/snnlu/snnlu-web:${{ github.sha }} .
-          # - echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          # - docker push ghcr.io/snnlu/snnlu-web:${{ github.sha }}
-
-          # 方案 C：托管平台 CLI（Cloudflare / Vercel / Zeabur 等，按各平台文档）
-          # - npm i -g wrangler && wrangler deploy   # 需要 CLOUDFLARE_API_TOKEN
-          #   （Nuxt 要走 Cloudflare，需要在 nuxt.config.ts 里加 nitro preset: 'cloudflare_module'，
-          #     并把访问计数从 .data/ 换到 KV）
-
-          # 方案 D：平台部署 Webhook（最省事，平台侧通常自带构建）
-          # - curl -fsS -X POST "$DEPLOY_HOOK" || exit 1
-
-          exit 0
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 发布
+        id: deployment
+        uses: actions/deploy-pages@v4

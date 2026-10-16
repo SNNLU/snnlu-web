@@ -20,9 +20,9 @@
     <CmsBox fixed box-style="width:205px;height:30px;left:980px;top:63px;z-index:13">
       <div>
         <div>
-          <form class="search text-warning" @submit.prevent="search('0')">
+          <form class="search text-warning" @submit.prevent="search">
             <input v-model="kw" type="text" class="input_kw form-control bg-transparent border-0" name="kw" placeholder="请输入搜索关键字...">
-            <button type="button" class="btn_kw_ok p-0 overflow-hidden btn btn-info opacity-0" @click="search(String(tab))">&nbsp;</button>
+            <button type="button" class="btn_kw_ok p-0 overflow-hidden btn btn-info opacity-0" @click="search">&nbsp;</button>
           </form>
         </div>
       </div>
@@ -47,8 +47,8 @@ const leave = () => {
   timer = setTimeout(() => (open.value = ''), 500)
 }
 
-/* 回车提交时原站拿不到栏目号，落到首页；点按钮才带当前栏目 */
-const search = (tab: string) => window.open(searchHref(kw.value, tab), '_blank')
+/* 检索在 /search/ 页里做，结果不分栏目 */
+const search = () => window.open(searchHref(kw.value), '_blank')
 </script>
 
 <style>

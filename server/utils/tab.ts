@@ -1,10 +1,5 @@
-import type { Link, Module, Node, St, Tab, Widget } from '#shared/cms'
+import { detailHref, folderHref, pageOf, type Link, type Module, type Node, type St, type Tab, type Widget } from '#shared/cms'
 import type { Article, Site } from './content'
-
-const SIZE = 30 // 检索结果每页条数，五条一道线
-
-export const detailHref = (id: number, tab = 9) => `/p/${tab}/?StId=st_app_news_i_x${id}`
-export const folderHref = (fid: number | string, tab = 9) => `/p/${tab}/?StId=st_app_news_search_x${fid}_x__x__x_0_x_0`
 
 const cut = (s: string, n: number) => (n && s.length > n ? `${s.slice(0, n)}...` : s)
 
@@ -15,11 +10,6 @@ export const rowOf = (a: Article, count: number, date: 'full' | 'short' | '') =>
   target: '_blank',
   date: date && ` ${date === 'full' ? a.date.slice(0, 10) : a.date.slice(5, 10)} `,
 })
-
-export function pageOf<T>(items: T[], page: number, size: number) {
-  const pages = Math.ceil(items.length / size)
-  return { items: items.slice((page - 1) * size, page * size), paging: { page, pages, total: items.length } }
-}
 
 /* 当前栏目在导航里的位置 */
 function locate(s: Site, tab: number) {
@@ -36,9 +26,9 @@ async function widgetOf(w: any, s: Site, tab: number): Promise<Widget> {
   switch (w.kind) {
     case 'list': {
       const all = await inFolder(w.folder)
-      const { items, paging } = pageOf(all, 1, w.size)
-      const query = { folder: w.folder, size: String(w.size), count: String(w.count), dated: w.dated ? '1' : '' }
-      return { kind: 'list', uid: w.uid, rows: items.map((a) => rowOf(a, w.count, w.dated ? (w.paged ? 'full' : 'short') : '')), paging: w.paged ? paging : null, query: w.paged ? query : null }
+      const rows = all.map((a) => rowOf(a, w.count, w.dated ? (w.paged ? 'full' : 'short') : ''))
+      const { items, paging } = pageOf(rows, 1, w.size)
+      return { kind: 'list', uid: w.uid, rows: items, paging: w.paged ? paging : null, all: w.paged ? rows : null, size: w.size }
     }
     case 'focus': {
       const all = await inFolder(w.folder)
@@ -86,53 +76,33 @@ async function gridOf(nodes: Node[], s: Site, tab: number): Promise<Node[]> {
   }))
 }
 
-const decodeKw = (token: string) => {
-  try {
-    return decodeURIComponent(atob(decodeURIComponent(token)).replace(/\+/g, ' '))
-  } catch {
-    return ''
-  }
-}
+/* 正文、栏目列表、全站检索都挂在 /p/9/ 的壳子里，同原站 */
+const ST_TAB = 9
 
-/* 标题里命中的词标红，同原站 */
-const mark = (title: string, kw: string) => {
-  const esc = (x: string) => x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  return kw ? title.split(kw).map(esc).join(`<span style='color:red;font:inherit'>${esc(kw)}</span>`) : esc(title)
-}
-
-export async function searchOf(folder: string, kw: string, page: number) {
+async function stOf(kind: 'news' | 'list' | 'search', arg: number): Promise<{ st: St; title: string } | null> {
   const s = await site()
-  const pool = folder ? await inFolder((await folderById(folder))?.[0] ?? '') : await articles()
-  const hits = kw ? pool.filter((a) => a.title.includes(kw)) : pool
-  const { items, paging } = pageOf(hits, page, SIZE)
-  const rows = items.map((a, i) => ({ ...rowOf(a, 0, 'full'), title: mark(a.title, kw), date: a.date.slice(0, 10), rule: i % 5 === 4 }))
-  return { rows, paging, site: s }
-}
+  const top = { label: `[${s.name}]`, href: '/search/', target: '' }
 
-async function stOf(stid: string, tab: number, origin: string): Promise<{ st: St; title: string } | null> {
-  const s = await site()
-  const top = { label: `[${s.name}]`, href: `/p/${tab}/?StId=st_app_news_search_x_x__x__x_0_x_0`, target: '' }
-
-  const item = stid.match(/^st_app_news_i_x(\d+)$/)
-  if (item) {
-    const a = (await articles()).find((x) => x.id === +item[1])
+  if (kind === 'news') {
+    const a = (await articles()).find((x) => x.id === arg)
     if (!a) return null
-    const views = await bump(`views:${a.id}`, a.views)
-    const f = s.folders[a.folder]
-    const mobile = `/wx/news/${a.id}`
+    const f = s.folders[a.folder]!
+    const mobile = `/wx/news/${a.id}/`
     return {
       title: a.title,
       st: {
-        trail: [top, { label: `>>${f.name}`, href: folderHref(f.id, tab), target: '' }, { label: `>>${a.title}`, href: detailHref(a.id, tab), target: '' }],
+        trail: [top, { label: `>>${f.name}`, href: folderHref(f.id), target: '' }, { label: `>>${a.title}`, href: detailHref(a.id), target: '' }],
         view: {
           kind: 'detail',
           title: a.title,
           subtitle: a.byline || null,
-          info: `时间：${a.date}:00&nbsp;&nbsp;&nbsp;来源：${a.source}&nbsp;&nbsp;&nbsp;查看：<span>${views}</span>`,
-          body: `<div>${a.body}\n<p style='text-align:right'>编辑：管理员</p></div>`,
+          info: `时间：${a.date}:00&nbsp;&nbsp;&nbsp;来源：${a.source}&nbsp;&nbsp;&nbsp;查看：<span>${a.views}</span>`,
+          body: `<div>${a.body}
+<p style='text-align:right'>编辑：管理员</p></div>`,
           tools: [
             { label: '[手机版本]', dialog: { title: '手机版本', w: 450, h: 500, src: mobile } },
-            { label: '[扫码分享]', dialog: { title: '二维码网址（请使用微信扫描）', w: 400, h: 300, src: `/qr?text=${encodeURIComponent(origin + mobile)}` } },
+            // 二维码页拿到相对路径后自己补上域名
+            { label: '[扫码分享]', dialog: { title: '二维码网址（请使用微信扫描）', w: 400, h: 300, src: `/qr/?text=${encodeURIComponent(mobile)}` } },
             { label: '[打印本页]', dialog: null },
           ],
         },
@@ -140,39 +110,39 @@ async function stOf(stid: string, tab: number, origin: string): Promise<{ st: St
     }
   }
 
-  const search = stid.match(/^st_app_news_search_x(\d*)_x_([^_]*)_x_[^_]*_x_(\d+)/)
-  if (!search) return null
-  const [, folder, token, page] = search
-  const kw = decodeKw(token)
-  const { rows, paging } = await searchOf(folder, kw, +page + 1)
-  const f = folder ? await folderById(folder) : null
-  const trail = f ? [top, { label: `>>${f[1].name}`, href: folderHref(folder, tab), target: '' }] : [top]
+  const f = kind === 'list' ? await folderById(String(arg)) : null
+  if (kind === 'list' && !f) return null
+  const pool = f ? await inFolder(f[0]) : await articles()
   return {
     title: '站内信息',
-    st: { trail, view: { kind: 'list', uid: 'st', rows, paging, query: { st: '1', folder, kw } } },
+    st: {
+      trail: f ? [top, { label: `>>${f[1].name}`, href: folderHref(arg), target: '' }] : [top],
+      view: { kind: 'list', uid: 'st', rows: pool.map((a) => rowOf(a, 0, 'full')), search: kind === 'search' },
+    },
   }
 }
 
-export async function tabOf(id: number, stid: string, origin: string): Promise<Tab | { redirect: string } | null> {
+const shell = (s: Site, id: number) => ({
+  id,
+  nav: s.nav.map((n) => ({ ...n, target: n.target ?? '_self', children: n.children.map((c) => ({ ...c, target: c.target ?? '_self', title: c.label })) })),
+  hero: [],
+  footer: s.footer,
+})
+
+export async function stTab(kind: 'news' | 'list' | 'search', arg = 0): Promise<Tab | null> {
+  const got = await stOf(kind, arg)
+  return got && { ...shell(await site(), ST_TAB), title: got.title, css: '', grid: [], st: got.st }
+}
+
+export async function tabOf(id: number): Promise<Tab | { redirect: string } | null> {
   const s = await site()
   if (s.redirects[id]) return { redirect: s.redirects[id] }
-  const shell = {
-    id,
-    nav: s.nav.map((n) => ({ ...n, target: n.target ?? '_self', children: n.children.map((c) => ({ ...c, target: c.target ?? '_self', title: c.label })) })),
-    hero: [],
-    footer: s.footer,
-  }
-
-  if (stid) {
-    const got = await stOf(stid, id, origin)
-    return got && { ...shell, title: got.title, css: '', grid: [], st: got.st }
-  }
 
   const l = await layout(id)
   if (!l) return null
   const at = locate(s, id)
   return {
-    ...shell,
+    ...shell(s, id),
     title: id === 0 ? s.name : `${at?.child?.label ?? at?.section.label ?? ''} - ${s.name}`,
     css: l.css,
     grid: await gridOf(l.grid, s, id),

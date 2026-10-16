@@ -9,9 +9,17 @@
 <script setup lang="ts">
 import QRCode from 'qrcode'
 
+/* 静态页面里没有查询串：挂载后跟着地址栏现画二维码；/ 开头的相对路径补上当前域名 */
 const route = useRoute()
-const text = String(route.query.text ?? '')
-const svg = await QRCode.toString(text || ' ', { type: 'svg', width: 150, margin: 0 })
+const text = ref('')
+const svg = ref('')
+
+async function draw(raw: string) {
+  text.value = raw.startsWith('/') ? location.origin + raw : raw
+  svg.value = await QRCode.toString(text.value || ' ', { type: 'svg', width: 150, margin: 0 })
+}
+
+onMounted(() => watch(() => String(route.query.text ?? ''), draw, { immediate: true }))
 
 useHead({ title: '生成二维码' })
 </script>
