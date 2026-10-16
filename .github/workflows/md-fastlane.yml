@@ -23,8 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     env:
-      # 三种身份，按优先级回退：App 安装 token → PAT(BOT_TOKEN) → GITHUB_TOKEN
-      APP_TOKEN: ${{ steps.app.outputs.token }}
+      # 注意：APP_TOKEN 不能写在这一层！job 级 env 不允许引用 steps 上下文，
+      # 写了会让整个工作流文件被判无效（表现为所有运行都 "workflow file issue"、完全不触发）。
+      # 它只在需要它的步骤里通过 step 级 env 传入。
       BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
       DEFAULT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       PR: ${{ github.event.pull_request.number }}
@@ -164,6 +165,8 @@ jobs:
         if: steps.ai.outputs.verdict != '' && steps.ai.outputs.verdict != 'error'
         env:
           VERDICT: ${{ steps.ai.outputs.verdict }}
+          # 三种身份按优先级回退：App 安装 token → PAT(BOT_TOKEN) → GITHUB_TOKEN
+          APP_TOKEN: ${{ steps.app.outputs.token }}
         run: |
           export GH_TOKEN="${APP_TOKEN:-${BOT_TOKEN:-$DEFAULT_TOKEN}}"
 
