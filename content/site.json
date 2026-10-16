@@ -59,10 +59,9 @@
   "/img/scene-20.jpg", "/img/scene-21.jpg", "/img/scene-25.jpg", "/img/scene-30.jpg"
  ],
  "quick": [
-  { "label": "图书信息", "href": "/p/14/" },
-  { "label": "招生问答", "href": "/p/22/" },
-  { "label": "服务指南", "href": "/p/29/" },
-  { "label": "智慧校园", "href": "/p/30/" },
+  { "label": "遂宁校区频道", "href": "https://pd.qq.com/s/dylo3s64q?b=9" },
+  { "label": "狮谷遂宁频道", "href": "https://pd.qq.com/s/6kuddggd0?b=9" },
+  { "label": "四川奶大", "href": "https://xn--wbs66c0gz4ecwe320l.top/" },
   { "label": "奶蛙官网", "href": "https://naiwa.win/" }
  ],
  "folders": {
