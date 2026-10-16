@@ -35,7 +35,7 @@ onUnmounted(() => removeEventListener('scroll', check))
   right: 20px;
   width: 38px;
   height: 38px;
-  background: url(/_tools/jquery/scrollup/img/top.png) no-repeat;
+  background: url(/img/top.svg) no-repeat;
 }
 
 .up-enter-active,

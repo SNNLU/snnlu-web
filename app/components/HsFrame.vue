@@ -67,7 +67,7 @@ onUnmounted(() => removeEventListener('keydown', esc))
   top: 2px;
   width: 16px;
   height: 16px;
-  background-image: url(/_tools/highslide/graphics/closeX.png);
+  background-image: url(/img/close.svg);
 }
 
 .hs-close:hover {

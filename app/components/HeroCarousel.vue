@@ -103,11 +103,12 @@ onUnmounted(hold)
   margin-left: 5px;
   text-indent: -9999px;
   cursor: pointer;
-  background: url(/_tools/jquery/baidufocus/css/img/ico.png) no-repeat -24px -126px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
 }
 
 .baidufocus-focus span.hover {
-  background-position: -10px -126px;
+  background: #d1ad69;
 }
 
 .hf-enter-active,

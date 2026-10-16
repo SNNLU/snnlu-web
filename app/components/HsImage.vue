@@ -78,7 +78,7 @@ onUnmounted(() => {
   max-width: none;
   border: 2px solid #fff;
   box-shadow: 2px 3px 9px rgba(0, 0, 0, 0.35);
-  cursor: url(/_tools/highslide/graphics/zoomout.cur), pointer;
+  cursor: zoom-out;
   transition: left 250ms, top 250ms, width 250ms, height 250ms;
 }
 </style>

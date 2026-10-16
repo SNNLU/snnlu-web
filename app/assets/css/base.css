@@ -1,15 +1,15 @@
-/* 皮肤：页头横幅与页脚底图都是 body 背景 */
-body {
+/* 皮肤：页头横幅与页脚底图；只给站点页面，手机版与二维码页不带 */
+body.skin {
   position: relative;
   padding-top: 0;
   padding-bottom: 0;
-  background-image: url(/_rest/linker_allfile.ashx?parr=imgs%2c638216685009721043%2c.png%2c0%2c0);
+  background-image: url(/img/head.svg);
   background-repeat: no-repeat;
   background-position: center top;
 }
 
 #site {
-  background-image: url(/_rest/linker_allfile.ashx?parr=imgs%2c638207103627621641%2c.png%2c0%2c0);
+  background-image: url(/img/foot.svg);
   background-repeat: no-repeat;
   background-position: center bottom;
 }

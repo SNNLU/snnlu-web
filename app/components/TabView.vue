@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import type { Tab, Visit } from '#shared/cms'
 
-const LOADING = '/_images/_system/loading_32x32.gif'
+const LOADING = '/img/loading.svg'
 
 const props = defineProps<{ id: number }>()
 const route = useRoute()
@@ -45,6 +45,7 @@ const busy = computed(() => useLoading().value > 0)
 
 useHead({
   title: () => tab.value?.title,
+  bodyAttrs: { class: 'skin' },
   style: () => (tab.value ? [{ key: 'cms', innerHTML: tab.value.css }] : []),
 })
 </script>
