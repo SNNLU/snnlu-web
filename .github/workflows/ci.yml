@@ -35,3 +35,29 @@ jobs:
 
       - name: 冒烟检查（产物是否生成）
         run: test -f .output/server/index.mjs
+
+  content:
+    name: content
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: 取出本次改动的文件清单
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if [ -n "$BASE_SHA" ]; then
+            git diff --name-only --diff-filter=ACMR "$BASE_SHA...HEAD" > .changed.txt
+          elif [ -n "$BEFORE_SHA" ] && git cat-file -e "${BEFORE_SHA}^{commit}" 2>/dev/null; then
+            git diff --name-only --diff-filter=ACMR "$BEFORE_SHA..HEAD" > .changed.txt
+          else
+            git show --pretty=format: --name-only HEAD > .changed.txt
+          fi
+          cat .changed.txt
+
+      - name: 校验 content/ 文章结构
+        run: node .github/scripts/validate-content.mjs .changed.txt
