@@ -3,7 +3,7 @@ body.skin {
   position: relative;
   padding-top: 0;
   padding-bottom: 0;
-  background-image: url(/img/head.svg);
+  background-image: url(/img/head.png);
   background-repeat: no-repeat;
   background-position: center top;
 }
