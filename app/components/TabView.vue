@@ -44,6 +44,7 @@ const busy = computed(() => useLoading().value > 0)
 
 useHead({
   title: () => tab.value?.title,
+  htmlAttrs: { class: 'skin' },
   bodyAttrs: { class: 'skin' },
   style: () => (tab.value ? [{ key: 'cms', innerHTML: tab.value.css }] : []),
 })

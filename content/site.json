@@ -1,7 +1,6 @@
 {
  "name": "遂宁奶龙大学",
- "visits": 520520,
- "footer": "<div><p style=\"text-align:center\"><span style=\"color: rgb(255, 255, 255); font-family: 微软雅黑, &quot;Microsoft YaHei&quot;; font-size: 16px;\">地址：遂宁奶龙市奶黄区科教园区奶香大道520号&nbsp;&nbsp;|&nbsp; 邮编：629520&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;联系电话：0825-5205200&nbsp;&nbsp;|&nbsp;&nbsp;</span><a href=\"/back\" target=\"_blank\" style=\"color: rgb(255, 255, 255); font-family: 微软雅黑, &quot;Microsoft YaHei&quot;; font-size: 16px; text-decoration: underline;\"><span style=\"color: rgb(255, 255, 255); font-family: 微软雅黑, &quot;Microsoft YaHei&quot;; font-size: 16px;\">内容管理</span></a><br></p><p style=\"text-align:center\"><span style=\"color: rgb(255, 255, 255); font-family: 微软雅黑, &quot;Microsoft YaHei&quot;; font-size: 16px;\">版权所有：遂宁奶龙大学（虚构）</span></p></div>",
+ "footer": "<div><p style=\"text-align:center\"><span style=\"color: rgb(255, 255, 255); font-family: 微软雅黑, &quot;Microsoft YaHei&quot;; font-size: 16px;\">地址：四川省遂宁市奶龙西路120号&nbsp;&nbsp;|&nbsp; 邮编：114514&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;联系电话：0825-1919810&nbsp;&nbsp;|&nbsp;&nbsp;</span>{{commit}}</p><p style=\"text-align:center\"><span style=\"color: rgb(255, 255, 255); font-family: 微软雅黑, &quot;Microsoft YaHei&quot;; font-size: 16px;\">This isn't a real website its based off the game \"<a class=\"naiwa-link\" href=\"https://naiwa.win/\" target=\"_blank\" rel=\"noopener\"><span>naiwa.win</span>{{ext}}</a>\".</span></p></div>",
  "nav": [
   { "label": "首页", "href": "/p/0/", "children": [] },
   { "label": "奶龙概况", "href": "/p/9", "parent": "/p/1/", "children": [
@@ -19,7 +18,7 @@
    { "label": "教师介绍", "href": "/p/16/" },
    { "label": "人才招聘", "href": "/p/17/" }
   ] },
-  { "label": "奶龙团学", "href": "/p/4/", "parent": "/p/4/", "children": [
+  { "label": "奶龙风采", "href": "/p/4/", "parent": "/p/4/", "children": [
    { "label": "通知公示", "href": "/p/19/" },
    { "label": "书院风采", "href": "/p/20/" },
    { "label": "班团动态", "href": "/p/21/" },
@@ -81,6 +80,6 @@
   "coop": { "id": 112, "name": "合作交流" },
   "rules": { "id": 113, "name": "规章制度" },
   "essay": { "id": 114, "name": "团学有感" },
-  "league": { "id": 120, "name": "奶龙团学", "include": ["notice", "life", "student", "essay"] }
+  "league": { "id": 120, "name": "奶龙风采", "include": ["notice", "life", "student", "essay"] }
  }
 }

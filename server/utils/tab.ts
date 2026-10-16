@@ -126,7 +126,7 @@ const shell = (s: Site, id: number) => ({
   id,
   nav: s.nav.map((n) => ({ ...n, target: n.target ?? '_self', children: n.children.map((c) => ({ ...c, target: c.target ?? '_self', title: c.label })) })),
   hero: [],
-  footer: s.footer,
+  footer: footerHtml(s.footer),
 })
 
 export async function stTab(kind: 'news' | 'list' | 'search', arg = 0): Promise<Tab | null> {
