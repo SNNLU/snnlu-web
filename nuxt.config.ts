@@ -28,4 +28,8 @@ export default defineNuxtConfig({
     '/_rest/linker_allfile.ashx': { proxy: `${SRC}/_rest/linker_allfile.ashx` },
     '/_ps/linker_qrcode.aspx': { proxy: `${SRC}/_ps/linker_qrcode.aspx` },
   },
+  // 站内图文都在 content/，随服务端一起打包
+  nitro: {
+    serverAssets: [{ baseName: 'content', dir: '../content' }],
+  },
 })
