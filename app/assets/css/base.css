@@ -1,0 +1,80 @@
+/* 皮肤：页头横幅与页脚底图都是 body 背景 */
+body {
+  position: relative;
+  padding-top: 0;
+  padding-bottom: 0;
+  background-image: url(/_rest/linker_allfile.ashx?parr=imgs%2c638216685009721043%2c.png%2c0%2c0);
+  background-repeat: no-repeat;
+  background-position: center top;
+}
+
+#site {
+  background-image: url(/_rest/linker_allfile.ashx?parr=imgs%2c638207103627621641%2c.png%2c0%2c0);
+  background-repeat: no-repeat;
+  background-position: center bottom;
+}
+
+#center {
+  position: relative;
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#home {
+  position: relative;
+  width: 100%;
+}
+
+#main {
+  width: 1200px;
+  height: auto;
+  float: left;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+#header {
+  position: relative;
+  width: auto;
+  height: 185px;
+}
+
+#content {
+  position: relative;
+  width: 100%;
+  min-height: 250px;
+  overflow: visible;
+  background-color: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+#footer {
+  position: relative;
+  width: auto;
+  height: 150px;
+  clear: both;
+}
+
+.cell {
+  width: auto;
+  height: auto;
+  border: 0;
+  margin: 0;
+}
+
+.st_div {
+  width: auto;
+  margin: 0;
+}
+
+/* 原站加载提示 */
+#loading {
+  position: fixed;
+  left: 0;
+  top: 100px;
+  z-index: 20000;
+}

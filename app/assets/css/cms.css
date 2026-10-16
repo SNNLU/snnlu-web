@@ -1,0 +1,122 @@
+/* 原站 _base_pc.css：先于 Bootstrap 载入，被其覆盖的部分照样保留 */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Times New Roman;
+  font-size: 14px;
+  color: #000;
+  line-height: 1.8;
+}
+
+p {
+  margin: 10px;
+}
+
+hr {
+  margin: 12px 0;
+}
+
+div,
+span,
+p,
+td,
+li {
+  line-height: 1.8;
+  color: inherit;
+  overflow-wrap: break-word;
+}
+
+img {
+  border: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: #00f;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+a:hover {
+  color: #f00;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+a img {
+  cursor: pointer;
+  border: 0;
+  opacity: 1;
+}
+
+a:hover img {
+  opacity: 0.8;
+}
+
+iframe,
+object,
+img,
+table {
+  max-width: 100%;
+}
+
+.max8 { width: 800px; max-width: 100%; }
+.m10 { margin: 10px; }
+.p10 { padding: 10px; }
+.t10 { margin-top: 10px; }
+.r10 { margin-right: 10px; }
+.b10 { margin-bottom: 10px; }
+.l10 { margin-left: 10px; }
+.red { color: #f00; }
+.div_center { text-align: center; }
+.overflow-hidden { overflow: hidden; }
+
+.break,
+.break div,
+.break p,
+.break td,
+.break li,
+.break a {
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.div_block { display: block; border: 1px solid #ccc; margin: 5px; padding: 5px; font-size: 13px; font-weight: normal; }
+.div_block_dotted { display: block; border: 1px dotted #ccc; margin: 5px; padding: 5px; font-size: 13px; font-weight: normal; }
+.div_line { margin: 5px; border: 0; font-size: 0; border-top: 1px; border-style: dashed; border-color: #ccc; }
+.div_underline { margin: 5px; padding: 2px; border: 0; border-bottom: 1px; border-style: dashed; border-color: #ccc; }
+.div_more { border: 0; margin: 0; padding: 5px; font-size: 13px; font-weight: normal; text-align: right; color: #333; }
+
+.sk_icon { overflow: hidden; width: 20px; }
+.sk_title { overflow: hidden; width: auto; font-size: 14px; color: #333; }
+.sk_more { overflow: hidden; text-decoration: none; color: #369; font-size: 13px; font-weight: normal; cursor: pointer; }
+.sk_more a { text-decoration: none; color: #369; font-size: 13px; font-weight: normal; cursor: pointer; }
+.sk_more a:hover { text-decoration: none; color: #f00; font-weight: normal; }
+
+/* 系统页（检索、正文） */
+.st_div { width: 100%; height: auto; overflow: hidden; }
+.st_div div,
+.st_div span,
+.st_div p,
+.st_div td { line-height: 1.5; }
+.st_div a { text-decoration: none; font-size: 13px; color: #369; cursor: pointer; }
+.st_div a:hover { text-decoration: none; color: #f00; }
+.st_div .div_top .mt_bgcolor { background-color: #eee; }
+.st_div .div_top .mt_text { line-height: 1.2; padding: 5px; padding-left: 10px; font-size: 13px; font-weight: normal; color: #999; }
+.st_div .div_top .mt_text a { text-decoration: none; font-size: 13px; color: #369; cursor: pointer; }
+.st_div .div_top .mt_text a:hover { text-decoration: none; color: #f00; }
+.st_div .div_title { text-align: center; margin: 5px; padding: 5px; font-size: 28px; font-weight: bold; color: #333; }
+.st_div .div_subtitle { text-align: center; margin: 5px; padding: 5px; font-size: 16px; font-weight: bold; color: #666; }
+.st_div .div_title .box { margin: 5px; padding: 2px; border: 1px solid #eee; border-left: 0; border-right: 0; }
+.st_div .div_title .box div { text-align: center; background-color: #eee; font-size: 13px; font-weight: normal; color: #333; }
+.st_div .div_content { margin: 5px; padding: 5px; line-height: 1.5; border: 1px dotted #ccc; font-weight: normal; font-size: 14px; color: #333; }
+.st_div .div_item { margin: 5px; }
+.st_div .div_item .div_itemtitle { line-height: 1.8; border: 0; font-weight: bold; font-size: 14px; color: #333; background: url(/_images/_system/_icon/icon_dot.png) no-repeat left center; padding-left: 15px; }
+.st_div .div_item .div_itemtitle a { text-decoration: none; font-family: 微软雅黑; font-size: 14px; color: #369; cursor: pointer; }
+.st_div .div_item .div_itemtitle a:hover { text-decoration: none; color: #f00; }
+.st_div .div_item .div_itemtitle .other { font-weight: normal; font-size: 13px; color: #333; }
+.st_div .div_bottom { margin: 5px; padding: 5px; text-align: center; font-size: 13px; color: #333; }
