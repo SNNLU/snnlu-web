@@ -22,7 +22,7 @@ const folders = Object.entries(JSON.parse(readFileSync('content/site.json', 'utf
   .map(([k, f]) => ({ key: k, label: `${k}（${f.name}）` }))
 
 /* 文章 id = 文件名里的数字；统计全部文章，查重 */
-const idOf = (name) => name.replace(/\D/g, '')
+const idOf = (name) => String(+name.replace(/\D/g, '')) // 001.md 与 1.md 是同一篇
 const owners = {}
 for (const name of readdirSync('content/news').filter((n) => n.endsWith('.md'))) {
   (owners[idOf(name)] ??= []).push(name)

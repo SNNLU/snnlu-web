@@ -7,7 +7,7 @@ function pages() {
     ...readdirSync('content/layout').map((f) => f.replace(/\.json$/, '')),
     ...Object.keys(site.redirects),
   ]
-  const news = readdirSync('content/news').filter((f) => f.endsWith('.md')).map((f) => f.replace(/\D/g, ''))
+  const news = readdirSync('content/news').filter((f) => f.endsWith('.md')).map((f) => String(+f.replace(/\D/g, ''))) // 与文章链接同一算法：001.md → /news/1/
   const folders = Object.values<{ id: number }>(site.folders).map((f) => f.id)
   return [
     '/',

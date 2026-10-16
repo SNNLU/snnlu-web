@@ -8,8 +8,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 # 部署串行执行、不互相取消（避免两次部署交错把线上搞成半新半旧）
 concurrency:
@@ -50,6 +48,10 @@ jobs:
     name: deploy
     needs: build
     runs-on: ubuntu-latest
+    # 发布权限只给这一步；build 会执行 npm ci 与项目代码，只留只读
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
