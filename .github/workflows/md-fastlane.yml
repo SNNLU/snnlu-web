@@ -3,7 +3,7 @@ name: MD Fastlane（文章审查与自动合并）
 # 触发用 pull_request_target：让 fork 提交也能拿到 secrets。
 # 安全前提有两条，缺一不可：
 #   ① 全程不 checkout、不执行 PR 里的任何代码（只读 API 取 diff）；
-#   ② 只处理纯 .md 改动，出现任何其它文件立即退出快车道、转人工。
+#   ② 只放行 content/ 下的 .md 文章，出现任何其它文件立即退出快车道、转人工。
 on:
   pull_request_target:
     types: [opened, synchronize]
@@ -33,9 +33,10 @@ jobs:
       AI_MODEL: ${{ vars.AI_MODEL || 'deepseek-chat' }}
     steps:
       # ── 步骤 1：严格路径拦截 ─────────────────────────────────────────────
-      # 只放行"改动文件全部是 .md"的 PR；只要出现一个非 .md 文件就静默退出，
-      # 后面的 AI 审查与自动合并全部跳过，交给人工审查代码。
-      - name: 路径拦截（只放行纯 Markdown）
+      # 白名单：改动文件必须全部位于 content/ 下且为 .md（任意层级）。
+      # 其它一切——README、docs/ 下的 md、content/layout/*.json、site.json、
+      # 图片、代码——只要出现一个就退出快车道，交人工审查。
+      - name: 路径拦截（只放行 content/ 下的 .md）
         id: gate
         run: |
           export GH_TOKEN="$DEFAULT_TOKEN"
@@ -47,13 +48,17 @@ jobs:
             exit 0
           fi
 
-          # 遍历每一个改动文件，出现非 .md 立刻标记退出
+          # 逐个遍历改动文件，脱离白名单的逐个点名，最后统一退出快车道
           ok=true
           while IFS= read -r f; do
-            case "$f" in
-              *.md) ;;
-              *) echo "::notice::发现非 Markdown 文件：$f —— 退出快车道，转人工审查"; ok=false ;;
-            esac
+            # 用 printf 喂给 grep，避免管道读走循环的 stdin。
+            # 刻意不认 .mdx：渲染器（server/utils/content.ts）只处理 .md，
+            # 放行 .mdx 会合入渲染不出来的文件。
+            if printf '%s' "$f" | grep -Eq '^content/.+\.md$'; then
+              continue
+            fi
+            echo "::notice::不在白名单内：$f —— 退出快车道，转人工审查"
+            ok=false
           done < files.txt
 
           echo "--- 本次改动文件 ---"
