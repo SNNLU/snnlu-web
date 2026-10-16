@@ -1,9 +1,15 @@
+/* 滚动条常驻：页面有长有短，滚动条时有时无会让居中的页头左右跳 8px */
+html.skin {
+  overflow-y: scroll;
+}
+
 /* 皮肤：页头横幅与页脚底图；只给站点页面，手机版与二维码页不带 */
 body.skin {
   position: relative;
   padding-top: 0;
   padding-bottom: 0;
-  background-image: url(/img/head.png);
+  /* 上层 logo.svg 是矢量的校徽、校名与英文；下层 head.png 只有底图。两张都是 1920 宽、居中，位置严格重合 */
+  background-image: url(/img/logo.svg), url(/img/head.png);
   background-repeat: no-repeat;
   background-position: center top;
 }

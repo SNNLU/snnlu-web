@@ -62,7 +62,7 @@ source: 来源单位
 | `rules` | 规章制度 | `/list/113/` |
 | `essay` | 团学有感 | `/list/114/` |
 
-- 「奶龙团学」（`/list/120/`）合并显示 `notice`、`life`、`student`、`essay`
+- 「奶龙风采」（`/list/120/`）合并显示 `notice`、`life`、`student`、`essay`
 
 新增栏目：在 `folders` 里加一项（代号、`id`、`name`），再在要显示它的版式文件里放一个 `"folder": "<代号>"` 的列表模块。
 

@@ -5,7 +5,6 @@ const store = () => useStorage('assets:content')
 
 export interface Site {
   name: string
-  visits: number
   footer: string
   nav: { label: string; href: string; target?: string; parent?: string; children: { label: string; href: string; target?: string }[] }[]
   redirects: Record<string, string>
@@ -60,7 +59,7 @@ export async function articles(): Promise<Article[]> {
   return all.sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id)
 }
 
-/* 栏目可以合并别的栏目（如「奶龙团学」） */
+/* 栏目可以合并别的栏目（如「奶龙风采」） */
 export async function inFolder(key: string) {
   const s = await site()
   const keys = s.folders[key]?.include ?? [key]

@@ -1,4 +1,15 @@
+import { execSync } from 'node:child_process'
 import { readdirSync, readFileSync } from 'node:fs'
+
+/* 页脚的提交号：Actions 里取 GITHUB_SHA，本地取当前 HEAD；拿不到就显示 main */
+function commit() {
+  if (process.env.GITHUB_SHA) return process.env.GITHUB_SHA
+  try {
+    return execSync('git rev-parse HEAD').toString().trim()
+  } catch {
+    return ''
+  }
+}
 
 /* 纯静态站：构建时把每一页都生成出来。页面清单直接从 content/ 读 */
 function pages() {
@@ -38,6 +49,8 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/img/badge.svg' }],
     },
   },
+  // 只在构建时由服务端读取，不下发到浏览器
+  runtimeConfig: { commit: commit() },
   // 站内图文都在 content/，构建时由服务端代码读出、生成静态页
   nitro: {
     serverAssets: [{ baseName: 'content', dir: '../content' }],
