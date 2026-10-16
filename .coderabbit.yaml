@@ -1,0 +1,44 @@
+# CodeRabbit 配置
+# 字段依据官方 schema: https://coderabbit.ai/integrations/schema.v2.json
+# 定位：只管代码与配置，Markdown 文章交给 md-fastlane.yml，两边不重叠。
+reviews:
+  # 1) 开启审查
+  auto_review:
+    enabled: true
+    drafts: false          # 草稿 PR 不审，转正式后自动审
+    auto_incremental_review: true   # 有新提交时增量复审
+
+  # 2) 忽略所有 Markdown：content/ 全目录 + 任意位置的 .md
+  #    这些路径不审（顺带也不会被 sparse-checkout 拉取，减少分析噪音）
+  path_filters:
+    - "!content/**"
+    - "!**/*.md"
+
+  # 3) 专心审代码与配置：除了默认规则，额外强调本站的真实风险点
+  path_instructions:
+    - path: "server/**/*.ts"
+      instructions: |
+        这是 Nuxt 服务端代码。重点检查：
+        - 空值与类型边界（例如列表排序依赖 meta.date，缺字段会在请求时抛异常导致 500）；
+        - 把用户输入当 HTML 或代码使用（注入）、路径穿越、越权；
+        - 同步 I/O 或计数写入（.data/ 下的 bump）在高并发下的一致性问题。
+    - path: ".github/workflows/**"
+      instructions: |
+        这是 CI / 自动合并的门禁本身。重点检查：
+        - 是否会因为权限不足而静默失效（例如复用工作流所需权限大于调用者授予的权限）；
+        - 是否有把 PR 代码 checkout 后执行的写法（pull_request_target 下极其危险）；
+        - 是否把 secrets 泄露到日志或传给不可信内容。
+    - path: "content/**/*.json"
+      instructions: |
+        站点布局与配置（site.json / layout/*.json）。字段缺失或类型变化会直接让页面渲染失败，
+        重点检查字段名、类型与结构是否与代码中的读取方式一致。
+
+  # 可选：让 CodeRabbit 在发现问题时提交 Request Changes（会真正挡住合并）
+  # 文档说明：开启后，当所有评论被解决、最新提交已审查、且预合并检查无 error 时，它会改为 Approve。
+  # 想要"AI 审干净才能合并"的强约束就把下面一行打开：
+  # request_changes_workflow: true
+
+  # 可选：预合并检查（标题/描述/关联 issue 等），error 模式可挡住合并
+  # pre_merge_checks:
+  #   title:
+  #     mode: warning
