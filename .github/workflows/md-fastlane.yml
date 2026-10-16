@@ -23,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     env:
+      # 三种身份，按优先级回退：App 安装 token → PAT(BOT_TOKEN) → GITHUB_TOKEN
+      APP_TOKEN: ${{ steps.app.outputs.token }}
       BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
       DEFAULT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       PR: ${{ github.event.pull_request.number }}
@@ -32,6 +34,19 @@ jobs:
       AI_BASE_URL: ${{ vars.AI_BASE_URL || 'https://api.deepseek.com/v1' }}
       AI_MODEL: ${{ vars.AI_MODEL || 'deepseek-chat' }}
     steps:
+      # ── 步骤 0：取 GitHub App 安装 token ─────────────────────────────────
+      # 私钥永不过期，每次运行现场换一个 1 小时有效的 token（无需任何轮换）。
+      # 只有用它才能在 SNNLU 审批 PR，也才能让机器人完成的合并触发部署工作流。
+      # 没配 App（或配置有误）时本步骤失败但不中断，后面自动回退到 GITHUB_TOKEN，
+      # 代价是失去上面两项能力——日志里会有明确警告。
+      - name: 取 GitHub App 安装 token
+        id: app
+        continue-on-error: true
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       # ── 步骤 1：严格路径拦截 ─────────────────────────────────────────────
       # 白名单：改动文件必须全部位于 content/ 下且为 .md（任意层级）。
       # 其它一切——README、docs/ 下的 md、content/layout/*.json、site.json、
@@ -150,7 +165,7 @@ jobs:
         env:
           VERDICT: ${{ steps.ai.outputs.verdict }}
         run: |
-          export GH_TOKEN="${BOT_TOKEN:-$DEFAULT_TOKEN}"
+          export GH_TOKEN="${APP_TOKEN:-${BOT_TOKEN:-$DEFAULT_TOKEN}}"
 
           if [ "$VERDICT" = "reject" ]; then
             gh pr review "$PR" -R "$GITHUB_REPOSITORY" --request-changes --body-file verdict.txt \
@@ -168,10 +183,10 @@ jobs:
           gh pr comment "$PR" -R "$GITHUB_REPOSITORY" --body-file comment.md
 
           # 审批：需要用「独立身份」的 token（见操作清单）。
-          # 组织策略禁止 GITHUB_TOKEN 审批 PR，所以没有 BOT_TOKEN 时这里会失败——
-          # 不中断流程，因为本仓库 ruleset 只要求 0 个审批，合并不依赖它。
+          # 组织策略禁止 GITHUB_TOKEN 审批 PR，所以只有 App / PAT 身份能审批成功——
+          # 失败不中断流程，因为本仓库 ruleset 只要求 0 个审批，合并不依赖它。
           if ! gh pr review "$PR" -R "$GITHUB_REPOSITORY" --approve --body-file verdict.txt 2>approve.err; then
-            echo "::warning::自动审批失败（未配置 BOT_TOKEN，或组织策略禁止 GITHUB_TOKEN 审批）"
+            echo "::warning::自动审批失败（App token 与 BOT_TOKEN 都不可用，或组织策略禁止 GITHUB_TOKEN 审批）"
             cat approve.err
           fi
 
@@ -187,7 +202,11 @@ jobs:
           fi
 
           # 用 GITHUB_TOKEN 完成的合并不会触发 push 事件（GitHub 防递归），
-          # 也就是 deploy-on-merge.yml 不会跑。需要合并即上线就必须配 BOT_TOKEN。
-          if [ -z "${BOT_TOKEN:-}" ]; then
-            echo "::warning::本次合并用的是 GITHUB_TOKEN，push 事件不会触发部署工作流；代码 PR 由真人合并不受影响。"
+          # 也就是 deploy-on-merge.yml 不会跑。App token / PAT 不受此限制。
+          if [ -z "${APP_TOKEN:-}${BOT_TOKEN:-}" ]; then
+            echo "::warning::未取到 App token，本次合并用的是 GITHUB_TOKEN，push 事件不会触发部署工作流；代码 PR 由真人合并不受影响。"
+          elif [ -n "${APP_TOKEN:-}" ]; then
+            echo "合并身份：GitHub App（合并后会正常触发部署工作流）"
+          else
+            echo "合并身份：PAT（合并后会正常触发部署工作流）"
           fi
