@@ -14,6 +14,7 @@ export default defineNuxtConfig({
         { name: 'keywords', content: '遂宁奶龙大学' },
         { name: 'description', content: '遂宁奶龙大学' },
       ],
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/img/badge.svg' }],
     },
   },
   // 站内图文都在 content/，随服务端一起打包
