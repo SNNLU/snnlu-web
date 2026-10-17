@@ -29,7 +29,7 @@
         </li>
       </ul>
     </nav>
-    <a class="head-brand" href="/" title="遂宁奶龙大学"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></a>
+    <div class="head-brand"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></div>
     <span class="head-sep" aria-hidden="true" />
     <img class="head-campus" src="/img/campus.svg" alt="遂宁校区 Suining Campus" width="136" height="54">
     <CmsBox fixed cls="head-nav" box-style="left:0;right:4px;height:48px;top:135px;z-index:12">
@@ -280,7 +280,7 @@ const leave = () => {
 }
 
 /* 1024–1199：版心随窗收，搜索框贴右，导航九项平分整行 */
-@media (max-width: 1199.98px) {
+@media (max-width: 1231.98px) {
   .search {
     left: auto;
     right: 16px;

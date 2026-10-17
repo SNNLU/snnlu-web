@@ -26,10 +26,12 @@ body.skin {
     linear-gradient(#286f51, #286f51) 0 100% / 100% 150px no-repeat;
 }
 
-/* 版心：最宽 1200，窄屏随视口收（页头一个、正文与页脚一个） */
+/* 版心：内容最宽 1200，两侧常留 16px；窗宽 1232 以上与原站一样，再窄就连续地收，不在某个宽度上跳 */
 .page-center {
   position: relative;
-  max-width: 1200px;
+  max-width: 1232px;
+  padding-left: 16px;
+  padding-right: 16px;
   margin-left: auto;
   margin-right: auto;
 }

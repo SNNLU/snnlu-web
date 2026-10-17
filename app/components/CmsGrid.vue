@@ -33,7 +33,7 @@ defineProps<{ nodes: Node[]; tab: number }>()
   height: auto;
 }
 
-@media (max-width: 1199.98px) {
+@media (max-width: 1231.98px) {
   .grid-col {
     width: calc(var(--w) / 1200 * 100% - 0.05px);
   }

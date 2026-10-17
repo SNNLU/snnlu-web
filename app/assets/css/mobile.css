@@ -13,7 +13,12 @@
   display: none;
 }
 
-@media (max-width: 1023.98px) {
+/*
+ * 何时用手机版：窄屏（< 1024），或者是触屏设备（没有悬停、指针粗）且不超过 1366 宽（平板横放）。
+ * 只看分辨率不够——平板横过来有 1180、1366 宽，却没有鼠标、悬停菜单用不了；
+ * 用 CSS 的交互能力查询（hover / pointer）判断设备，是各家浏览器都支持的通行做法。
+ */
+@media (max-width: 1023.98px), (hover: none) and (pointer: coarse) and (max-width: 1366px) {
   :root {
     --m-green: #127764;
     --m-green-deep: #075c4b;
@@ -301,7 +306,7 @@
     aspect-ratio: 2.4 / 1;
   }
 
-  .baidufocus-focus {
+  .hero .baidufocus .baidufocus-focus {
     left: 0;
     right: 0;
     height: 24px;
@@ -312,7 +317,7 @@
     line-height: normal;
   }
 
-  .baidufocus-focus span {
+  .hero .baidufocus .baidufocus-focus span {
     top: 8px;
     float: none;
     width: 8px;
@@ -322,7 +327,7 @@
     transition: width 0.3s;
   }
 
-  .baidufocus-focus span.hover {
+  .hero .baidufocus .baidufocus-focus span.hover {
     width: 20px;
     border-radius: 4px;
     background: var(--m-orange);
@@ -573,6 +578,11 @@
     white-space: nowrap;
   }
 
+  /* 数字等宽：各行日期一样宽，标题对齐，不随数字跳 */
+  .m-date {
+    font-variant-numeric: tabular-nums;
+  }
+
   .m-date b {
     margin-right: 2px;
     font: 700 22px/1 Arial, var(--m-font);
@@ -678,8 +688,7 @@
     background-color: rgba(255, 255, 255, 0.7) !important;
   }
 
-  #content .fn-btns .btn-num[style*="rgb(255, 0, 0)"],
-  #content .fn-btns .btn-num[style*="#ff0000"] {
+  #content .fn-btns .btn-num.on {
     width: 20px;
     border-radius: 4px;
     background-color: var(--m-orange) !important;
@@ -998,7 +1007,7 @@
 }
 
 /* 平板（768–1023）：列表模块两两并排，其余仍占满一行 */
-@media (min-width: 768px) and (max-width: 1023.98px) {
+@media (min-width: 768px) and (max-width: 1023.98px), (min-width: 768px) and (hover: none) and (pointer: coarse) and (max-width: 1366px) {
   #content .grid-row:has(> .grid-col + .grid-col) {
     display: flex;
     flex-wrap: wrap;

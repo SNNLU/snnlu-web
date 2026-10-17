@@ -30,11 +30,40 @@
 import type { Link } from '#shared/cms'
 
 defineProps<{ html: string; quick: Link[] }>()
+
+/* 竖线只隔开同一行里的两段：后一段折到下一行时，这条竖线就落在行尾，藏起 */
+let ro: ResizeObserver | undefined
+function tidy() {
+  const segs = [...document.querySelectorAll<HTMLElement>('#footer .ft-seg')]
+  const seps = [...document.querySelectorAll<HTMLElement>('#footer .ft-sep')]
+  seps.forEach((s) => s.classList.remove('ft-end'))
+  seps.forEach((s, i) => {
+    const a = segs[i]
+    const b = segs[i + 1]
+    if (a && b && Math.abs(a.getBoundingClientRect().top - b.getBoundingClientRect().top) > 4) s.classList.add('ft-end')
+  })
+}
+onMounted(() => {
+  tidy()
+  ro = new ResizeObserver(tidy)
+  const box = document.querySelector('#footer')
+  if (box) ro.observe(box)
+})
+onUnmounted(() => ro?.disconnect())
 </script>
 
 <style>
 #footer a {
   text-decoration: none;
+}
+
+#footer .ft-seg {
+  white-space: nowrap;
+}
+
+/* 只藏不挪：占位保留，免得后一段又挤回这一行、来回折 */
+#footer .ft-end {
+  visibility: hidden;
 }
 
 #footer .badge-box .div_module {

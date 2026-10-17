@@ -23,6 +23,7 @@
                       v-for="i in order"
                       :key="i"
                       class="btn-num"
+                      :class="{ on: i === at }"
                       :style="{ backgroundColor: i === at ? '#ff0000' : '#333333', borderColor: i === hover ? '#ff0000' : '#eeeeee' }"
                       :title="w.slides[i]?.alt"
                       role="button"

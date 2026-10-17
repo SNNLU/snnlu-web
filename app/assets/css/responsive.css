@@ -1,15 +1,9 @@
 /*
- * 窄屏改写。1200 及以上逐像素照原站；1024–1199 是同一套版面随窗收窄；1024 以下另有手机版（见后）。
+ * 窄屏改写。窗宽 1232 及以上逐像素照原站；1024–1231 是同一套版面随窗收窄；手机版见 mobile.css。
  * 版式 JSON 带来的样式多是 #id 选择器或行内 style，这里用更具体的选择器（必要时 !important）盖过去。
  */
 
-@media (max-width: 1199.98px) {
-  /* 版心两侧留 16px */
-  .page-center {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
+@media (max-width: 1231.98px) {
   /* 侧栏：原站每条写死 248px 宽、左浮；改成整列宽、一条一行 */
   #content .div_module .menu-links.side,
   #content .div_module .menu-links.side a {
@@ -40,9 +34,25 @@
     max-width: 100%;
   }
 
+  /* 标题收短、日期钉在右边：用 flex，不用浮动（浮动加省略号时日期会随截断左右跳） */
   #content .div_module .div_list .div_title {
-    overflow: hidden;
+    display: flex;
+    align-items: baseline;
     white-space: nowrap;
+  }
+
+  #content .div_module .div_list .div_title .date {
+    order: 2;
+    flex: none;
+    float: none;
+    margin-left: auto;
+    padding-left: 10px;
+  }
+
+  #content .div_module .div_list .div_title a {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
     text-overflow: ellipsis;
   }
 
