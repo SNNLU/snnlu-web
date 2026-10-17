@@ -5,7 +5,18 @@
       <ul class="baidufocus_list">
         <Transition v-for="(s, i) in slides" :key="s.src" name="hf">
           <li v-show="i === at" @mouseenter="hold" @mouseleave="run">
-            <img :src="s.src" :srcset="srcset(s.src)" :sizes="SIZES" width="2000" height="484" :alt="s.alt" decoding="async" :fetchpriority="i ? 'low' : 'high'">
+            <img
+              v-if="loaded.includes(i)"
+              :src="s.src"
+              :srcset="srcset(s.src)"
+              :sizes="SIZES"
+              width="2000"
+              height="484"
+              :alt="s.alt"
+              decoding="async"
+              :fetchpriority="i ? 'low' : 'high'"
+              @load="onLoad(i)"
+            >
           </li>
         </Transition>
       </ul>
@@ -44,28 +55,58 @@ const srcset = (src: string) =>
     : undefined
 
 const at = ref(0)
+/* 只给当前和即将切换的横幅挂 src；隐藏的 slide 不下载 */
+const loaded = ref<number[]>([0])
 let timer: ReturnType<typeof setInterval> | undefined
+let warmTimer: ReturnType<typeof setTimeout> | undefined
+
+const ensure = (i: number) => {
+  const len = props.slides.length
+  if (!len) return
+  const k = ((i % len) + len) % len
+  if (!loaded.value.includes(k)) loaded.value = [...loaded.value, k]
+}
 
 const hold = () => clearInterval(timer)
+const onLoad = (i: number) => {
+  if (i !== at.value || reducedMotion()) return
+  clearTimeout(warmTimer)
+  const delay = document.documentElement.dataset.ua === 'mobile' ? 3000 : 600
+  warmTimer = setTimeout(() => ensure(at.value + 1), delay)
+}
 const run = () => {
   hold()
   if (reducedMotion()) return
-  timer = setInterval(() => (at.value = (at.value + 1) % props.slides.length), 5000)
+  timer = setInterval(() => {
+    ensure(at.value + 1)
+    at.value = (at.value + 1) % props.slides.length
+  }, 5000)
 }
 const show = (i: number) => {
   hold()
+  ensure(i)
   at.value = i
 }
 
 const step = (dir: number) => {
   hold()
-  at.value = (at.value + dir + props.slides.length) % props.slides.length
+  const next = (at.value + dir + props.slides.length) % props.slides.length
+  ensure(next)
+  at.value = next
   run()
 }
 const swipe = useSwipe(() => step(1), () => step(-1))
 
-onMounted(run)
-onUnmounted(hold)
+onMounted(() => {
+  run()
+  /* 图片若已在缓存里，load 事件可能早于 hydration；补一次预取下一张 */
+  const img = document.querySelector<HTMLImageElement>('.baidufocus_list li img')
+  if (img?.complete) onLoad(at.value)
+})
+onUnmounted(() => {
+  hold()
+  clearTimeout(warmTimer)
+})
 </script>
 
 <style>

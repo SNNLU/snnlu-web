@@ -21,7 +21,7 @@
                       :key="`${i}-${s.src}`"
                       class="fn-img"
                       draggable="false"
-                      :style="{ display: 'block', height: `${o.h}px`, backgroundImage: `url(${s.src})`, backgroundPosition: 'center center', backgroundRepeat: 'repeat-x', backgroundSize: 'auto 100%' }"
+                      :style="{ display: 'block', height: `${o.h}px`, backgroundImage: bg(i, s.src), backgroundPosition: 'center center', backgroundRepeat: 'repeat-x', backgroundSize: 'auto 100%' }"
                       :target="s.target"
                       :href="s.href"
                       :aria-label="s.alt"
@@ -98,6 +98,24 @@ const activeIndex = computed(() => (n.value > 1 ? (pos.value - 1 + n.value) % n.
 const activeItem = computed(() => slides.value[activeIndex.value])
 const order = computed(() => slides.value.map((_, i) => i).reverse())
 
+/* 只给当前和预取的图片挂背景；其余 slide 不下载 */
+const loaded = ref<number[]>([0])
+const ensure = (i: number) => {
+  const len = n.value
+  if (!len) return
+  const k = ((i % len) + len) % len
+  if (!loaded.value.includes(k)) loaded.value = [...loaded.value, k]
+}
+const bg = (i: number, src: string) => (loaded.value.includes(realIndex(i)) ? `url(${src})` : 'none')
+
+/* 手机版首张新闻图就是 LCP：提前预载，桌面版仍由横幅承担首屏 */
+useHead({
+  link: computed(() => {
+    const src = slides.value[0]?.src
+    return src ? [{ rel: 'preload' as const, as: 'image' as const, href: src, media: '(max-width: 767px)', fetchpriority: 'high' as const }] : []
+  }),
+})
+
 const trackStyle = computed(() => ({
   transform: `translate3d(calc(${-pos.value * 100}% + ${drag.value}px), 0, 0)`,
   transition: smooth.value ? 'transform 300ms cubic-bezier(0.37, 0, 0.63, 1)' : 'none',
@@ -109,12 +127,33 @@ let axis: 'x' | 'y' | '' = ''
 let dragging = false
 let timer: ReturnType<typeof setTimeout> | undefined
 let edge: ReturnType<typeof setTimeout> | undefined
+let warmTimer: ReturnType<typeof setTimeout> | undefined
+
+/* 当前图加载完再预取下一张；不要在 LCP 之前抢带宽 */
+function scheduleWarm() {
+  clearTimeout(warmTimer)
+  warmTimer = setTimeout(() => ensure(activeIndex.value + 1), 700)
+}
+
+function probeActive() {
+  const i = activeIndex.value
+  const src = slides.value[i]?.src
+  if (!src) return
+  const img = new Image()
+  img.decoding = 'async'
+  img.onload = () => {
+    if (activeIndex.value === i) scheduleWarm()
+  }
+  img.src = src
+}
 
 function start(e: TouchEvent) {
   clearTimeout(timer)
   clearTimeout(edge)
   if (pos.value === 0) pos.value = n.value
   else if (pos.value === n.value + 1) pos.value = 1
+  ensure(activeIndex.value + 1)
+  ensure(activeIndex.value - 1)
   const t = e.touches[0]
   if (!t) return
   dragging = true
@@ -142,7 +181,9 @@ function end() {
   if (!dragging) return
   dragging = false
   if (axis === 'x' && Math.abs(drag.value) > 40) {
-    pos.value += drag.value < 0 ? 1 : -1
+    const d = drag.value < 0 ? 1 : -1
+    ensure(activeIndex.value + d)
+    pos.value += d
     snapEdge()
   }
   drag.value = 0
@@ -159,6 +200,7 @@ function cancel() {
 
 function goTo(i: number) {
   if (n.value < 2) return restart()
+  ensure(i)
   let delta = i + 1 - pos.value
   if (delta > n.value / 2) delta -= n.value
   else if (delta < -n.value / 2) delta += n.value
@@ -182,6 +224,7 @@ function snapEdge() {
 }
 
 function next() {
+  ensure(activeIndex.value + 1)
   pos.value += 1
   snapEdge()
   restart()
@@ -192,10 +235,21 @@ function restart() {
   if (n.value > 1 && !reducedMotion()) timer = setTimeout(next, o.time)
 }
 
-onMounted(restart)
+watch(activeIndex, (i) => {
+  clearTimeout(warmTimer)
+  ensure(i)
+  if (import.meta.client) probeActive()
+})
+
+onMounted(() => {
+  ensure(0)
+  probeActive()
+  restart()
+})
 onUnmounted(() => {
   clearTimeout(timer)
   clearTimeout(edge)
+  clearTimeout(warmTimer)
 })
 </script>
 
