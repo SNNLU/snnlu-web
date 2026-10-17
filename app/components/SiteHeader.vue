@@ -35,8 +35,15 @@
     <CmsBox fixed cls="head-nav" box-style="left:0;right:4px;height:48px;top:135px;z-index:12">
       <div>
         <ul class="sf-menu sf-js-enabled sf-arrows">
-          <li v-for="n in nav" :key="n.label" :class="{ sfHover: open === n.label }" @mouseenter="enter(n.label)" @mouseleave="leave">
-            <a :target="n.target" :href="n.href" :class="{ 'sf-with-ul': n.children.length }">{{ n.label }}</a>
+          <!-- 下拉菜单：鼠标悬停或键盘聚焦都展开，Esc 收起 -->
+          <li v-for="n in nav" :key="n.label" :class="{ sfHover: open === n.label }" @mouseenter="enter(n.label)" @mouseleave="leave" @focusin="enter(n.label)" @focusout="leave">
+            <a
+              :target="n.target"
+              :href="n.href"
+              :class="{ 'sf-with-ul': n.children.length }"
+              :aria-haspopup="n.children.length ? 'true' : undefined"
+              :aria-expanded="n.children.length ? open === n.label : undefined"
+            >{{ n.label }}</a>
             <Transition name="sf">
               <ul v-if="n.children.length" v-show="open === n.label">
                 <li v-for="c in n.children" :key="c.label">
@@ -65,10 +72,14 @@ import type { Link, NavItem } from '#shared/cms'
 
 defineProps<{ nav: NavItem[]; quick: Link[]; tab: number }>()
 
-/* 手机版菜单：展开时锁住页面滚动，Esc 收起；unfold 是当前展开的栏目 */
+/* 手机版菜单：展开时锁住页面滚动，Esc 收起（桌面下拉菜单也一并收起）；unfold 是当前展开的栏目 */
 const menu = ref(false)
 const unfold = ref('')
-const esc = (e: KeyboardEvent) => e.key === 'Escape' && (menu.value = false)
+const esc = (e: KeyboardEvent) => {
+  if (e.key !== 'Escape') return
+  menu.value = false
+  open.value = ''
+}
 watch(menu, (v) => document.documentElement.classList.toggle('m-lock', v))
 onMounted(() => addEventListener('keydown', esc))
 onUnmounted(() => {

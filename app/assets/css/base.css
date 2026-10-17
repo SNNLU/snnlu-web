@@ -79,6 +79,24 @@ body.skin {
   margin: 0;
 }
 
+/* 「跳到正文」：平时藏起，键盘聚焦时浮在左上角 */
+.skip-link:focus {
+  position: fixed;
+  z-index: 2147483647;
+  left: 8px;
+  top: 8px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  background: #fff;
+  color: #127764;
+  font: 14px/1.6 "Microsoft YaHei", sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+#content:focus {
+  outline: 0;
+}
+
 /* 原站加载提示 */
 #loading {
   position: fixed;

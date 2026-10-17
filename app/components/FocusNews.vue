@@ -15,6 +15,7 @@
                       :style="{ display: 'block', width: `${o.w}px`, height: `${o.h}px`, backgroundImage: `url(${shown.src})`, backgroundPosition: 'center center', backgroundRepeat: 'repeat-x', backgroundSize: 'auto 100%' }"
                       :target="shown.target"
                       :href="shown.href"
+                      :aria-label="shown.alt"
                     >&nbsp;</a>
                   </div>
                   <div class="fn-btns" :style="{ width: `${o.w}px`, height: '18px', position: 'absolute', left: '0px', bottom: '0px', border: '0px', zIndex: 999 }">
@@ -24,20 +25,27 @@
                       class="btn-num"
                       :style="{ backgroundColor: i === at ? '#ff0000' : '#333333', borderColor: i === hover ? '#ff0000' : '#eeeeee' }"
                       :title="w.slides[i]?.alt"
+                      role="button"
+                      tabindex="0"
+                      :aria-label="`第 ${i + 1} 张：${w.slides[i]?.alt}`"
+                      :aria-pressed="i === at"
                       @mouseover="hover = i"
                       @mouseout="hover = -1"
                       @click="play(i)"
+                      @keydown.enter.space.prevent="play(i)"
                     >{{ i + 1 }}</div>
                   </div>
                 </div>
                 <div>
-                  <div
+                  <!-- 图下的标题就是这篇的链接（原站是点击后 window.open 的 div） -->
+                  <a
                     class="caption"
+                    :href="item.href"
+                    target="_blank"
                     :style="{ height: `${o.titleH}px`, lineHeight: `${o.titleH}px`, backgroundColor: o.titleBg, color: lit ? o.titleHover : o.titleColor }"
                     @mouseover="lit = true"
                     @mouseout="lit = false"
-                    @click="open(item.href)"
-                  >{{ item.alt }}</div>
+                  >{{ item.alt }}</a>
                 </div>
               </div>
             </div>
@@ -93,10 +101,8 @@ function play(i: number) {
       fade = el.animate([{ opacity: 0.5 }, { opacity: 1 }], { duration: 500, easing: SWING, fill: 'forwards' })
     }
   } else shownAt.value = i
-  timer = setTimeout(() => play((i + 1) % props.w.slides.length), o.time)
+  if (!reducedMotion()) timer = setTimeout(() => play((i + 1) % props.w.slides.length), o.time)
 }
-
-const open = (href: string) => window.open(href)
 
 onMounted(() => play(0))
 onUnmounted(() => clearTimeout(timer))
@@ -120,6 +126,8 @@ onUnmounted(() => clearTimeout(timer))
 }
 
 .caption {
+  display: block;
+  text-decoration: none;
   font-family: 微软雅黑;
   font-size: 13px;
   font-weight: bold;
@@ -129,5 +137,10 @@ onUnmounted(() => clearTimeout(timer))
   text-align: center;
   border: 0;
   width: 100%;
+}
+
+/* cms.css 的 a:hover 会把字重改回常规 */
+.caption:hover {
+  font-weight: bold;
 }
 </style>

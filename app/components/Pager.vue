@@ -1,18 +1,20 @@
 <!-- 十页一段；首页、上一段、上一页 … 下一页、下一段、尾页 -->
 <template>
-  <nav>
+  <!-- 翻页在页内切换，不是跳转：原站是 javascript:void(0) 的链接。这里留 <a>（各处的链接样式照旧套得上），
+       去掉假 href，标成按钮、可 Tab 到、回车与空格可按 -->
+  <nav aria-label="分页">
     <ul class="pagination pagination-sm mt-1 mb-1 justify-content-end">
-      <li v-if="page > 1" class="page-item jump"><a class="page-link text-secondary" href="javascript:void(0);" title="首页" @click="go(1)"><svg class="text-dark" width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M11.854 3.646a.5.5 0 0 1 0 .708L8.207 8l3.647 3.646a.5.5 0 0 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 0 1 .708 0zM4.5 1a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 1 0v-13a.5.5 0 0 0-.5-.5z" /></svg>&nbsp;</a></li>
-      <li v-if="from > 1" class="page-item jump"><a class="page-link text-secondary" href="javascript:void(0);" title="上一段" @click="go(from - 10)">&laquo;</a></li>
-      <li v-if="page > 1" class="page-item"><a class="page-link text-secondary" href="javascript:void(0);" title="" @click="go(page - 1)">上一页</a></li>
+      <li v-if="page > 1" class="page-item jump"><a class="page-link text-secondary" role="button" tabindex="0" title="首页" aria-label="首页" @click="go(1)" @keydown.enter.space.prevent="go(1)"><svg class="text-dark" width="13" height="13" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.854 3.646a.5.5 0 0 1 0 .708L8.207 8l3.647 3.646a.5.5 0 0 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 0 1 .708 0zM4.5 1a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 1 0v-13a.5.5 0 0 0-.5-.5z" /></svg>&nbsp;</a></li>
+      <li v-if="from > 1" class="page-item jump"><a class="page-link text-secondary" role="button" tabindex="0" title="上一段" aria-label="上一段" @click="go(from - 10)" @keydown.enter.space.prevent="go(from - 10)">&laquo;</a></li>
+      <li v-if="page > 1" class="page-item"><a class="page-link text-secondary" role="button" tabindex="0" @click="go(page - 1)" @keydown.enter.space.prevent="go(page - 1)">上一页</a></li>
       <li v-for="n in numbers" :key="n" class="page-item num" :class="{ disabled: n === page }">
-        <a v-if="n === page" class="page-link text-danger" href="javascript:void(0);">{{ n }}</a>
-        <a v-else class="page-link text-secondary" href="javascript:void(0);" title="" @click="go(n)">{{ n }}</a>
+        <a v-if="n === page" class="page-link text-danger" aria-current="page">{{ n }}</a>
+        <a v-else class="page-link text-secondary" role="button" tabindex="0" :aria-label="`第 ${n} 页`" @click="go(n)" @keydown.enter.space.prevent="go(n)">{{ n }}</a>
       </li>
-      <li v-if="page < pages" class="page-item"><a class="page-link text-secondary" href="javascript:void(0);" title="" @click="go(page + 1)">下一页</a></li>
-      <li v-if="from + 10 <= pages" class="page-item jump"><a class="page-link text-secondary" href="javascript:void(0);" title="下一段" @click="go(from + 10)">&raquo;</a></li>
-      <li v-if="page < pages" class="page-item jump"><a class="page-link text-secondary" href="javascript:void(0);" title="尾页" @click="go(pages)">&nbsp;<svg class="text-dark" width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M4.146 3.646a.5.5 0 0 0 0 .708L7.793 8l-3.647 3.646a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708 0zM11.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z" /></svg></a></li>
-      <li class="page-item disabled"><a class="page-link bg-light" href="javascript:void(0);">{{ page }}/{{ pages }}页&nbsp;共{{ total }}条</a></li>
+      <li v-if="page < pages" class="page-item"><a class="page-link text-secondary" role="button" tabindex="0" @click="go(page + 1)" @keydown.enter.space.prevent="go(page + 1)">下一页</a></li>
+      <li v-if="from + 10 <= pages" class="page-item jump"><a class="page-link text-secondary" role="button" tabindex="0" title="下一段" aria-label="下一段" @click="go(from + 10)" @keydown.enter.space.prevent="go(from + 10)">&raquo;</a></li>
+      <li v-if="page < pages" class="page-item jump"><a class="page-link text-secondary" role="button" tabindex="0" title="尾页" aria-label="尾页" @click="go(pages)" @keydown.enter.space.prevent="go(pages)">&nbsp;<svg class="text-dark" width="13" height="13" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.146 3.646a.5.5 0 0 0 0 .708L7.793 8l-3.647 3.646a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708 0zM11.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z" /></svg></a></li>
+      <li class="page-item disabled"><a class="page-link bg-light">{{ page }}/{{ pages }}页&nbsp;共{{ total }}条</a></li>
     </ul>
   </nav>
 </template>

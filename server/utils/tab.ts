@@ -150,6 +150,7 @@ export async function tabOf(id: number): Promise<Tab | { redirect: string } | nu
     css: l.css,
     grid: await gridOf(l.grid, s, id),
     st: null,
-    hero: id === 0 ? s.hero.map((h) => ({ ...h, href: 'javascript:void(0);', target: '_self' })) : [],
+    // 横幅只是图，不链到哪里（原站写的是 javascript:void(0)）
+    hero: id === 0 ? s.hero.map((h) => ({ ...h, href: '', target: '_self' })) : [],
   }
 }

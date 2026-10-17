@@ -1,5 +1,7 @@
 <template>
   <template v-if="tab">
+    <!-- 键盘用户的第一个 Tab：跳过页头与导航 -->
+    <a class="skip-link visually-hidden-focusable" href="#content">跳到正文</a>
     <!-- 页头 → 横幅（整宽，在文档流里）→ 正文与页脚；页头与正文各在一个 1200 版心里 -->
     <div id="site">
       <div id="center" class="page-center">
@@ -9,7 +11,7 @@
       <MobileSubNav v-if="sub" v-bind="sub" />
       <div class="page-center">
         <div id="main">
-          <div id="content">
+          <div id="content" tabindex="-1">
             <StView v-if="tab.st" :key="route.fullPath" :st="tab.st" />
             <CmsGrid v-else :nodes="tab.grid" :tab="tab.id" />
           </div>
