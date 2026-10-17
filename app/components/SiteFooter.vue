@@ -1,5 +1,15 @@
 <template>
   <div id="footer">
+    <!-- 手机版页脚顶部：快速链接一排，校名与校训（同 sicnu.edu.cn 手机版）；桌面上不显示 -->
+    <div class="m-foot">
+      <nav class="m-foot-links" aria-label="快速链接">
+        <a v-for="q in quick" :key="q.href" :href="q.href" :target="q.target">{{ q.label }}</a>
+      </nav>
+      <div class="m-foot-brand">
+        <img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87" loading="lazy">
+        <span class="m-motto" role="img" aria-label="重德博学 务实尚美" />
+      </div>
+    </div>
     <CmsBox fixed box-style="left:0;right:2px;height:76px;top:10px;z-index:1">
       <!-- eslint-disable-next-line vue/no-v-html -- 页脚来自 content/site.json（不走快车道，需所有者审批） -->
       <div><div v-html="html" /></div>
@@ -17,7 +27,9 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{ html: string }>()
+import type { Link } from '#shared/cms'
+
+defineProps<{ html: string; quick: Link[] }>()
 </script>
 
 <style>

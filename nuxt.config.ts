@@ -47,7 +47,7 @@ export default defineNuxtConfig({
     },
   },
   // 与原站同序：系统基样式 → Bootstrap 5.3.2 → 皮肤；最后是窄屏的改写
-  css: ['~/assets/css/cms.css', 'bootstrap/dist/css/bootstrap.min.css', '~/assets/css/base.css', '~/assets/css/responsive.css'],
+  css: ['~/assets/css/cms.css', 'bootstrap/dist/css/bootstrap.min.css', '~/assets/css/base.css', '~/assets/css/responsive.css', '~/assets/css/mobile.css'],
   // 只在构建时由服务端读取，不下发到浏览器
   runtimeConfig: { commit: commit() },
   devServer: { port: 4321 },

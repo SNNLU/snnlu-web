@@ -3,16 +3,17 @@
     <!-- 页头 → 横幅（整宽，在文档流里）→ 正文与页脚；页头与正文各在一个 1200 版心里 -->
     <div id="site">
       <div id="center" class="page-center">
-        <SiteHeader :nav="tab.nav" :tab="tab.id" />
+        <SiteHeader :nav="tab.nav" :quick="tab.quick" :tab="tab.id" />
       </div>
       <HeroCarousel v-if="tab.hero.length" :slides="tab.hero" />
+      <MobileSubNav v-if="sub" v-bind="sub" />
       <div class="page-center">
         <div id="main">
           <div id="content">
             <StView v-if="tab.st" :key="route.fullPath" :st="tab.st" />
             <CmsGrid v-else :nodes="tab.grid" :tab="tab.id" />
           </div>
-          <SiteFooter :html="tab.footer" />
+          <SiteFooter :html="tab.footer" :quick="tab.quick" />
         </div>
       </div>
     </div>
@@ -22,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Tab, Visit } from '#shared/cms'
+import type { Module, Node, Tab, Visit } from '#shared/cms'
 
 const LOADING = '/img/loading.svg'
 
@@ -37,6 +38,23 @@ const visit = computed(() => (data.value && 'redirect' in data.value ? data.valu
 if (visit.value) await navigateTo(visit.value, { external: !visit.value.startsWith('/'), redirectCode: 302 })
 
 const tab = computed(() => (data.value && 'grid' in data.value ? data.value : null))
+
+/* 手机版内页抬头：栏目页取侧栏（带 focus 的菜单）的标题与链接；正文、列表取路径条里的栏目名；首页没有 */
+const sub = computed(() => {
+  const t = tab.value
+  if (!t || t.id === 0) return null
+  if (t.st) return { title: t.st.trail[1]?.label.replace(/^>>/, '') ?? t.title, links: [], current: '' }
+  const walk = (nodes: Node[]): Module | undefined => {
+    for (const n of nodes) {
+      const hit = n.t === 'row' ? walk(n.kids) : n.t === 'col' ? n.modules.find((m) => m.widget.kind === 'menu' && m.widget.focus) : undefined
+      if (hit) return hit
+    }
+  }
+  const m = walk(t.grid)
+  if (!m || m.widget.kind !== 'menu') return null
+  const focus = m.widget.focus + t.id
+  return { title: m.bar?.title ?? t.title, links: m.widget.links, current: m.widget.links.find((l) => l.id === focus)?.href ?? '' }
+})
 const busy = computed(() => useLoading().value > 0)
 
 useHead({

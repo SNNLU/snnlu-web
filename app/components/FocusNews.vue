@@ -7,16 +7,17 @@
         <div v-if="item && shown" class="td_img0">
           <div class="div_img0">
             <div :id="w.slider">
-              <div :style="{ width: `${o.w}px`, height: 'auto', border: '0px' }">
-                <div :style="{ position: 'relative', overflow: 'hidden', width: `${o.w}px`, height: `${o.h - o.titleH}px` }">
+              <div class="fn-box" :style="{ width: `${o.w}px`, height: 'auto', border: '0px' }">
+                <div class="fn-view" :style="{ position: 'relative', overflow: 'hidden', width: `${o.w}px`, height: `${o.h - o.titleH}px` }">
                   <div ref="pane" style="display:block;width:100%;height:100%;">
                     <a
+                      class="fn-img"
                       :style="{ display: 'block', width: `${o.w}px`, height: `${o.h}px`, backgroundImage: `url(${shown.src})`, backgroundPosition: 'center center', backgroundRepeat: 'repeat-x', backgroundSize: 'auto 100%' }"
                       :target="shown.target"
                       :href="shown.href"
                     >&nbsp;</a>
                   </div>
-                  <div :style="{ width: `${o.w}px`, height: '18px', position: 'absolute', left: '0px', bottom: '0px', border: '0px', zIndex: 999 }">
+                  <div class="fn-btns" :style="{ width: `${o.w}px`, height: '18px', position: 'absolute', left: '0px', bottom: '0px', border: '0px', zIndex: 999 }">
                     <div
                       v-for="i in order"
                       :key="i"
@@ -47,7 +48,7 @@
             <table v-for="r in w.rows" :key="r.href" border="0" cellspacing="0" cellpadding="0" class="table_item">
               <tbody>
                 <tr>
-                  <td align="left"><div class="div_item_link"><a :title="r.tip" :target="r.target" :href="r.href">{{ r.title }}</a></div></td>
+                  <td align="left"><div class="div_item_link"><MDate v-if="r.ymd" :ymd="r.ymd" /><a :title="r.tip" :target="r.target" :href="r.href">{{ r.title }}</a></div></td>
                   <td align="right"><div class="div_item_date">{{ r.date }}</div></td>
                 </tr>
               </tbody>
