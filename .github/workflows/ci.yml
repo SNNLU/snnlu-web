@@ -34,6 +34,9 @@ jobs:
       - name: 类型检查
         run: npm run typecheck
 
+      - name: 单元测试
+        run: npm test
+
       # 与部署同一条命令：生成全部静态页，任何一页出错都会失败
       - name: 生成静态站
         run: npm run generate
