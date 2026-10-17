@@ -28,6 +28,7 @@ html[data-ua="mobile"] {
   }
 
   body.skin {
+    min-width: 0;
     background: none;
     font-family: var(--m-font);
     color: var(--m-text);

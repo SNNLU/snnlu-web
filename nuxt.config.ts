@@ -59,8 +59,9 @@ export default defineNuxtConfig({
       ],
     },
   },
-  // 与原站同序：系统基样式 → Bootstrap 5.3.2（只取用到的部分）→ 皮肤；最后是手机版（按 UA 判定）的改写
-  css: ['~/assets/css/cms.css', '~/assets/scss/bootstrap.scss', '~/assets/css/base.css', '~/assets/css/responsive.css', '~/assets/css/mobile.scss'],
+  // 与原站同序：系统基样式 → Bootstrap 5.3.2（只取用到的部分）→ 皮肤 → 手机版（按 UA 判定）的改写。
+  // 桌面版在 base.css 里设了 1232px 的最小宽度：窗口再窄也不压版式，改为横向滚动。
+  css: ['~/assets/css/cms.css', '~/assets/scss/bootstrap.scss', '~/assets/css/base.css', '~/assets/css/mobile.scss'],
   // 只在构建时由服务端读取，不下发到浏览器
   runtimeConfig: { commit: commit() },
   devServer: { port: 4321 },
