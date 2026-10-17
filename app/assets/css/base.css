@@ -3,6 +3,15 @@ html.skin {
   overflow-y: scroll;
 }
 
+/* 手机版专用块：默认隐藏；<html data-ua="mobile"> 时由 mobile.scss 打开 */
+.m-bar,
+.m-nav,
+.m-date,
+.m-subnav,
+.m-foot {
+  display: none;
+}
+
 /* 皮肤：页头横幅与页脚底图；只给站点页面，手机版与二维码页不带 */
 body.skin {
   position: relative;
