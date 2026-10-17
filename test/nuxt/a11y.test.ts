@@ -43,7 +43,7 @@ describe('FocusNews controls', () => {
     const w = await mountSuspended(FocusNews, { props: { w: w0 } })
     const caption = w.find('a.caption')
     expect(caption.attributes('href')).toBe('/news/1/')
-    expect(w.find('a.fn-img').attributes('aria-label')).toBe('图1')
+    expect(w.find('a.fn-img[tabindex="0"]').attributes('aria-label')).toBe('图1')
   })
 })
 

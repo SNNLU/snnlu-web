@@ -1,8 +1,7 @@
-<!-- 横幅：baidufocus，5 秒一换，淡入淡出 300ms；悬停暂停，悬停圆点即切换。
-     在页头之下的文档流里，整宽、最宽 1920（与原站同高 465），窄屏按比例缩 -->
+<!-- 窓の幅 絵は動かずに 秋の空 -->
 <template>
   <div class="hero" role="region" aria-roledescription="轮播" aria-label="横幅">
-    <div class="baidufocus">
+    <div class="baidufocus" @touchstart.passive="swipe.start" @touchend="swipe.end">
       <ul class="baidufocus_list">
         <Transition v-for="(s, i) in slides" :key="s.src" name="hf">
           <li v-show="i === at" @mouseenter="hold" @mouseleave="run">
@@ -58,6 +57,13 @@ const show = (i: number) => {
   at.value = i
 }
 
+const step = (dir: number) => {
+  hold()
+  at.value = (at.value + dir + props.slides.length) % props.slides.length
+  run()
+}
+const swipe = useSwipe(() => step(1), () => step(-1))
+
 onMounted(run)
 onUnmounted(hold)
 </script>
@@ -68,8 +74,16 @@ onUnmounted(hold)
   z-index: 9;
   max-width: 1920px;
   margin: 0 auto;
+  --hero-height: 360px;
   aspect-ratio: 1920 / 465;
   overflow: hidden;
+}
+
+html[data-ua="desktop"] .hero {
+  height: var(--hero-height);
+  aspect-ratio: auto;
+  margin-left: max(0px, round(nearest, calc(50% - 960px), 1px));
+  margin-right: auto;
 }
 
 .baidufocus {
@@ -79,6 +93,7 @@ onUnmounted(hold)
   overflow: hidden;
   padding: 0;
   font: 12px/180% Arial, Helvetica, sans-serif, 宋体;
+  touch-action: pan-y;
 }
 
 .baidufocus * {
@@ -128,6 +143,11 @@ onUnmounted(hold)
   bottom: 0;
   margin-left: -25px;
   z-index: 2;
+}
+
+html[data-ua="desktop"] .baidufocus-focus {
+  left: round(nearest, calc(50% - 25.5px), 1px);
+  margin-left: 0;
 }
 
 .baidufocus-focus span {

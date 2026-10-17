@@ -3,11 +3,21 @@ html.skin {
   overflow-y: scroll;
 }
 
+.m-bar,
+.m-nav,
+.m-date,
+.m-subnav,
+.m-foot {
+  display: none;
+}
+
 /* 皮肤：页头横幅与页脚底图；只给站点页面，手机版与二维码页不带 */
 body.skin {
   position: relative;
   padding-top: 0;
   padding-bottom: 0;
+  /* 窓狭し 頁動かず 冬の嶺 */
+  min-width: 1232px;
   /*
    * 页头三层，都以视口中线定位，与 1200 版心对齐（版心左缘 = 50% - 600px）：
    *   校训 motto.svg（292 宽，版心 x=1218）；实景 head-photo.webp（2 倍图，840 宽，版心 x=560）；整条 185 高的绿底。
@@ -34,6 +44,18 @@ body.skin {
   padding-right: 16px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* 窓の幅 ページは止まる 冬の庭 */
+html[data-ua="desktop"] .page-center {
+  margin-left: max(0px, round(nearest, calc(50% - 616px), 1px));
+}
+
+html[data-ua="desktop"] body.skin {
+  background-position:
+    round(nearest, calc(50% + 764px), 1px) 10px,
+    round(nearest, calc(50% + 380px), 1px) 0,
+    0 0;
 }
 
 /* 版心里的浮动在这里收住；超出版心的部分照原站裁掉（clip 不产生滚动容器） */

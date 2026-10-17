@@ -1,21 +1,30 @@
-<!-- 校区新闻：左图轮播（淡出至半透明 100ms、换图、淡入 500ms），右侧条目表 -->
+<!-- 春風や 指の向きには 絵が流れ -->
 <template>
   <div>
     <div :id="w.uid">
       <div class="d-flex align-items-start w-100">
-        <!-- 栏目里没有带封面的文章时不出轮播，只留右侧条目 -->
-        <div v-if="item && shown" class="td_img0">
+        <div v-if="activeItem" class="td_img0">
           <div class="div_img0">
             <div :id="w.slider">
               <div class="fn-box" :style="{ width: `${o.w}px`, height: 'auto', border: '0px' }">
-                <div class="fn-view" :style="{ position: 'relative', overflow: 'hidden', width: `${o.w}px`, height: `${o.h - o.titleH}px` }">
-                  <div ref="pane" style="display:block;width:100%;height:100%;">
+                <div
+                  class="fn-view"
+                  :style="{ position: 'relative', overflow: 'hidden', width: `${o.w}px`, height: `${o.h - o.titleH}px` }"
+                  @touchstart.passive="start"
+                  @touchmove.passive="move"
+                  @touchend="end"
+                >
+                  <div class="fn-track" :style="trackStyle">
                     <a
+                      v-for="(s, i) in track"
+                      :key="`${i}-${s.src}`"
                       class="fn-img"
-                      :style="{ display: 'block', width: `${o.w}px`, height: `${o.h}px`, backgroundImage: `url(${shown.src})`, backgroundPosition: 'center center', backgroundRepeat: 'repeat-x', backgroundSize: 'auto 100%' }"
-                      :target="shown.target"
-                      :href="shown.href"
-                      :aria-label="shown.alt"
+                      :style="{ display: 'block', height: `${o.h}px`, backgroundImage: `url(${s.src})`, backgroundPosition: 'center center', backgroundRepeat: 'repeat-x', backgroundSize: 'auto 100%' }"
+                      :target="s.target"
+                      :href="s.href"
+                      :aria-label="s.alt"
+                      :aria-hidden="realIndex(i) === activeIndex ? undefined : 'true'"
+                      :tabindex="realIndex(i) === activeIndex ? 0 : -1"
                     >&nbsp;</a>
                   </div>
                   <div class="fn-btns" :style="{ width: `${o.w}px`, height: '18px', position: 'absolute', left: '0px', bottom: '0px', border: '0px', zIndex: 999 }">
@@ -23,30 +32,29 @@
                       v-for="i in order"
                       :key="i"
                       class="btn-num"
-                      :class="{ on: i === at }"
-                      :style="{ backgroundColor: i === at ? '#ff0000' : '#333333', borderColor: i === hover ? '#ff0000' : '#eeeeee' }"
+                      :class="{ on: i === activeIndex }"
+                      :style="{ backgroundColor: i === activeIndex ? '#ff0000' : '#333333', borderColor: i === hover ? '#ff0000' : '#eeeeee' }"
                       :title="w.slides[i]?.alt"
                       role="button"
                       tabindex="0"
                       :aria-label="`第 ${i + 1} 张：${w.slides[i]?.alt}`"
-                      :aria-pressed="i === at"
+                      :aria-pressed="i === activeIndex"
                       @mouseover="hover = i"
                       @mouseout="hover = -1"
-                      @click="play(i)"
-                      @keydown.enter.space.prevent="play(i)"
+                      @click="goTo(i)"
+                      @keydown.enter.space.prevent="goTo(i)"
                     >{{ i + 1 }}</div>
                   </div>
                 </div>
                 <div>
-                  <!-- 图下的标题就是这篇的链接（原站是点击后 window.open 的 div） -->
                   <a
                     class="caption"
-                    :href="item.href"
+                    :href="activeItem.href"
                     target="_blank"
                     :style="{ height: `${o.titleH}px`, lineHeight: `${o.titleH}px`, backgroundColor: o.titleBg, color: lit ? o.titleHover : o.titleColor }"
                     @mouseover="lit = true"
                     @mouseout="lit = false"
-                  >{{ item.alt }}</a>
+                  >{{ activeItem.alt }}</a>
                 </div>
               </div>
             </div>
@@ -76,40 +84,128 @@ import type { Widget } from '#shared/cms'
 const props = defineProps<{ w: Extract<Widget, { kind: 'focus' }> }>()
 const o = props.w.options
 
-const at = ref(0)
-const shownAt = ref(0)
 const hover = ref(-1)
 const lit = ref(false)
-const pane = ref<HTMLElement>()
-const item = computed(() => props.w.slides[at.value])
-const shown = computed(() => props.w.slides[shownAt.value])
-// 按钮倒序插入、右浮动，看上去仍是 1 2 3 4 5
-const order = computed(() => props.w.slides.map((_, i) => i).reverse())
+const drag = ref(0)
+const smooth = ref(true)
 
+const slides = computed(() => props.w.slides)
+const n = computed(() => slides.value.length)
+const track = computed(() => {
+  const list = slides.value
+  return list.length > 1 ? [list[list.length - 1]!, ...list, list[0]!] : list
+})
+const pos = ref(n.value > 1 ? 1 : 0)
+const realIndex = (i: number) => (n.value > 1 ? (i - 1 + n.value) % n.value : 0)
+const activeIndex = computed(() => (n.value > 1 ? (pos.value - 1 + n.value) % n.value : 0))
+const activeItem = computed(() => slides.value[activeIndex.value])
+const order = computed(() => slides.value.map((_, i) => i).reverse())
+
+const trackStyle = computed(() => ({
+  transform: `translate3d(calc(${-pos.value * 100}% + ${drag.value}px), 0, 0)`,
+  transition: smooth.value ? 'transform 300ms cubic-bezier(0.37, 0, 0.63, 1)' : 'none',
+}))
+
+let sx = 0
+let sy = 0
+let axis: 'x' | 'y' | '' = ''
 let timer: ReturnType<typeof setTimeout> | undefined
-let fade: Animation | undefined
+let edge: ReturnType<typeof setTimeout> | undefined
 
-function play(i: number) {
+function start(e: TouchEvent) {
   clearTimeout(timer)
-  if (!props.w.slides.length) return
-  at.value = i
-  fade?.finish()
-  const el = pane.value
-  if (el?.animate) {
-    fade = el.animate([{ opacity: 1 }, { opacity: 0.5 }], { duration: 100, easing: SWING, fill: 'forwards' })
-    fade.onfinish = () => {
-      shownAt.value = i
-      fade = el.animate([{ opacity: 0.5 }, { opacity: 1 }], { duration: 500, easing: SWING, fill: 'forwards' })
-    }
-  } else shownAt.value = i
-  if (!reducedMotion()) timer = setTimeout(() => play((i + 1) % props.w.slides.length), o.time)
+  if (pos.value === 0) pos.value = n.value
+  else if (pos.value === n.value + 1) pos.value = 1
+  const t = e.touches[0]
+  if (!t) return
+  sx = t.clientX
+  sy = t.clientY
+  axis = ''
+  drag.value = 0
+  smooth.value = false
 }
 
-onMounted(() => play(0))
-onUnmounted(() => clearTimeout(timer))
+function move(e: TouchEvent) {
+  const t = e.touches[0]
+  if (!t) return
+  const dx = t.clientX - sx
+  const dy = t.clientY - sy
+  if (!axis) {
+    if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return
+    axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y'
+  }
+  if (axis === 'x') drag.value = dx
+}
+
+function end() {
+  if (axis === 'x' && Math.abs(drag.value) > 40) {
+    pos.value += drag.value < 0 ? 1 : -1
+    snapEdge()
+  }
+  drag.value = 0
+  smooth.value = true
+  restart()
+}
+
+function goTo(i: number) {
+  if (n.value < 2) return restart()
+  let delta = i + 1 - pos.value
+  if (delta > n.value / 2) delta -= n.value
+  else if (delta < -n.value / 2) delta += n.value
+  if (!delta) return restart()
+  clearTimeout(edge)
+  drag.value = 0
+  smooth.value = true
+  pos.value += delta
+  snapEdge()
+  restart()
+}
+
+function snapEdge() {
+  clearTimeout(edge)
+  edge = setTimeout(() => {
+    if (pos.value === 0) pos.value = n.value
+    else if (pos.value === n.value + 1) pos.value = 1
+    smooth.value = false
+    requestAnimationFrame(() => requestAnimationFrame(() => (smooth.value = true)))
+  }, 320)
+}
+
+function next() {
+  pos.value += 1
+  snapEdge()
+  restart()
+}
+
+function restart() {
+  clearTimeout(timer)
+  if (n.value > 1 && !reducedMotion()) timer = setTimeout(next, o.time)
+}
+
+onMounted(restart)
+onUnmounted(() => {
+  clearTimeout(timer)
+  clearTimeout(edge)
+})
 </script>
 
 <style scoped>
+.fn-view {
+  touch-action: pan-y;
+}
+
+.fn-track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  will-change: transform;
+}
+
+.fn-img {
+  flex: 0 0 100%;
+  width: 100%;
+}
+
 .btn-num {
   float: right;
   margin: 1px;
@@ -124,6 +220,7 @@ onUnmounted(() => clearTimeout(timer))
   text-align: center;
   cursor: pointer;
   opacity: 0.5;
+  transition: width 0.3s, background-color 0.3s;
 }
 
 .caption {
@@ -140,7 +237,6 @@ onUnmounted(() => clearTimeout(timer))
   width: 100%;
 }
 
-/* cms.css 的 a:hover 会把字重改回常规 */
 .caption:hover {
   font-weight: bold;
 }

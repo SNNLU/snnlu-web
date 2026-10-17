@@ -1,45 +1,32 @@
 /*
- * 手机版（视口 < 1024）：照 sicnu.edu.cn 手机版的式样——绿顶栏与整屏菜单、两色带括角的栏目标题、
+ * 手机版：照 sicnu.edu.cn 手机版的式样——绿顶栏与整屏菜单、两色带括角的栏目标题、
  * 「日 /年.月」的列表、圆角卡片、深绿页脚。只改样式与几处手机专用的小块（m-*），数据与桌面同一份。
  * 版式 JSON 带来的行内 style 与 #id 样式要盖过去，所以这里多处用 #content 打头或 !important。
+ *
+ * スマホには 風の便りを 聞く窓辺
  */
 
-/* 手机专用的块，桌面上不显示 */
-.m-bar,
-.m-nav,
-.m-date,
-.m-subnav,
-.m-foot {
-  display: none;
-}
+html[data-ua="mobile"] {
+  --m-green: #127764;
+  --m-green-deep: #075c4b;
+  --m-orange: #f26321;
+  --m-tint: #f4faf9;
+  --m-line: #e8ecef;
+  --m-text: #333;
+  --m-mute: #999;
+  --m-font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
 
-/*
- * 何时用手机版：窄屏（< 1024），或者是触屏设备（没有悬停、指针粗）且不超过 1366 宽（平板横放）。
- * 只看分辨率不够——平板横过来有 1180、1366 宽，却没有鼠标、悬停菜单用不了；
- * 用 CSS 的交互能力查询（hover / pointer）判断设备，是各家浏览器都支持的通行做法。
- */
-@media (max-width: 1023.98px), (hover: none) and (pointer: coarse) and (max-width: 1366px) {
-  :root {
-    --m-green: #127764;
-    --m-green-deep: #075c4b;
-    --m-orange: #f26321;
-    --m-tint: #f4faf9;
-    --m-line: #e8ecef;
-    --m-text: #333;
-    --m-mute: #999;
-    --m-font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
-  }
-
-  html.skin {
+  &.skin {
     overflow-y: auto;
   }
 
   /* 菜单展开时页面不跟着滚 */
-  html.m-lock {
+  &.m-lock {
     overflow: hidden;
   }
 
   body.skin {
+    min-width: 0;
     background: none;
     font-family: var(--m-font);
     color: var(--m-text);
@@ -293,30 +280,7 @@
   }
 
   .hero .baidufocus .baidufocus-focus {
-    left: 0;
-    right: 0;
-    height: 24px;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    line-height: normal;
-  }
-
-  .hero .baidufocus .baidufocus-focus span {
-    top: 8px;
-    float: none;
-    width: 8px;
-    height: 8px;
-    margin: 0;
-    background: rgba(255, 255, 255, 0.7);
-    transition: width 0.3s;
-  }
-
-  .hero .baidufocus .baidufocus-focus span.hover {
-    width: 20px;
-    border-radius: 4px;
-    background: var(--m-orange);
+    display: none;
   }
 
   /* ───────── 内页抬头 ───────── */
@@ -482,8 +446,8 @@
   #content .sk_name {
     position: relative;
     display: inline-block;
-    padding: 0 22px 12px;
-    background: linear-gradient(#bbb, #bbb) 22px 100% / 30px 1px no-repeat;
+    padding: 0 16px 12px;
+    background: linear-gradient(#bbb, #bbb) 16px 100% / 30px 1px no-repeat;
     white-space: nowrap;
   }
 
@@ -491,20 +455,22 @@
   #content .sk_name::after {
     content: "";
     position: absolute;
-    top: -2px;
-    width: 22px;
-    height: 22px;
-    background: no-repeat center / 100% 100%;
+    top: 0;
+    width: 24px;
+    height: 21.6px;
+    background: no-repeat 50% 50%;
+    background-size: 100%;
+    pointer-events: none;
   }
 
   #content .sk_name::before {
     left: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22' fill='none' stroke='%23a8d8cf'%3E%3Cpath d='M22 1.6C15 .7 9 .7 5.5 1.6v18.9H0'/%3E%3C/svg%3E");
+    background-image: url("/img/tit-l1.png");
   }
 
   #content .sk_name::after {
     right: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22' fill='none' stroke='%23a8d8cf'%3E%3Cpath d='M0 1.6c7-.9 13-.9 16.5 0v18.9H22'/%3E%3C/svg%3E");
+    background-image: url("/img/tit-r1.png");
   }
 
   #content .sk_tail {
@@ -990,26 +956,26 @@
     width: 38px;
     height: 38px;
   }
-}
 
-/* 平板（768–1023）：列表模块两两并排，其余仍占满一行 */
-@media (min-width: 768px) and (max-width: 1023.98px), (min-width: 768px) and (hover: none) and (pointer: coarse) and (max-width: 1366px) {
-  #content .grid-row:has(> .grid-col + .grid-col) {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 30px;
-  }
+  /* 平板（768–1023）：列表模块两两并排，其余仍占满一行 */
+  @media (min-width: 768px) and (max-width: 1023.98px), (min-width: 768px) and (hover: none) and (pointer: coarse) and (max-width: 1366px) {
+    #content .grid-row:has(> .grid-col + .grid-col) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 30px;
+    }
 
-  #content .grid-row:has(> .grid-col + .grid-col) > .grid-col {
-    flex: 1 1 calc(50% - 15px);
-    min-width: 0;
-  }
+    #content .grid-row:has(> .grid-col + .grid-col) > .grid-col {
+      flex: 1 1 calc(50% - 15px);
+      min-width: 0;
+    }
 
-  .hero {
-    aspect-ratio: 3 / 1;
-  }
+    .hero {
+      aspect-ratio: 3 / 1;
+    }
 
-  .m-banner {
-    height: 180px;
+    .m-banner {
+      height: 180px;
+    }
   }
 }
