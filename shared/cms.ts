@@ -139,11 +139,11 @@ const decodeKw = (token: string) => {
 }
 
 export function legacyHref(stid: string) {
-  const item = stid.match(/^st_app_news_i_x(\d+)$/)
-  if (item) return detailHref(+item[1])
+  const item = stid.match(/^st_app_news_i_x(\d+)$/)?.[1]
+  if (item) return detailHref(+item)
   const search = stid.match(/^st_app_news_search_x(\d*)_x_([^_]*)_x_/)
   if (!search) return null
-  const kw = decodeKw(search[2])
+  const kw = decodeKw(search[2] ?? '')
   if (kw) return searchHref(kw)
   return search[1] ? folderHref(search[1]) : '/search/'
 }

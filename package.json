@@ -7,12 +7,14 @@
     "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "typecheck": "nuxt typecheck",
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
     "@types/qrcode": "^1.5.6",
     "nuxt": "^4.6.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.3.13"
   },
   "dependencies": {
     "bootstrap": "5.3.2",

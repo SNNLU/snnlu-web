@@ -6,7 +6,10 @@ const TEXT = 'font-family:simsun,serif;font-size:18px'
 
 function block(b: string) {
   const img = b.match(/^!\[(.*)\]\((\S+)\)$/)
-  if (img) return `<p style="text-align:center"><img src="${esc(img[2])}" alt="${esc(img[1])}" width="670"></p>`
+  if (img) {
+    const [, alt = '', src = ''] = img
+    return `<p style="text-align:center"><img src="${esc(src)}" alt="${esc(alt)}" width="670"></p>`
+  }
   if (b.startsWith('## ')) return `<p class="p" style="line-height:1.5"><strong><span style="${TEXT}">${esc(b.slice(3))}</span></strong></p>`
   if (b.startsWith('- ')) {
     const items = b.split('\n').map((l) => `<li><span style="${TEXT}">${esc(l.replace(/^- /, ''))}</span></li>`)
@@ -21,6 +24,7 @@ export const markdown = (src: string) => src.trim().split(/\n{2,}/).map(block).j
 export function frontMatter(src: string) {
   const m = src.replace(/\r\n/g, '\n').match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/)
   if (!m) return { meta: {} as Record<string, string>, body: src }
-  const meta = Object.fromEntries(m[1].split('\n').map((l) => [l.slice(0, l.indexOf(':')).trim(), l.slice(l.indexOf(':') + 1).trim()]))
-  return { meta, body: m[2] }
+  const [, head = '', body = ''] = m
+  const meta = Object.fromEntries(head.split('\n').map((l) => [l.slice(0, l.indexOf(':')).trim(), l.slice(l.indexOf(':') + 1).trim()]))
+  return { meta, body }
 }

@@ -39,7 +39,9 @@ async function widgetOf(w: any, s: Site, tab: number): Promise<Widget> {
       if (w.source === 'quick') {
         return { kind: 'menu', uid: w.uid, focus: '', links: s.quick.map((q) => ({ ...q, target: '_blank', title: q.label })) }
       }
-      const links: Link[] = s.nav[+w.source.split(':')[1]].children.map((c) => ({
+      const section = s.nav[+w.source.split(':')[1]]
+      if (!section) throw new Error(`menu 的 source "${w.source}" 在导航里找不到`)
+      const links: Link[] = section.children.map((c) => ({
         label: c.label,
         href: c.href,
         target: c.target ?? '_self',
