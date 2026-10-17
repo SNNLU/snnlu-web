@@ -1,5 +1,4 @@
-<!-- 横幅：baidufocus，5 秒一换，淡入淡出 300ms；悬停暂停，悬停圆点即切换。
-     在页头之下的文档流里，整宽、最宽 1920（与原站同高 465），窄屏按比例缩 -->
+<!-- 窓の幅 絵は動かずに 秋の空 -->
 <template>
   <div class="hero" role="region" aria-roledescription="轮播" aria-label="横幅">
     <div class="baidufocus" @touchstart.passive="swipe.start" @touchend="swipe.end">
@@ -75,8 +74,14 @@ onUnmounted(hold)
   z-index: 9;
   max-width: 1920px;
   margin: 0 auto;
+  --hero-height: 360px;
   aspect-ratio: 1920 / 465;
   overflow: hidden;
+}
+
+html[data-ua="desktop"] .hero {
+  height: var(--hero-height);
+  aspect-ratio: auto;
 }
 
 .baidufocus {
