@@ -1,5 +1,3 @@
-import type { Node } from '#shared/cms'
-
 /* content/ 下的全部内容：site.json、layout/*.json、pages/*.md、news/*.md */
 const store = () => useStorage('assets:content')
 
@@ -26,14 +24,16 @@ export interface Article {
   body: string
 }
 
-export interface Layout {
-  css: string
-  grid: Node[]
-}
-
 export const site = async () => (await store().getItem<Site>('site.json'))!
 
-export const layout = (tab: number) => store().getItem<Layout>(`layout:${tab}.json`)
+/* 版式在读入时校验：字段写错、引用了不存在的栏目/导航/页面，生成直接失败并给出位置 */
+export async function layout(tab: number) {
+  const raw = await store().getItem(`layout:${tab}.json`)
+  if (raw == null) return null
+  const s = await site()
+  const pages = (await store().getKeys('pages')).map((k) => k.replace(/^pages:/, '').replace(/.md$/, ''))
+  return parseLayout(`content/layout/${tab}.json`, raw, { folders: Object.keys(s.folders), navCount: s.nav.length, pages })
+}
 
 export async function pageHtml(slug: string) {
   const src = await store().getItem<string>(`pages:${slug}.md`)
