@@ -9,7 +9,7 @@
       </div>
       <HeroCarousel v-if="tab.hero.length" :slides="tab.hero" />
       <MobileSubNav v-if="sub" v-bind="sub" />
-      <div class="page-center">
+      <div class="page-center page-main">
         <div id="main">
           <div id="content" tabindex="-1">
             <StView v-if="tab.st" :key="route.fullPath" :st="tab.st" />
