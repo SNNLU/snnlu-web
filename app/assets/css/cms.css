@@ -118,6 +118,7 @@ table {
 .st_div .div_title .box { margin: 5px; padding: 2px; border: 1px solid #eee; border-left: 0; border-right: 0; }
 .st_div .div_title .box div { text-align: center; background-color: #eee; font-size: 13px; font-weight: normal; color: #333; }
 .st_div .div_content { margin: 5px; padding: 5px; line-height: 1.5; border: 1px dotted #ccc; font-weight: normal; font-size: 14px; color: #333; }
+.st_div .div_content img { height: auto; }
 .st_div .div_item { margin: 5px; }
 .st_div .div_item .div_itemtitle { line-height: 1.8; border: 0; font-weight: bold; font-size: 14px; color: #333; background: url(/img/icon-dot.svg) no-repeat left center; padding-left: 15px; }
 .st_div .div_item .div_itemtitle a { text-decoration: none; font-family: 微软雅黑; font-size: 14px; color: #369; cursor: pointer; }

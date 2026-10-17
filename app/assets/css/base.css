@@ -99,6 +99,15 @@ body.skin {
   height: 185px;
 }
 
+/* 页头外框按设计高度收口：行盒会多撑出 1.8px，在页头与横幅之间露出白缝 */
+#site > #center {
+  height: 185px;
+}
+
+html[data-ua="mobile"] #site > #center {
+  height: 60px;
+}
+
 #content {
   position: relative;
   width: 100%;
