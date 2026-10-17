@@ -30,11 +30,9 @@
       </ul>
     </nav>
     <div class="head-top">
-      <!-- eslint-disable-next-line vue/no-v-html -- 本地品牌 SVG，构建时读取 -->
-      <div class="head-brand" v-html="brandSvg" />
+      <img class="head-brand" src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87">
       <span class="head-sep" aria-hidden="true" />
-      <!-- eslint-disable-next-line vue/no-v-html -- 本地校区 SVG，构建时读取 -->
-      <div class="head-campus" v-html="campusSvg" />
+      <img class="head-campus" src="/img/campus.svg" alt="遂宁校区 Suining Campus" width="136" height="54">
       <!-- 普通的 GET 表单：不靠脚本也能搜，结果页从 ?kw= 读词；同原站，在新窗口打开 -->
       <form class="search" role="search" action="/search/" method="get" target="_blank">
         <label class="visually-hidden" for="site-kw">站内搜索</label>
@@ -73,8 +71,6 @@
 
 <script setup lang="ts">
 import type { Link, NavItem } from '#shared/cms'
-import brandSvg from '../../public/img/brand.svg?raw'
-import campusSvg from '../../public/img/campus.svg?raw'
 
 defineProps<{ nav: NavItem[]; quick: Link[]; tab: number }>()
 
@@ -211,18 +207,11 @@ const leave = () => {
 }
 
 .head-brand {
+  display: block;
   flex: none;
   width: 381px;
   height: 87px;
   margin: 23px 0 0 8px;
-  line-height: 0;
-}
-
-.head-brand > svg,
-.head-campus > svg {
-  display: block;
-  width: 100%;
-  height: 100%;
 }
 
 /* 分隔线：1px 实线，各种缩放下都清楚（旧图里是 2.5px 宽的糊边） */
@@ -235,6 +224,7 @@ const leave = () => {
 }
 
 .head-campus {
+  display: block;
   flex: none;
   width: 136px;
   height: 54px;
