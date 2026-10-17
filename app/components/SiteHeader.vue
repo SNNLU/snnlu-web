@@ -3,12 +3,12 @@
   <div id="header">
     <!-- 手机版（<1024）：仿 sicnu.edu.cn 手机版，顶栏校名 + 菜单键，展开整屏菜单（快速链接、搜索、可折叠的栏目） -->
     <div class="m-bar">
-      <a class="m-logo" href="/" title="遂宁奶龙大学"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></a>
+      <AppLink class="m-logo" href="/" title="遂宁奶龙大学"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></AppLink>
       <button ref="burger" type="button" class="m-burger" :class="{ on: menu }" :aria-expanded="menu" aria-controls="m-nav" :aria-label="menu ? '关闭菜单' : '打开菜单'" @click="menu = !menu"><i /><i /><i /></button>
     </div>
     <nav id="m-nav" class="m-nav" :class="{ open: menu }" aria-label="栏目">
       <div class="m-quick">
-        <template v-for="(q, i) in quick" :key="q.href"><span v-if="i" aria-hidden="true">|</span><a :href="q.href" :target="q.target">{{ q.label }}</a></template>
+        <template v-for="(q, i) in quick" :key="q.href"><span v-if="i" aria-hidden="true">|</span><AppLink :href="q.href" :target="q.target">{{ q.label }}</AppLink></template>
       </div>
       <form class="m-search" role="search" action="/search/" method="get">
         <label class="visually-hidden" for="m-kw">站内搜索</label>
@@ -18,13 +18,13 @@
       <ul class="m-menu">
         <li v-for="n in nav" :key="n.label" :class="{ on: unfold === n.label }">
           <div class="m-row">
-            <a :href="n.href" :target="n.target">{{ n.label }}</a>
+            <AppLink :href="n.href" :target="n.target">{{ n.label }}</AppLink>
             <button v-if="n.children.length" type="button" :aria-expanded="unfold === n.label" :aria-label="`展开${n.label}`" @click="unfold = unfold === n.label ? '' : n.label">
               <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" /></svg>
             </button>
           </div>
           <ul v-if="n.children.length" v-show="unfold === n.label" class="m-sub">
-            <li v-for="c in n.children" :key="c.label"><a :href="c.href" :target="c.target">{{ c.label }}</a></li>
+            <li v-for="c in n.children" :key="c.label"><AppLink :href="c.href" :target="c.target">{{ c.label }}</AppLink></li>
           </ul>
         </li>
       </ul>
@@ -48,17 +48,17 @@
         <ul class="sf-menu sf-js-enabled sf-arrows">
           <!-- 下拉菜单：鼠标悬停或键盘聚焦都展开，Esc 收起 -->
           <li v-for="n in nav" :key="n.label" :class="{ sfHover: open === n.label }" @mouseenter="enter(n.label)" @mouseleave="leave" @focusin="enter(n.label)" @focusout="leave">
-            <a
+            <AppLink
               :target="n.target"
               :href="n.href"
               :class="{ 'sf-with-ul': n.children.length }"
               :aria-haspopup="n.children.length ? 'true' : undefined"
               :aria-expanded="n.children.length ? open === n.label : undefined"
-            >{{ n.label }}</a>
+            >{{ n.label }}</AppLink>
             <Transition name="sf">
               <ul v-if="n.children.length" v-show="open === n.label">
                 <li v-for="c in n.children" :key="c.label">
-                  <a :target="c.target" :href="c.href" :title="c.title">{{ c.label }}</a>
+                  <AppLink :target="c.target" :href="c.href" :title="c.title">{{ c.label }}</AppLink>
                 </li>
               </ul>
             </Transition>

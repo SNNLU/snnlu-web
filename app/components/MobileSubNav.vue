@@ -13,7 +13,7 @@
     </div>
     <ul v-if="links.length" v-show="open" id="m-sublinks" class="m-sublinks">
       <li v-for="l in links" :key="l.href + l.label">
-        <a :href="l.href" :target="l.target" :class="{ on: l.href === current }" :aria-current="l.href === current ? 'page' : undefined">{{ l.label }}</a>
+        <AppLink :href="l.href" :target="l.target" :class="{ on: l.href === current }" :aria-current="l.href === current ? 'page' : undefined">{{ l.label }}</AppLink>
       </li>
     </ul>
   </div>

@@ -3,7 +3,7 @@
   <div>
     <!-- 带 focus 的是内页侧栏，不带的是首页快速链接 -->
     <div :id="w.uid" class="menu-links" :class="{ side: w.focus }">
-      <a
+      <AppLink
         v-for="l in w.links"
         :id="l.id"
         :key="l.href + l.label"
@@ -11,7 +11,7 @@
         :target="l.target"
         :href="l.href"
         :title="l.title"
-      >{{ l.label }}</a>
+      >{{ l.label }}</AppLink>
       <div />
     </div>
   </div>
