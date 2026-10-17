@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Comic Neue";
+  src: url("/fonts/comic-neue-note.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* 滚动条常驻：页面有长有短，滚动条时有时无会让居中的页头左右跳 8px */
 html.skin {
   overflow-y: scroll;
