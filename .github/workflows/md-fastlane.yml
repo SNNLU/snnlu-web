@@ -29,6 +29,8 @@ jobs:
       BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
       DEFAULT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       PR: ${{ github.event.pull_request.number }}
+      # 本次运行审的是这个提交；合并时用 --match-head-commit 钉死，之后再推的提交不会被顺带合进去
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
       PR_TITLE: ${{ github.event.pull_request.title }}
       AI_API_KEY: ${{ secrets.AI_API_KEY }}
       # 想换成 OpenAI / 其它兼容 OpenAI 协议的模型，改这两个仓库变量即可
@@ -56,13 +58,26 @@ jobs:
         id: gate
         run: |
           export GH_TOKEN="$DEFAULT_TOKEN"
-          gh pr view "$PR" -R "$GITHUB_REPOSITORY" --json files --jq '.files[].path' > files.txt
+          leave() { echo "::notice::$1，退出快车道，转人工审查"; echo "md_only=false" >> "$GITHUB_OUTPUT"; exit 0; }
 
-          if [ ! -s files.txt ]; then
-            echo "::notice::取不到改动文件列表，退出快车道"
-            echo "md_only=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
+          # 审查期间 PR 又被推了新提交：交给新提交触发的那次运行
+          head_now() { gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" --jq '.head.sha'; }
+          [ "$(head_now)" = "$HEAD_SHA" ] || leave "PR 头部已不是 $HEAD_SHA"
+
+          # 不能用 gh pr view --json files：它最多只返回 100 个文件，
+          # 第 101 个起的改动（比如夹带的 nuxt.config.ts）会被白名单漏看。
+          # REST 接口分页可取到 3000 个；重命名要连旧路径一起查（把代码文件改名成 .md 也算动了代码）。
+          gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR/files?per_page=100" \
+            --jq '.[] | [.filename, (.previous_filename // "")] | @tsv' > pairs.tsv \
+            || leave "取改动文件列表失败"
+          [ -s pairs.tsv ] || leave "取不到改动文件列表"
+          { cut -f1 pairs.tsv; cut -f2 pairs.tsv | grep -v '^$' || true; } > files.txt
+
+          # 文件数要和 PR 自报的对上，对不上（超过 3000 或接口异常）一律不放行
+          want=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" --jq '.changed_files')
+          got=$(wc -l < pairs.tsv | tr -d ' ')
+          [ "$want" = "$got" ] || leave "文件清单不完整（PR 报 $want 个，取到 $got 个）"
+          [ "$(head_now)" = "$HEAD_SHA" ] || leave "PR 头部已不是 $HEAD_SHA"
 
           # 逐个遍历改动文件，脱离白名单的逐个点名，最后统一退出快车道
           ok=true
@@ -87,7 +102,22 @@ jobs:
         if: steps.gate.outputs.md_only == 'true'
         run: |
           export GH_TOKEN="$DEFAULT_TOKEN"
-          gh pr diff "$PR" -R "$GITHUB_REPOSITORY" > pr.diff
+          if ! gh pr diff "$PR" -R "$GITHUB_REPOSITORY" > pr.diff || [ ! -s pr.diff ]; then
+            echo "::warning::取不到 diff（PR 过大时 GitHub 会拒绝返回），本次不合并，转人工审查"
+            echo "verdict=error" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" --jq '.head.sha')" != "$HEAD_SHA" ]; then
+            echo "::notice::取 diff 期间 PR 有新提交，交给新提交那次运行"
+            echo "verdict=error" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # 只审前一截等于没审：超长就整体转人工，不再截断送审
+          if [ "$(wc -c < pr.diff)" -gt 120000 ]; then
+            echo "::warning::diff 超过 120000 字节，模型看不全，本次不合并，转人工审查"
+            echo "verdict=error" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
 
           if [ -z "${AI_API_KEY:-}" ]; then
             echo "::warning::未配置 AI_API_KEY，无法审查，本次不合并"
@@ -104,9 +134,6 @@ jobs:
 
           with open("pr.diff", encoding="utf-8", errors="replace") as f:
               diff = f.read()
-          truncated = len(diff) > 120000
-          if truncated:
-              diff = diff[:120000]
 
           prompt = f"""你是一个文章审核员。检查以下 Markdown 变更，如果包含明显的违法、色情、垃圾广告或恶意破坏，回复 [REJECT] 并说明原因；如果是正常的文章内容、错别字或排版调整，请直接回复 [PASS]。不要做任何额外的格式挑刺。
 
@@ -138,9 +165,6 @@ jobs:
               reader = getattr(e, "read", None)
               detail = reader().decode("utf-8", "replace")[:300] if callable(reader) else ""
               text = f"[ERROR] 审查接口调用失败：{e} {detail}"
-
-          if truncated:
-              text += "\n\n（注：diff 过长已截断，只审了前 120000 字节）"
 
           with open("verdict.txt", "w", encoding="utf-8") as f:
               f.write(text + "\n")
@@ -193,11 +217,12 @@ jobs:
             cat approve.err
           fi
 
-          # 自动合并：必需检查（build / content）全绿后自动合入
-          if ! gh pr merge "$PR" -R "$GITHUB_REPOSITORY" --auto --squash 2>merge.err; then
+          # 自动合并：必需检查（build / content）全绿后自动合入。
+          # --match-head-commit：只合审过的那个提交，之后有人再推，合并直接失败
+          if ! gh pr merge "$PR" -R "$GITHUB_REPOSITORY" --auto --squash --match-head-commit "$HEAD_SHA" 2>merge.err; then
             if grep -qi 'clean status' merge.err; then
               # 门禁已全部满足时 GitHub 拒绝进入排队，改为直接合并
-              gh pr merge "$PR" -R "$GITHUB_REPOSITORY" --squash || cat merge.err
+              gh pr merge "$PR" -R "$GITHUB_REPOSITORY" --squash --match-head-commit "$HEAD_SHA" || cat merge.err
             else
               echo "::warning::开启自动合并失败"
               cat merge.err
