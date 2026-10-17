@@ -23,6 +23,11 @@ describe('markdown', () => {
     expect(html).toContain('<img src="/1.jpg" alt="" width="670" decoding="async">')
   })
 
+  it('reserves the aspect ratio of local images', () => {
+    const html = markdown('![](/img/scene-01.jpg)')
+    expect(html).toContain('width="670" height="447"')
+  })
+
   it('never lets raw HTML through', () => {
     const html = markdown('<script>alert(1)</script>\n\n## <b>x</b>\n\n- <i>y</i>\n\n![" onerror="alert(1)](/x.jpg)')
     expect(html).not.toMatch(/<script|<b>|<i>|" onerror="/)
