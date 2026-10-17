@@ -1,0 +1,6 @@
+# 代码、配置、工作流以及本文件：都要所有者审批
+# （仓库 ruleset 打开「Require review from Code Owners」后才生效）
+*                   @Tchirek
+
+# 文章：不设 owner，由 md-fastlane 的 AI 审查放行，与其白名单 ^content/.+\.md$ 一致
+/content/**/*.md
