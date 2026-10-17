@@ -4,7 +4,7 @@
     <a class="head-brand" href="/" title="遂宁奶龙大学"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></a>
     <span class="head-sep" aria-hidden="true" />
     <img class="head-campus" src="/img/campus.svg" alt="遂宁校区 Suining Campus" width="136" height="54">
-    <CmsBox fixed box-style="width:1196px;height:48px;left:0;top:135px;z-index:12">
+    <CmsBox fixed box-style="left:0;right:4px;height:48px;top:135px;z-index:12">
       <div>
         <ul class="sf-menu sf-js-enabled sf-arrows">
           <li v-for="n in nav" :key="n.label" :class="{ sfHover: open === n.label }" @mouseenter="enter(n.label)" @mouseleave="leave">
@@ -227,6 +227,29 @@ const leave = () => {
 
 .search button:hover {
   color: #d1ad69;
+}
+
+/* 1024–1199：版心随窗收，搜索框贴右，导航九项平分整行 */
+@media (max-width: 1199.98px) {
+  .search {
+    left: auto;
+    right: 16px;
+  }
+
+  .sf-menu {
+    display: flex;
+    float: none;
+    width: 100%;
+  }
+
+  .sf-menu > li {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .sf-menu > li > a {
+    padding: 0 4px;
+  }
 }
 
 .search svg {

@@ -1,7 +1,8 @@
 <!-- 侧栏与快速链接：一排浮动的链接，当前栏目加 focus -->
 <template>
   <div>
-    <div :id="w.uid">
+    <!-- 带 focus 的是内页侧栏，不带的是首页快速链接 -->
+    <div :id="w.uid" class="menu-links" :class="{ side: w.focus }">
       <a
         v-for="l in w.links"
         :id="l.id"

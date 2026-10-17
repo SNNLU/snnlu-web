@@ -1,22 +1,21 @@
-<!-- 横幅：baidufocus，5 秒一换，淡入淡出 300ms；悬停暂停，悬停圆点即切换 -->
+<!-- 横幅：baidufocus，5 秒一换，淡入淡出 300ms；悬停暂停，悬停圆点即切换。
+     在页头之下的文档流里，整宽、最宽 1920（与原站同高 465），窄屏按比例缩 -->
 <template>
-  <CmsBox fixed box-style="z-index:9;height:465px;width:100%;left:0;top:185px;overflow:hidden">
-    <div>
-      <div class="baidufocus" style="width:1920px;height:465px">
-        <ul class="baidufocus_list">
-          <Transition v-for="(s, i) in slides" :key="s.src" name="hf">
-            <li v-show="i === at" @mouseenter="hold" @mouseleave="run">
-              <a :target="s.target" :href="s.href"><img style="width:1920px;height:465px" :src="s.src" :srcset="srcset(s.src)" :sizes="SIZES" width="2000" height="484" :alt="s.alt" decoding="async" :fetchpriority="i ? 'low' : 'high'"></a>
-            </li>
-          </Transition>
-        </ul>
-        <div class="baidufocus-btn" style="visibility:hidden"><span class="left_btn" /><span class="right_btn" /></div>
-        <div class="baidufocus-focus">
-          <span v-for="(s, i) in slides" :key="s.src" :class="{ hover: i === at }" @mouseenter="show(i)" @mouseleave="run">{{ i + 1 }}</span>
-        </div>
+  <div class="hero">
+    <div class="baidufocus">
+      <ul class="baidufocus_list">
+        <Transition v-for="(s, i) in slides" :key="s.src" name="hf">
+          <li v-show="i === at" @mouseenter="hold" @mouseleave="run">
+            <a :target="s.target" :href="s.href"><img :src="s.src" :srcset="srcset(s.src)" :sizes="SIZES" width="2000" height="484" :alt="s.alt" decoding="async" :fetchpriority="i ? 'low' : 'high'"></a>
+          </li>
+        </Transition>
+      </ul>
+      <div class="baidufocus-btn" style="visibility:hidden"><span class="left_btn" /><span class="right_btn" /></div>
+      <div class="baidufocus-focus">
+        <span v-for="(s, i) in slides" :key="s.src" :class="{ hover: i === at }" @mouseenter="show(i)" @mouseleave="run">{{ i + 1 }}</span>
       </div>
     </div>
-  </CmsBox>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -25,7 +24,7 @@ import type { Slide } from '#shared/cms'
 const props = defineProps<{ slides: Slide[] }>()
 
 /* 横幅有三档：banner-N.webp 是 2000 宽原档，-1280、-750 是缩小档（scripts/assets/banners.py 生成） */
-const SIZES = '1920px'
+const SIZES = '(min-width: 1920px) 1920px, 100vw'
 const srcset = (src: string) =>
   /\/banner-\d+\.webp$/.test(src)
     ? [750, 1280].map((w) => `${src.replace(/\.webp$/, `-${w}.webp`)} ${w}w`).concat(`${src} 2000w`).join(', ')
@@ -49,12 +48,20 @@ onUnmounted(hold)
 </script>
 
 <style>
+.hero {
+  position: relative;
+  z-index: 9;
+  max-width: 1920px;
+  margin: 0 auto;
+  aspect-ratio: 1920 / 465;
+  overflow: hidden;
+}
+
 .baidufocus {
   position: relative;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  /* 原站在窗宽不足 1920 时靠左；这里以视口中线对齐，与页头背景一致 */
-  left: 50%;
-  margin: 0 0 0 -960px;
   padding: 0;
   font: 12px/180% Arial, Helvetica, sans-serif, 宋体;
 }
@@ -77,8 +84,14 @@ onUnmounted(hold)
 
 .baidufocus_list li {
   position: absolute;
-  left: 0;
-  top: 0;
+  inset: 0;
+}
+
+.baidufocus_list img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .baidufocus-btn,

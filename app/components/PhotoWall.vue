@@ -1,7 +1,7 @@
 <!-- 校园掠影：jCarousel 0.3 的步进规则（每 3 秒 +1，到尾回到头），点图放大 -->
 <template>
   <div>
-    <div :id="w.uid">
+    <div :id="w.uid" class="photo-wall">
       <div ref="clip" class="jcarousel">
         <ul :style="{ left: `${left}px`, transition: moving ? `left 400ms ${SWING}` : 'none' }" @transitionend="moving = false">
           <li v-for="(p, i) in w.photos" :key="i">
