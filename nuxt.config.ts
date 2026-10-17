@@ -46,8 +46,8 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/img/badge.svg' }],
     },
   },
-  // 与原站同序：系统基样式 → Bootstrap 5.3.2 → 皮肤；最后是窄屏的改写
-  css: ['~/assets/css/cms.css', 'bootstrap/dist/css/bootstrap.min.css', '~/assets/css/base.css', '~/assets/css/responsive.css', '~/assets/css/mobile.css'],
+  // 与原站同序：系统基样式 → Bootstrap 5.3.2（只取用到的部分）→ 皮肤；最后是窄屏的改写
+  css: ['~/assets/css/cms.css', '~/assets/scss/bootstrap.scss', '~/assets/css/base.css', '~/assets/css/responsive.css', '~/assets/css/mobile.css'],
   // 只在构建时由服务端读取，不下发到浏览器
   runtimeConfig: { commit: commit() },
   devServer: { port: 4321 },
@@ -61,6 +61,8 @@ export default defineNuxtConfig({
       routes: pages(),
     },
   },
+  // Bootstrap 5.3 的 SCSS 还在用 @import 与旧函数，新版 sass 会刷一屏弃用提示；依赖里的不报，本仓库只压 import 这一条
+  vite: { css: { preprocessorOptions: { scss: { quietDeps: true, silenceDeprecations: ['import'] } } } },
   // 代码风格按仓库现状：无分号、单引号、两空格、多行末尾逗号
   eslint: { config: { stylistic: { semi: false, quotes: 'single', indent: 2, commaDangle: 'always-multiline', braceStyle: '1tbs', arrowParens: true } } },
 })
