@@ -1,6 +1,7 @@
 <!-- 二维码页：「扫码分享」小窗里的内容 -->
 <template>
   <div class="qr">
+    <!-- eslint-disable-next-line vue/no-v-html -- qrcode 库生成的 SVG，输入只是网址文本 -->
     <table align="center"><tbody><tr><td align="center" style="padding-top:10px"><div v-html="svg" /></td></tr></tbody></table>
     <div class="title">{{ text }}<div v-if="/^https?:\/\//.test(text)" class="open"><a target="_blank" :href="text">[打开]</a></div></div>
   </div>

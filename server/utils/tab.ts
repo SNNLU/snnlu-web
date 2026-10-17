@@ -151,4 +151,3 @@ export async function tabOf(id: number): Promise<Tab | { redirect: string } | nu
     hero: id === 0 ? s.hero.map((h) => ({ ...h, href: 'javascript:void(0);', target: '_self' })) : [],
   }
 }
-

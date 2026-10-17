@@ -31,7 +31,10 @@ for (const name of readdirSync('content/news').filter((n) => n.endsWith('.md')))
 const FM = /^---\n([\s\S]*?)\n---\n?([\s\S]*)$/
 const DATE = /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/
 let errors = 0
-const err = (f, msg) => { console.log(`::error file=${f}::${msg}`); errors++ }
+const err = (f, msg) => {
+  console.log(`::error file=${f}::${msg}`)
+  errors++
+}
 const warn = (f, msg) => console.log(`::warning file=${f}::${msg}`)
 
 for (const f of targets) {

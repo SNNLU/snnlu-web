@@ -17,7 +17,9 @@
     </div>
 
     <template v-if="v.kind === 'detail'">
+      <!-- eslint-disable-next-line vue/no-v-html -- detailInfo() 转义了投稿字段 -->
       <div class="div_title">{{ v.title }}<div v-if="v.subtitle !== null" class="div_subtitle">{{ v.subtitle }}</div><div class="box"><div v-html="v.info" /></div></div>
+      <!-- eslint-disable-next-line vue/no-v-html -- 正文经 markdown() 逐块转义 -->
       <div class="div_content" v-html="v.body" />
       <div class="div_bottom"><template v-for="(t, i) in v.tools" :key="t.label">{{ i ? '    ' : '' }}<a href="javascript:void(0);" @click="use(t)">{{ t.label }}</a></template></div>
       <HsFrame v-if="dialog" v-bind="dialog" @close="dialog = null" />
@@ -30,6 +32,7 @@
             <div class="div_item">
               <div class="div_itemtitle">
                 <div class="other" style="float:right">{{ r.date }}</div>
+                <!-- eslint-disable-next-line vue/no-v-html -- mark() 先转义再标红 -->
                 <a :target="r.target" :href="r.href" v-html="r.title" />
                 <div style="clear:both;height:1px;width:auto;overflow:hidden">&nbsp;</div>
               </div>

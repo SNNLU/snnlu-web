@@ -1,6 +1,7 @@
 <template>
   <div id="footer">
     <CmsBox fixed box-style="width:1198px;height:76px;left:0;top:10px;z-index:1">
+      <!-- eslint-disable-next-line vue/no-v-html -- 页脚来自 content/site.json（不走快车道，需所有者审批） -->
       <div><div v-html="html" /></div>
     </CmsBox>
     <!-- 原站访客计数的位置：静态站不计数，换成 Nuxt 标识 -->
