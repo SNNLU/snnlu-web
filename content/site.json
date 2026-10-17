@@ -49,9 +49,9 @@
   "8": "https://naiwa.win/", "32": "https://naiwa.win/"
  },
  "hero": [
-  { "src": "/img/banner-1.webp", "alt": "黑白同心波纹中的奶龙" },
-  { "src": "/img/banner-2.webp", "alt": "构成主义色块间大笑的奶龙" },
-  { "src": "/img/banner-3.webp", "alt": "波普色带上的奶龙们" }
+  { "src": "/img/banner-1.webp", "alt": "至上主义几何色块中的奶龙" },
+  { "src": "/img/banner-2.webp", "alt": "波普丝网印刷色带上的奶龙们" },
+  { "src": "/img/banner-3.webp", "alt": "欧普艺术波纹中的奶龙" }
  ],
  "gallery": [
   "/img/scene-01.jpg", "/img/scene-02.jpg", "/img/scene-03.jpg", "/img/scene-04.jpg", "/img/scene-07.jpg",

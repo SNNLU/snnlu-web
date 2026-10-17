@@ -13,12 +13,14 @@
                   @touchstart.passive="start"
                   @touchmove.passive="move"
                   @touchend="end"
+                  @touchcancel="cancel"
                 >
                   <div class="fn-track" :style="trackStyle">
                     <a
                       v-for="(s, i) in track"
                       :key="`${i}-${s.src}`"
                       class="fn-img"
+                      draggable="false"
                       :style="{ display: 'block', height: `${o.h}px`, backgroundImage: `url(${s.src})`, backgroundPosition: 'center center', backgroundRepeat: 'repeat-x', backgroundSize: 'auto 100%' }"
                       :target="s.target"
                       :href="s.href"
@@ -109,15 +111,18 @@ const trackStyle = computed(() => ({
 let sx = 0
 let sy = 0
 let axis: 'x' | 'y' | '' = ''
+let dragging = false
 let timer: ReturnType<typeof setTimeout> | undefined
 let edge: ReturnType<typeof setTimeout> | undefined
 
 function start(e: TouchEvent) {
   clearTimeout(timer)
+  clearTimeout(edge)
   if (pos.value === 0) pos.value = n.value
   else if (pos.value === n.value + 1) pos.value = 1
   const t = e.touches[0]
   if (!t) return
+  dragging = true
   sx = t.clientX
   sy = t.clientY
   axis = ''
@@ -126,6 +131,7 @@ function start(e: TouchEvent) {
 }
 
 function move(e: TouchEvent) {
+  if (!dragging) return
   const t = e.touches[0]
   if (!t) return
   const dx = t.clientX - sx
@@ -138,10 +144,19 @@ function move(e: TouchEvent) {
 }
 
 function end() {
+  if (!dragging) return
+  dragging = false
   if (axis === 'x' && Math.abs(drag.value) > 40) {
     pos.value += drag.value < 0 ? 1 : -1
     snapEdge()
   }
+  drag.value = 0
+  smooth.value = true
+  restart()
+}
+
+function cancel() {
+  dragging = false
   drag.value = 0
   smooth.value = true
   restart()
@@ -192,6 +207,9 @@ onUnmounted(() => {
 <style scoped>
 .fn-view {
   touch-action: pan-y;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .fn-track {
@@ -204,6 +222,7 @@ onUnmounted(() => {
 .fn-img {
   flex: 0 0 100%;
   width: 100%;
+  -webkit-user-drag: none;
 }
 
 .btn-num {

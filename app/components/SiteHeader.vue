@@ -29,10 +29,21 @@
         </li>
       </ul>
     </nav>
-    <div class="head-brand"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></div>
-    <span class="head-sep" aria-hidden="true" />
-    <img class="head-campus" src="/img/campus.svg" alt="遂宁校区 Suining Campus" width="136" height="54">
-    <CmsBox fixed cls="head-nav" box-style="left:0;right:4px;height:48px;top:135px;z-index:12">
+    <div class="head-top">
+      <img class="head-brand" src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87">
+      <span class="head-sep" aria-hidden="true" />
+      <img class="head-campus" src="/img/campus.svg" alt="遂宁校区 Suining Campus" width="136" height="54">
+      <!-- 普通的 GET 表单：不靠脚本也能搜，结果页从 ?kw= 读词；同原站，在新窗口打开 -->
+      <form class="search" role="search" action="/search/" method="get" target="_blank">
+        <label class="visually-hidden" for="site-kw">站内搜索</label>
+        <input id="site-kw" v-model="kw" type="search" name="kw" placeholder="请输入搜索关键字..." autocomplete="off">
+        <button type="submit" aria-label="搜索">
+          <!-- 原图里的放大镜描成矢量：镜片、左上的高光、带圆头的空心手柄 -->
+          <svg viewBox="7.5 4.5 21 21" aria-hidden="true"><circle cx="20.2" cy="12.8" r="6.9" /><path d="M15.95 11.66A4.4 4.4 0 0 1 19.06 8.55" /><path d="M16.33 18.51L10.65 24.18A1.3 1.3 0 0 1 8.82 22.35L14.49 16.67" /></svg>
+        </button>
+      </form>
+    </div>
+    <CmsBox cls="head-nav" box-style="height:48px;margin-right:4px;z-index:12">
       <div>
         <ul class="sf-menu sf-js-enabled sf-arrows">
           <!-- 下拉菜单：鼠标悬停或键盘聚焦都展开，Esc 收起 -->
@@ -55,15 +66,6 @@
         </ul>
       </div>
     </CmsBox>
-    <!-- 普通的 GET 表单：不靠脚本也能搜，结果页从 ?kw= 读词；同原站，在新窗口打开 -->
-    <form class="search" role="search" action="/search/" method="get" target="_blank">
-      <label class="visually-hidden" for="site-kw">站内搜索</label>
-      <input id="site-kw" v-model="kw" type="search" name="kw" placeholder="请输入搜索关键字..." autocomplete="off">
-      <button type="submit" aria-label="搜索">
-        <!-- 原图里的放大镜描成矢量：镜片、左上的高光、带圆头的空心手柄 -->
-        <svg viewBox="7.5 4.5 21 21" aria-hidden="true"><circle cx="20.2" cy="12.8" r="6.9" /><path d="M15.95 11.66A4.4 4.4 0 0 1 19.06 8.55" /><path d="M16.33 18.51L10.65 24.18A1.3 1.3 0 0 1 8.82 22.35L14.49 16.67" /></svg>
-      </button>
-    </form>
   </div>
 </template>
 
@@ -198,46 +200,45 @@ const leave = () => {
   opacity: 0;
 }
 
-/* 校名（含校徽、英文）、分隔线、校区字样：位置与旧页头图一致（版心坐标） */
-.head-brand {
-  position: absolute;
-  left: 8px;
-  top: 23px;
-  z-index: 13;
-  line-height: 0;
+.head-top {
+  display: flex;
+  align-items: flex-start;
+  height: 135px;
 }
 
-.head-brand img {
+.head-brand {
   display: block;
+  flex: none;
+  width: 381px;
+  height: 87px;
+  margin: 23px 0 0 8px;
 }
 
 /* 分隔线：1px 实线，各种缩放下都清楚（旧图里是 2.5px 宽的糊边） */
 .head-sep {
-  position: absolute;
-  left: 424px;
-  top: 40px;
+  flex: none;
   width: 1px;
   height: 60px;
+  margin: 40px 0 0 35px;
   background: rgba(255, 255, 255, 0.55);
 }
 
 .head-campus {
-  position: absolute;
-  left: 450px;
-  top: 54px;
+  display: block;
+  flex: none;
+  width: 136px;
+  height: 54px;
+  margin: 54px 0 0 25px;
 }
 
 /* 搜索框：原先印在 head.png 上的一枚胶囊，这里用样式画出同样的胶囊（205×36，白 12.8%），位置与旧图重合 */
 .search {
-  position: absolute;
-  left: 975px;
-  top: 61px;
-  z-index: 13;
+  flex: none;
   display: flex;
   align-items: center;
   width: 205px;
   height: 36px;
-  margin: 0;
+  margin: 61px 20px 0 auto;
   border-radius: 18px;
   background-color: rgba(255, 255, 255, 0.128);
   transition: background-color 0.2s;

@@ -48,10 +48,10 @@ describe('FocusNews controls', () => {
 })
 
 describe('HeroCarousel', () => {
-  it('banners are not fake links; dots switch slides on focus', async () => {
+  it('banners are not links; dots switch slides on focus', async () => {
     const slides = [1, 2].map((i) => ({ src: `/img/banner-${i}.webp`, alt: `横幅${i}`, href: '', target: '_self' }))
     const w = await mountSuspended(HeroCarousel, { props: { slides } })
-    expect(w.find('.baidufocus_list a').attributes('href')).toBeUndefined()
+    expect(w.find('.baidufocus_list a').exists()).toBe(false)
     const dot = w.find('[aria-label="第 2 张：横幅2"]')
     await dot.trigger('focus')
     expect(dot.attributes('aria-pressed')).toBe('true')
