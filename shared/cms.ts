@@ -27,8 +27,7 @@ export interface Paging {
 }
 
 export interface Bar {
-  cell: string
-  box: string
+  boxClass?: string
   title: string
   more: Link | null
 }
@@ -45,17 +44,15 @@ export type Widget =
 
 export interface Module {
   key: string
-  style: string
+  boxClass: string
+  cellClass?: string
   bar: Bar | null
-  cell: string
-  wrap: string
   widget: Widget
 }
 
 export type Node =
   | { t: 'row'; kids: Node[] }
   | { t: 'col'; width: number; modules: Module[] }
-  | { t: 'clear'; nbsp: boolean }
 
 export interface Slide {
   src: string

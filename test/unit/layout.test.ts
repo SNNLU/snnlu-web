@@ -14,7 +14,7 @@ const refs: LayoutRefs = {
 /* 一个最小的版式：一列、一个模块，组件由参数给 */
 const one = (widget: object, extra: object = {}) => ({
   css: '',
-  grid: [{ t: 'row', kids: [{ t: 'col', width: 300, modules: [{ key: 'k', style: '', bar: null, cell: '', wrap: '', widget, ...extra }] }] }],
+  grid: [{ t: 'row', kids: [{ t: 'col', width: 300, modules: [{ key: 'k', boxClass: 'cms-box', bar: null, cellClass: '', widget, ...extra }] }] }],
 })
 const W = 'grid.0.kids.0.modules.0'
 

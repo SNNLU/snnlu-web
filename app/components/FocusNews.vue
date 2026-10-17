@@ -63,17 +63,12 @@
           </div>
         </div>
         <div class="flex-fill">
-          <div class="div_items">
-            <table v-for="r in w.rows" :key="r.href" border="0" cellspacing="0" cellpadding="0" class="table_item">
-              <tbody>
-                <tr>
-                  <td align="left"><div class="div_item_link"><MDate v-if="r.ymd" :ymd="r.ymd" /><a :title="r.tip" :target="r.target" :href="r.href">{{ r.title }}</a></div></td>
-                  <td align="right"><div class="div_item_date">{{ r.date }}</div></td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="grid-clear">&nbsp;</div>
-          </div>
+          <ul class="div_items">
+            <li v-for="r in w.rows" :key="r.href" class="table_item">
+              <div class="div_item_link"><MDate v-if="r.ymd" :ymd="r.ymd" /><a :title="r.tip" :target="r.target" :href="r.href">{{ r.title }}</a></div>
+              <div class="div_item_date">{{ r.date }}</div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

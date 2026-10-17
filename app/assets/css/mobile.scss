@@ -384,13 +384,13 @@ html[data-ua="mobile"] {
     min-height: 0;
   }
 
-  #content .grid-col {
-    float: none;
-    width: auto;
+  #content .grid-row {
+    display: block;
   }
 
-  #content .grid-clear {
-    display: none;
+  #content .grid-col {
+    display: block;
+    width: auto;
   }
 
   #content .cell > div {
@@ -505,17 +505,13 @@ html[data-ua="mobile"] {
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Ccircle cx='13' cy='13' r='12.5' fill='none' stroke='%23127764' stroke-opacity='.5'/%3E%3Ccircle cx='8.5' cy='13' r='1.6' fill='%237fb9ad'/%3E%3Ccircle cx='13' cy='13' r='1.6' fill='%237fb9ad'/%3E%3Ccircle cx='17.5' cy='13' r='1.6' fill='%23127764'/%3E%3C/svg%3E") no-repeat center / 100%;
   }
 
-  #content .sk_bar + * ,
-  #content .sk_bar ~ td {
+  #content .sk_bar + .cms-cell {
     padding: 0;
-  }
-
-  /* 标题与内容之间 */
-  #content .sk_bar ~ * {
     margin: 0;
   }
 
-  #content table tr:has(> .sk_bar) + tr > td > div {
+  /* 标题与内容之间 */
+  #content .sk_bar + .cms-cell > div {
     margin-top: 18px !important;
   }
 
@@ -656,24 +652,15 @@ html[data-ua="mobile"] {
     white-space: normal;
   }
 
-  #content .div_items .table_item,
-  #content .div_items .table_item tbody,
-  #content .div_items .table_item tr {
+  #content .div_items .table_item {
     display: block;
     width: 100%;
-  }
-
-  #content .div_items .table_item {
+    padding: 0;
     border-bottom: 1px solid var(--m-line);
     background: none !important;
   }
 
-  #content .div_items .table_item td {
-    display: block;
-    padding: 0 !important;
-  }
-
-  #content .div_items .table_item td:last-child {
+  #content .div_items .table_item .div_item_date {
     display: none;
   }
 

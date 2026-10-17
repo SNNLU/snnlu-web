@@ -1,19 +1,23 @@
-/* 原站 _base_pc.css：先于 Bootstrap 载入，被其覆盖的部分照样保留 */
+/*
+ * 原站 _base_pc.css：先于 Bootstrap 载入。
+ * 会被 Bootstrap 覆盖的排版值直接写成最终值（system-ui、16px、1.5），
+ * 这样样式分批载入时不会先按 Times/14px 排一遍再跳成最终版。
+ */
 body {
   margin: 0;
   padding: 0;
-  font-family: Times New Roman;
-  font-size: 14px;
-  color: #000;
-  line-height: 1.8;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 16px;
+  color: #212529;
+  line-height: 1.5;
 }
 
 p {
-  margin: 10px;
+  margin: 0 0 1rem;
 }
 
 hr {
-  margin: 12px 0;
+  margin: 1rem 0;
 }
 
 div,

@@ -37,16 +37,29 @@ body.skin {
     linear-gradient(#286f51, #286f51) 0 0 / 100% 185px no-repeat;
 }
 
-/* 页脚底图 1920 宽；更宽的屏两侧用同色补满 */
+/* 页脚底图 1920 宽；更宽的屏两侧用同色补满。整页至少一屏高，正文不足时页脚落在视口底部 */
 #site {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
   background:
     url(/img/foot.svg) center bottom / 1920px 150px no-repeat,
     linear-gradient(#286f51, #286f51) 0 100% / 100% 150px no-repeat;
 }
 
+/* 页头、横幅、手机内页抬头保持自然高度，不参与剩余空间的分配 */
+#site > .page-center:first-child,
+#site > .hero,
+#site > .m-subnav {
+  flex: none;
+  width: 100%;
+}
+
 /* 版心：内容最宽 1200，两侧常留 16px；窗宽 1232 以上与原站一样，再窄就连续地收，不在某个宽度上跳 */
 .page-center {
   position: relative;
+  width: 100%;
   max-width: 1232px;
   padding-left: 16px;
   padding-right: 16px;
@@ -54,13 +67,30 @@ body.skin {
   margin-right: auto;
 }
 
-/* 版心里的浮动在这里收住；超出版心的部分照原站裁掉（clip 不产生滚动容器） */
+/* 正文与页脚占满页头/横幅之外的剩余高度；内容不足一屏时页脚贴底 */
+.page-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+/* 版心里的浮动在这里收住；超出版心的部分照原站裁掉（clip 不产生滚动容器）。
+   两行：正文占剩余高度，页脚自然高度贴底 */
 #main {
-  display: flow-root;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 1fr auto;
+  flex: 1 0 auto;
   overflow-x: clip;
   border: 0;
   margin: 0;
   padding: 0;
+}
+
+/* 列宽由版心决定，不让图片/长文本的 min-content 把整行撑宽 */
+#content,
+#footer {
+  min-width: 0;
 }
 
 #header {

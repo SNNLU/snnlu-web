@@ -10,19 +10,15 @@
      "modules": [
       {
        "key": "0_40_0_42_638274435410622939",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:10px;margin-right:10px;margin-bottom:0;margin-left:0",
        "bar": {
-        "cell": "width:auto;background-color:#21735c",
-        "box": "overflow:hidden;width:auto;height:40px",
         "title": "学校新闻",
         "more": {
          "label": "More>>",
          "target": "_blank",
          "href": "/list/101/"
-        }
+        },
+        "boxClass": "sk_box--h40"
        },
-       "cell": "width:auto",
-       "wrap": "width:auto;height:auto;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0",
        "widget": {
         "kind": "focus",
         "uid": "id_22c3ec9d_1e52_42e1_953b_ebfdd668083b",
@@ -40,7 +36,8 @@
          "titleHover": "#25674c",
          "titleBg": "#cedfd7"
         }
-       }
+       },
+       "boxClass": "cms-box cms-box--mt-10 cms-box--mr-10"
       }
      ]
     },
@@ -50,19 +47,15 @@
      "modules": [
       {
        "key": "0_40_0_42_638306274788235072",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:10px;margin-right:0;margin-bottom:0;margin-left:10px",
        "bar": {
-        "cell": "width:auto;background-color:#21735c",
-        "box": "overflow:hidden;width:auto;height:40px",
         "title": "奶龙生活",
         "more": {
          "label": "More>>",
          "target": "_blank",
          "href": "/list/102/"
-        }
+        },
+        "boxClass": "sk_box--h40"
        },
-       "cell": "width:auto",
-       "wrap": "width:auto;height:auto;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0",
        "widget": {
         "kind": "list",
         "uid": "id_6f941c81_403b_42c6_bc57_edbcfa2457e3",
@@ -71,13 +64,10 @@
         "count": 20,
         "dated": true,
         "paged": false
-       }
+       },
+       "boxClass": "cms-box cms-box--mt-10 cms-box--ml-10"
       }
      ]
-    },
-    {
-     "t": "clear",
-     "nbsp": false
     }
    ]
   },
@@ -93,19 +83,15 @@
        "modules": [
         {
          "key": "0_40_0_638315102342702297",
-         "style": "width:auto;height:auto;min-height:50px;margin-top:20px;margin-right:5px;margin-bottom:0;margin-left:0",
          "bar": {
-          "cell": "width:auto;background-color:#21735c",
-          "box": "overflow:hidden;width:auto;height:40px",
           "title": "学生工作",
           "more": {
            "label": "More>>",
            "target": "_blank",
            "href": "/list/103/"
-          }
+          },
+          "boxClass": "sk_box--h40"
          },
-         "cell": "width:auto",
-         "wrap": "width:auto;height:auto;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0",
          "widget": {
           "kind": "list",
           "uid": "id_fa4d3d7e_70f1_4fbc_b489_57d824b68660",
@@ -114,7 +100,8 @@
           "count": 34,
           "dated": true,
           "paged": false
-         }
+         },
+         "boxClass": "cms-box cms-box--mt-20 cms-box--mr-5"
         }
        ]
       },
@@ -124,19 +111,15 @@
        "modules": [
         {
          "key": "0_40_0_42_638291030789256782",
-         "style": "width:auto;height:auto;min-height:50px;margin-top:20px;margin-right:0;margin-bottom:0;margin-left:5px",
          "bar": {
-          "cell": "width:auto;background-color:#21735c",
-          "box": "overflow:hidden;width:auto;height:40px",
           "title": "通知公告",
           "more": {
            "label": "More>>",
            "target": "_blank",
            "href": "/list/104/"
-          }
+          },
+          "boxClass": "sk_box--h40"
          },
-         "cell": "width:auto",
-         "wrap": "width:auto;height:auto;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0",
          "widget": {
           "kind": "list",
           "uid": "id_6be620e9_37e9_4fa0_8e8b_5c984dc53cc1",
@@ -145,13 +128,10 @@
           "count": 35,
           "dated": true,
           "paged": false
-         }
+         },
+         "boxClass": "cms-box cms-box--mt-20 cms-box--ml-5"
         }
        ]
-      },
-      {
-       "t": "clear",
-       "nbsp": false
       }
      ]
     },
@@ -165,10 +145,6 @@
          "t": "col",
          "width": 1200,
          "modules": []
-        },
-        {
-         "t": "clear",
-         "nbsp": false
         }
        ]
       },
@@ -184,19 +160,15 @@
            "modules": [
             {
              "key": "0_40_0_42_638303696049490695",
-             "style": "width:auto;height:auto;min-height:50px;margin-top:20px;margin-right:5px;margin-bottom:0;margin-left:0",
              "bar": {
-              "cell": "width:auto;background-color:#21735c",
-              "box": "overflow:hidden;width:auto;height:40px",
               "title": "院系动态",
               "more": {
                "label": "More>>",
                "target": "_blank",
                "href": "/list/105/"
-              }
+              },
+              "boxClass": "sk_box--h40"
              },
-             "cell": "width:auto",
-             "wrap": "width:auto;height:auto;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0",
              "widget": {
               "kind": "list",
               "uid": "id_e8dd2879_1d9c_4d9e_a03c_335e37665bea",
@@ -205,7 +177,8 @@
               "count": 31,
               "dated": true,
               "paged": false
-             }
+             },
+             "boxClass": "cms-box cms-box--mt-20 cms-box--mr-5"
             }
            ]
           },
@@ -215,19 +188,15 @@
            "modules": [
             {
              "key": "0_40_0_42_638291028996823618",
-             "style": "width:auto;height:auto;min-height:50px;margin-top:20px;margin-right:0;margin-bottom:0;margin-left:5px",
              "bar": {
-              "cell": "width:auto;background-color:#21735c",
-              "box": "overflow:hidden;width:auto;height:40px",
               "title": "媒体报道",
               "more": {
                "label": "More>>",
                "target": "_blank",
                "href": "/list/106/"
-              }
+              },
+              "boxClass": "sk_box--h40"
              },
-             "cell": "width:auto",
-             "wrap": "width:auto;height:auto;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0",
              "widget": {
               "kind": "list",
               "uid": "id_cbc772da_6654_41a8_b710_59149a6e46d9",
@@ -236,13 +205,10 @@
               "count": 30,
               "dated": true,
               "paged": false
-             }
+             },
+             "boxClass": "cms-box cms-box--mt-20 cms-box--ml-5"
             }
            ]
-          },
-          {
-           "t": "clear",
-           "nbsp": false
           }
          ]
         },
@@ -258,43 +224,33 @@
              "modules": [
               {
                "key": "0_638355495540522628",
-               "style": "width:auto;height:auto;min-height:50px;margin-top:10px;margin-right:0;margin-bottom:0;margin-left:0",
                "bar": {
-                "cell": "width:auto;background-color:#21735c",
-                "box": "overflow:hidden;width:auto;height:40px",
                 "title": "校园掠影",
-                "more": null
+                "more": null,
+                "boxClass": "sk_box--h40"
                },
-               "cell": "width:auto",
-               "wrap": "width:auto;height:auto;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0",
                "widget": {
                 "kind": "gallery",
                 "uid": "id_35e4f272_d580_4e90_9e9e_f0a53b83ea09"
-               }
+               },
+               "boxClass": "cms-box cms-box--mt-10"
               },
               {
                "key": "0_40_0_638307525802087147",
-               "style": "width:auto;height:auto;min-height:50px;margin-top:20px;margin-right:0;margin-bottom:0;margin-left:0",
                "bar": {
-                "cell": "width:auto;background-color:#21735c",
-                "box": "overflow:hidden;width:auto;height:40px",
                 "title": "快速链接",
-                "more": null
+                "more": null,
+                "boxClass": "sk_box--h40"
                },
-               "cell": "width:auto",
-               "wrap": "width:auto;height:auto;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0",
                "widget": {
                 "kind": "menu",
                 "uid": "id_e42d3cd3_b024_4b16_a546_b2f3b955c3d9",
                 "focus": "",
                 "source": "quick"
-               }
+               },
+               "boxClass": "cms-box cms-box--mt-20"
               }
              ]
-            },
-            {
-             "t": "clear",
-             "nbsp": false
             }
            ]
           }

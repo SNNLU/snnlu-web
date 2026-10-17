@@ -10,21 +10,19 @@
      "modules": [
       {
        "key": "27_24_18_17_15_12_638210410582280922",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:50px;margin-right:0;margin-bottom:0;margin-left:0",
        "bar": {
-        "cell": "width:auto;background-color:#21735c",
-        "box": "overflow:hidden;width:auto;height:50px",
         "title": null,
-        "more": null
+        "more": null,
+        "boxClass": "sk_box--h50"
        },
-       "cell": "width:auto;border-bottom-width:1px;border-left-width:1px;border-right-width:1px;border-bottom-style:solid;border-left-style:solid;border-right-style:solid;border-bottom-color:#ddd;border-left-color:#ddd;border-right-color:#ddd",
-       "wrap": "width:auto;height:auto;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0",
        "widget": {
         "kind": "menu",
         "uid": "id_9bb3dbdc_822b_4c75_a6ca_4b9f9ea99dad",
         "focus": "id_9bb3dbdc_822b_4c75_a6ca_4b9f9ea99dad_",
         "source": "nav:6"
-       }
+       },
+       "boxClass": "cms-box cms-box--mt-50",
+       "cellClass": "cms-cell--boxed"
       }
      ]
     },
@@ -39,31 +37,23 @@
      "modules": [
       {
        "key": "27_24_18_17_15_12_638210576090009233",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:40px;margin-right:0;margin-bottom:0;margin-left:0",
        "bar": null,
-       "cell": "",
-       "wrap": "",
        "widget": {
         "kind": "tabpath",
         "uid": "id_b470e290_1e24_457d_bbcd_a5fe36b5368b"
-       }
+       },
+       "boxClass": "cms-box cms-box--mt-40"
       },
       {
        "key": "27_24_18_17_15_12_638210581453001457",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0",
        "bar": null,
-       "cell": "",
-       "wrap": "",
        "widget": {
         "kind": "page",
         "slug": "training"
-       }
+       },
+       "boxClass": "cms-box"
       }
      ]
-    },
-    {
-     "t": "clear",
-     "nbsp": false
     }
    ]
   }

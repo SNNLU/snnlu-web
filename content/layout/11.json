@@ -10,21 +10,19 @@
      "modules": [
       {
        "key": "11_638210410582280922",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:50px;margin-right:0;margin-bottom:0;margin-left:0",
        "bar": {
-        "cell": "width:auto;background-color:#21735c",
-        "box": "overflow:hidden;width:auto;height:50px",
         "title": null,
-        "more": null
+        "more": null,
+        "boxClass": "sk_box--h50"
        },
-       "cell": "width:auto;border-bottom-width:1px;border-left-width:1px;border-right-width:1px;border-bottom-style:solid;border-left-style:solid;border-right-style:solid;border-bottom-color:#ddd;border-left-color:#ddd;border-right-color:#ddd",
-       "wrap": "width:auto;height:auto;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0",
        "widget": {
         "kind": "menu",
         "uid": "id_d6cf769a_4f93_4808_97a3_a35fe513adac",
         "focus": "id_d6cf769a_4f93_4808_97a3_a35fe513adac_",
         "source": "nav:1"
-       }
+       },
+       "boxClass": "cms-box cms-box--mt-50",
+       "cellClass": "cms-cell--boxed"
       }
      ]
     },
@@ -39,31 +37,23 @@
      "modules": [
       {
        "key": "11_638210576090009233",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:40px;margin-right:0;margin-bottom:0;margin-left:0",
        "bar": null,
-       "cell": "",
-       "wrap": "",
        "widget": {
         "kind": "tabpath",
         "uid": "id_65d20b08_31b9_444f_8c3b_fa764dc0c7ec"
-       }
+       },
+       "boxClass": "cms-box cms-box--mt-40"
       },
       {
        "key": "11_638210581453001457",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0",
        "bar": null,
-       "cell": "",
-       "wrap": "",
        "widget": {
         "kind": "page",
         "slug": "scenery"
-       }
+       },
+       "boxClass": "cms-box"
       }
      ]
-    },
-    {
-     "t": "clear",
-     "nbsp": false
     }
    ]
   }

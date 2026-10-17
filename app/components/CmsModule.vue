@@ -2,10 +2,9 @@
   <CmsBox
     :id="`myp2c_sm_div_${m.key}`"
     :cls="`myp2c_sm_css_${m.key}`"
-    :box-style="m.style"
+    :box-class="m.boxClass"
+    :cell-class="m.cellClass"
     :bar="m.bar"
-    :cell="m.cell"
-    :wrap="m.wrap"
   >
     <NewsList v-if="w.kind === 'list'" :w="w" />
     <FocusNews v-else-if="w.kind === 'focus'" :w="w" />

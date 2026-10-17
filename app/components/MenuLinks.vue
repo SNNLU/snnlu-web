@@ -14,7 +14,6 @@
       >{{ l.label }}</a>
       <div />
     </div>
-    <div class="grid-clear">&nbsp;</div>
   </div>
 </template>
 
@@ -23,3 +22,9 @@ import type { Widget } from '#shared/cms'
 
 defineProps<{ w: Extract<Widget, { kind: 'menu' }>; tab: number }>()
 </script>
+
+<style>
+.menu-links {
+  display: flow-root;
+}
+</style>

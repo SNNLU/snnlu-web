@@ -20,10 +20,9 @@ const widget = z.discriminatedUnion('kind', [
 
 const module = z.strictObject({
   key: z.string(),
-  style: z.string(),
-  bar: z.strictObject({ cell: z.string(), box: z.string(), title: z.string().nullable(), more: link.nullable() }).nullable(),
-  cell: z.string(),
-  wrap: z.string(),
+  boxClass: z.string(),
+  cellClass: z.string().optional(),
+  bar: z.strictObject({ boxClass: z.string().optional(), title: z.string().nullable(), more: link.nullable() }).nullable(),
   widget,
 })
 
@@ -32,12 +31,10 @@ export type RawModule = z.infer<typeof module>
 export type RawNode =
   | { t: 'row'; kids: RawNode[] }
   | { t: 'col'; width: number; modules: RawModule[] }
-  | { t: 'clear'; nbsp: boolean }
 
 const node: z.ZodType<RawNode> = z.lazy(() => z.discriminatedUnion('t', [
   z.strictObject({ t: z.literal('row'), kids: z.array(node) }),
   z.strictObject({ t: z.literal('col'), width: count, modules: z.array(module) }),
-  z.strictObject({ t: z.literal('clear'), nbsp: z.boolean() }),
 ]))
 
 const layoutSchema = z.strictObject({ css: z.string(), grid: z.array(node) })
