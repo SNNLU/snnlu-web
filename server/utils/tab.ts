@@ -22,7 +22,7 @@ function locate(s: Site, tab: number) {
   return null
 }
 
-async function widgetOf(w: any, s: Site, tab: number): Promise<Widget> {
+async function widgetOf(w: RawWidget, s: Site, tab: number): Promise<Widget> {
   switch (w.kind) {
     case 'list': {
       const all = await inFolder(w.folder)
@@ -39,8 +39,8 @@ async function widgetOf(w: any, s: Site, tab: number): Promise<Widget> {
       if (w.source === 'quick') {
         return { kind: 'menu', uid: w.uid, focus: '', links: s.quick.map((q) => ({ ...q, target: '_blank', title: q.label })) }
       }
-      const section = s.nav[+w.source.split(':')[1]]
-      if (!section) throw new Error(`menu 的 source "${w.source}" 在导航里找不到`)
+      const section = s.nav[+w.source.slice('nav:'.length)]
+      if (!section) throw new Error(`menu 的 source "${w.source}" 在导航里找不到`) // parseLayout 已查过，这里只为类型收窄
       const links: Link[] = section.children.map((c) => ({
         label: c.label,
         href: c.href,
@@ -62,10 +62,9 @@ async function widgetOf(w: any, s: Site, tab: number): Promise<Widget> {
     case 'page':
       return { kind: 'html', html: `<div><div style="clear:both;margin:0;padding:0"><div>${await pageHtml(w.slug)}</div></div></div>` }
   }
-  throw new Error(`unknown widget ${w.kind}`)
 }
 
-async function gridOf(nodes: Node[], s: Site, tab: number): Promise<Node[]> {
+async function gridOf(nodes: RawNode[], s: Site, tab: number): Promise<Node[]> {
   return Promise.all(nodes.map(async (n): Promise<Node> => {
     if (n.t === 'row') return { t: 'row', kids: await gridOf(n.kids, s, tab) }
     if (n.t !== 'col') return n
