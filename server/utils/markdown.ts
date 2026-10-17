@@ -1,5 +1,6 @@
 /* 只认四种块：段落、图片、二级标题、列表；排版照原站正文（宋体 18px，首行缩进两字） */
-const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+/* 凡是拼进 HTML（最后走 v-html）的内容字段都要先过这里；单双引号都转，属性用哪种引号都安全 */
+export const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
 
 const TEXT = 'font-family:simsun,serif;font-size:18px'
 
