@@ -5,7 +5,7 @@
       <ul class="baidufocus_list">
         <Transition v-for="(s, i) in slides" :key="s.src" name="hf">
           <li v-show="i === at" @mouseenter="hold" @mouseleave="run">
-            <a :target="s.href ? s.target : undefined" :href="s.href || undefined"><img :src="s.src" :srcset="srcset(s.src)" :sizes="SIZES" width="2000" height="484" :alt="s.alt" decoding="async" :fetchpriority="i ? 'low' : 'high'"></a>
+            <img :src="s.src" :srcset="srcset(s.src)" :sizes="SIZES" width="2000" height="484" :alt="s.alt" decoding="async" :fetchpriority="i ? 'low' : 'high'">
           </li>
         </Transition>
       </ul>
@@ -36,11 +36,11 @@ import type { Slide } from '#shared/cms'
 
 const props = defineProps<{ slides: Slide[] }>()
 
-/* 横幅有三档：banner-N.webp 是 2000 宽原档，-1280、-750 是缩小档（scripts/assets/banners.py 生成） */
+/* 横幅五档：banner-N.webp 是 2000 主档，3840 / 2560 / 1280 / 750 为 srcset 候选（scripts/assets/banners.py 生成） */
 const SIZES = '(min-width: 1920px) 1920px, 100vw'
 const srcset = (src: string) =>
   /\/banner-\d+\.webp$/.test(src)
-    ? [750, 1280].map((w) => `${src.replace(/\.webp$/, `-${w}.webp`)} ${w}w`).concat(`${src} 2000w`).join(', ')
+    ? [750, 1280, 2560, 3840].map((w) => `${src.replace(/\.webp$/, `-${w}.webp`)} ${w}w`).join(', ')
     : undefined
 
 const at = ref(0)
@@ -74,7 +74,7 @@ onUnmounted(hold)
   z-index: 9;
   max-width: 1920px;
   margin: 0 auto;
-  --hero-height: 360px;
+  --hero-height: 465px;
   aspect-ratio: 1920 / 465;
   overflow: hidden;
 }
@@ -82,8 +82,6 @@ onUnmounted(hold)
 html[data-ua="desktop"] .hero {
   height: var(--hero-height);
   aspect-ratio: auto;
-  margin-left: max(0px, round(nearest, calc(50% - 960px), 1px));
-  margin-right: auto;
 }
 
 .baidufocus {
@@ -143,11 +141,6 @@ html[data-ua="desktop"] .hero {
   bottom: 0;
   margin-left: -25px;
   z-index: 2;
-}
-
-html[data-ua="desktop"] .baidufocus-focus {
-  left: round(nearest, calc(50% - 25.5px), 1px);
-  margin-left: 0;
 }
 
 .baidufocus-focus span {

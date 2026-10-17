@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Comic Neue";
+  src: url("/fonts/comic-neue-note.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* 滚动条常驻：页面有长有短，滚动条时有时无会让居中的页头左右跳 8px */
 html.skin {
   overflow-y: scroll;
@@ -20,12 +28,12 @@ body.skin {
   min-width: 1232px;
   /*
    * 页头三层，都以视口中线定位，与 1200 版心对齐（版心左缘 = 50% - 600px）：
-   *   校训 motto.svg（292 宽，版心 x=1218）；实景 head-photo.webp（2 倍图，840 宽，版心 x=560）；整条 185 高的绿底。
+   *   校训 motto.svg（292 宽，版心 x=1218）；实景 head-photo.webp（2 倍图，840 宽，版心 x=763）；整条 185 高的绿底。
    * background-position 的百分比是「(容器宽 - 图宽) × 百分比」，所以 50% + (图在版心的 x - 600 + 图宽 / 2) 正好落位。
    */
   background:
     url(/img/motto.svg) calc(50% + 764px) 10px / 292px 136px no-repeat,
-    url(/img/head-photo.webp) calc(50% + 380px) 0 / 840px 185px no-repeat,
+    url(/img/head-photo.webp) calc(50% + 583px) 0 / 840px 185px no-repeat,
     linear-gradient(#286f51, #286f51) 0 0 / 100% 185px no-repeat;
 }
 
@@ -64,18 +72,6 @@ body.skin {
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
-}
-
-/* 窓の幅 ページは止まる 冬の庭 */
-html[data-ua="desktop"] .page-center {
-  margin-left: max(0px, round(nearest, calc(50% - 616px), 1px));
-}
-
-html[data-ua="desktop"] body.skin {
-  background-position:
-    round(nearest, calc(50% + 764px), 1px) 10px,
-    round(nearest, calc(50% + 380px), 1px) 0,
-    0 0;
 }
 
 /* 版心里的浮动在这里收住；超出版心的部分照原站裁掉（clip 不产生滚动容器）。
