@@ -1,6 +1,6 @@
 # 页头实景层：照片 → 与旧页头同样的淡色剪影（楼与树比天空暗一点，再叠一层细节），
 # 左右两端渐隐到底色 #286F51，输出 2 倍图。
-# 照片：湖边的玻璃幕墙塔楼与圆楼（1920×960）。
+# 照片：湖边的玻璃幕墙塔楼与圆楼（1775×886）。
 # 用法：python scripts/assets/head-photo.py <照片> public/img/head-photo.webp   （需要 numpy、pillow、opencv-python）
 import sys
 import numpy as np
@@ -9,10 +9,10 @@ import cv2
 
 src, out = sys.argv[1], sys.argv[2]
 BASE = np.array([40, 111, 81], np.float64)   # 页头底色 #286F51
-S = 0.69                                      # 照片 → 页头（1x）缩放：塔楼宽 288px → 200px
+S = 0.48                                      # 照片 → 页头（1x）缩放
 X0, X1 = 560, 1400                            # 图层在 1200 版心中的横向范围（1x）
-TOWER_X, TOWER_Y = 740, 20                    # 塔楼左缘、楼顶在版心中的位置（1x）
-PX, PY = 1022, 240                            # 照片里塔楼左缘、楼顶
+TOWER_X, TOWER_Y = 650, 20                    # 楼群左缘、最高楼顶在版心中的位置（1x）
+PX, PY = 200, 130                             # 照片里楼群左缘、最高楼顶
 K = 2                                         # 输出倍率
 SIL, DETAIL = 10.0, 9.0                      # 剪影压暗量、细节强度（色阶）
 
