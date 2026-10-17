@@ -19,28 +19,25 @@ body.skin {
     linear-gradient(#286f51, #286f51) 0 0 / 100% 185px no-repeat;
 }
 
+/* 页脚底图 1920 宽；更宽的屏两侧用同色补满 */
 #site {
-  background-image: url(/img/foot.svg);
-  background-repeat: no-repeat;
-  background-position: center bottom;
+  background:
+    url(/img/foot.svg) center bottom / 1920px 150px no-repeat,
+    linear-gradient(#286f51, #286f51) 0 100% / 100% 150px no-repeat;
 }
 
-#center {
+/* 版心：最宽 1200，窄屏随视口收（页头一个、正文与页脚一个） */
+.page-center {
   position: relative;
-  width: 1200px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
 }
 
-#home {
-  position: relative;
-  width: 100%;
-}
-
+/* 版心里的浮动在这里收住；超出版心的部分照原站裁掉（clip 不产生滚动容器） */
 #main {
-  width: 1200px;
-  height: auto;
-  float: left;
+  display: flow-root;
+  overflow-x: clip;
   border: 0;
   margin: 0;
   padding: 0;

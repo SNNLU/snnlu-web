@@ -1,0 +1,76 @@
+/*
+ * 窄屏改写。1200 及以上逐像素照原站；1024–1199 是同一套版面随窗收窄；1024 以下另有手机版（见后）。
+ * 版式 JSON 带来的样式多是 #id 选择器或行内 style，这里用更具体的选择器（必要时 !important）盖过去。
+ */
+
+@media (max-width: 1199.98px) {
+  /* 版心两侧留 16px */
+  .page-center {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* 侧栏：原站每条写死 248px 宽、左浮；改成整列宽、一条一行 */
+  #content .div_module .menu-links.side,
+  #content .div_module .menu-links.side a {
+    float: none;
+    display: block;
+    width: auto;
+  }
+
+  /* 首页快速链接：原站整排写死 1200px，收窄后折成两行 */
+  #content .div_module .menu-links {
+    width: auto;
+  }
+
+  /* 当前位置条：原站写死 900px */
+  #content .div_module .tab-path {
+    width: auto;
+  }
+
+  /* 新闻列表：原站条目最小宽 390/595px，标题过长就截断加省略号 */
+  #content .div_module .div_list {
+    width: auto;
+  }
+
+  /* 条目是 Bootstrap 的 .col（同一行里平分）；原站靠最小宽把它们挤成一行一条，这里直接占满整行 */
+  #content .div_module .div_list .div_item {
+    flex: 0 0 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  #content .div_module .div_list .div_title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* 校区新闻右侧的条目表：标题格原站写死 295px */
+  #content .div_module .flex-fill {
+    min-width: 0;
+  }
+
+  #content .div_module .table_item {
+    table-layout: fixed;
+  }
+
+  #content .div_module .table_item td:last-child {
+    width: 64px;
+  }
+
+  #content .div_module .table_item .div_item_link {
+    width: auto;
+    text-overflow: ellipsis;
+  }
+
+  /* 校园掠影：原站写死 1200px */
+  #content .div_module .photo-wall {
+    width: auto;
+  }
+
+  /* 正文里的图随宽缩 */
+  #content img {
+    height: auto;
+  }
+}

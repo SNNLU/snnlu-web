@@ -1,23 +1,20 @@
 <template>
   <template v-if="tab">
+    <!-- 页头 → 横幅（整宽，在文档流里）→ 正文与页脚；页头与正文各在一个 1200 版心里 -->
     <div id="site">
-      <div id="center">
-        <div id="home">
-          <div style="width:100%;overflow:hidden">
-            <div id="main">
-              <SiteHeader :nav="tab.nav" :tab="tab.id" />
-              <div id="content">
-                <StView v-if="tab.st" :key="route.fullPath" :st="tab.st" />
-                <div v-else style="width:5000px"><CmsGrid :nodes="tab.grid" :tab="tab.id" /></div>
-              </div>
-              <SiteFooter :html="tab.footer" />
-            </div>
+      <div id="center" class="page-center">
+        <SiteHeader :nav="tab.nav" :tab="tab.id" />
+      </div>
+      <HeroCarousel v-if="tab.hero.length" :slides="tab.hero" />
+      <div class="page-center">
+        <div id="main">
+          <div id="content">
+            <StView v-if="tab.st" :key="route.fullPath" :st="tab.st" />
+            <CmsGrid v-else :nodes="tab.grid" :tab="tab.id" />
           </div>
+          <SiteFooter :html="tab.footer" />
         </div>
       </div>
-    </div>
-    <div style="width:100%;height:auto;margin:0;padding:0">
-      <HeroCarousel v-if="tab.hero.length" :slides="tab.hero" />
     </div>
     <div v-show="busy" id="loading"><img :src="LOADING" alt="导入数据..."></div>
     <ScrollUp />

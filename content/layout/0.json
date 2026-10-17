@@ -10,7 +10,7 @@
      "modules": [
       {
        "key": "0_40_0_42_638274435410622939",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:475px;margin-right:10px;margin-bottom:0;margin-left:0",
+       "style": "width:auto;height:auto;min-height:50px;margin-top:10px;margin-right:10px;margin-bottom:0;margin-left:0",
        "bar": {
         "cell": "width:auto;background-color:#21735c",
         "box": "overflow:hidden;width:auto;height:40px",
@@ -50,7 +50,7 @@
      "modules": [
       {
        "key": "0_40_0_42_638306274788235072",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:475px;margin-right:0;margin-bottom:0;margin-left:10px",
+       "style": "width:auto;height:auto;min-height:50px;margin-top:10px;margin-right:0;margin-bottom:0;margin-left:10px",
        "bar": {
         "cell": "width:auto;background-color:#21735c",
         "box": "overflow:hidden;width:auto;height:40px",

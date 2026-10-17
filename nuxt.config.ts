@@ -39,15 +39,15 @@ export default defineNuxtConfig({
       title: '遂宁奶龙大学',
       meta: [
         { name: 'renderer', content: 'webkit' },
-        { name: 'viewport', content: 'width=1920' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'keywords', content: '遂宁奶龙大学' },
         { name: 'description', content: '遂宁奶龙大学' },
       ],
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/img/badge.svg' }],
     },
   },
-  // 与原站同序：系统基样式 → Bootstrap 5.3.2 → 皮肤
-  css: ['~/assets/css/cms.css', 'bootstrap/dist/css/bootstrap.min.css', '~/assets/css/base.css'],
+  // 与原站同序：系统基样式 → Bootstrap 5.3.2 → 皮肤；最后是窄屏的改写
+  css: ['~/assets/css/cms.css', 'bootstrap/dist/css/bootstrap.min.css', '~/assets/css/base.css', '~/assets/css/responsive.css'],
   // 只在构建时由服务端读取，不下发到浏览器
   runtimeConfig: { commit: commit() },
   devServer: { port: 4321 },
