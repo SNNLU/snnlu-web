@@ -25,7 +25,9 @@
           @focus="show(i)"
           @blur="run"
           @keydown.enter.space.prevent="show(i)"
-        >{{ i + 1 }}</span>
+        >
+          <svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="6" /></svg>
+        </span>
       </div>
     </div>
   </div>
@@ -150,16 +152,19 @@ html[data-ua="desktop"] .hero {
   display: block;
   width: 12px;
   height: 12px;
-  line-height: 12px;
   margin-left: 5px;
-  text-indent: -9999px;
   cursor: pointer;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.6);
 }
 
-.baidufocus-focus span.hover {
-  background: #d1ad69;
+.baidufocus-focus span svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: rgba(255, 255, 255, 0.6);
+}
+
+.baidufocus-focus span.hover svg {
+  fill: #d1ad69;
 }
 
 .hf-enter-active,
