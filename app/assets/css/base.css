@@ -20,12 +20,12 @@ body.skin {
   min-width: 1232px;
   /*
    * 页头三层，都以视口中线定位，与 1200 版心对齐（版心左缘 = 50% - 600px）：
-   *   校训 motto.svg（292 宽，版心 x=1218）；实景 head-photo.webp（2 倍图，840 宽，版心 x=604）；整条 185 高的绿底。
+   *   校训 motto.svg（292 宽，版心 x=1218）；实景 head-photo.webp（2 倍图，840 宽，版心 x=653）；整条 185 高的绿底。
    * background-position 的百分比是「(容器宽 - 图宽) × 百分比」，所以 50% + (图在版心的 x - 600 + 图宽 / 2) 正好落位。
    */
   background:
     url(/img/motto.svg) calc(50% + 764px) 10px / 292px 136px no-repeat,
-    url(/img/head-photo.webp) calc(50% + 424px) 0 / 840px 185px no-repeat,
+    url(/img/head-photo.webp) calc(50% + 473px) 0 / 840px 185px no-repeat,
     linear-gradient(#286f51, #286f51) 0 0 / 100% 185px no-repeat;
 }
 
