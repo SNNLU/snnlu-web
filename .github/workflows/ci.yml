@@ -1,8 +1,8 @@
 name: CI
 
 on:
+  # 不限目标分支：叠放的 PR（base 是上一个 PR 的分支）也要跑检查
   pull_request:
-    branches: [main]
   push:
     branches: [main]
 
