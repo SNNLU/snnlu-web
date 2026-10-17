@@ -8,10 +8,15 @@ body.skin {
   position: relative;
   padding-top: 0;
   padding-bottom: 0;
-  /* 上层 logo.svg 是矢量的校徽、校名与英文；下层 head.png 只有底图。两张都是 1920 宽、居中，位置严格重合 */
-  background-image: url(/img/logo.svg), url(/img/head.png);
-  background-repeat: no-repeat;
-  background-position: center top;
+  /*
+   * 页头三层，都以视口中线定位，与 1200 版心对齐（版心左缘 = 50% - 600px）：
+   *   校训 motto.svg（292 宽，版心 x=1218）；实景 head-photo.webp（2 倍图，840 宽，版心 x=560）；整条 185 高的绿底。
+   * background-position 的百分比是「(容器宽 - 图宽) × 百分比」，所以 50% + (图在版心的 x - 600 + 图宽 / 2) 正好落位。
+   */
+  background:
+    url(/img/motto.svg) calc(50% + 764px) 10px / 292px 136px no-repeat,
+    url(/img/head-photo.webp) calc(50% + 380px) 0 / 840px 185px no-repeat,
+    linear-gradient(#286f51, #286f51) 0 0 / 100% 185px no-repeat;
 }
 
 #site {

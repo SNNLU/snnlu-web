@@ -1,6 +1,9 @@
-<!-- 页头：校名在 body 背景图里；这里只有 superfish 导航与搜索框 -->
+<!-- 页头：绿底、实景、校训铺满整条视口宽，在 body 背景里（见 base.css）；版心内的校名、分隔线、校区字样、搜索与导航在这里 -->
 <template>
   <div id="header">
+    <a class="head-brand" href="/" title="遂宁奶龙大学"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></a>
+    <span class="head-sep" aria-hidden="true" />
+    <img class="head-campus" src="/img/campus.svg" alt="遂宁校区 Suining Campus" width="136" height="54">
     <CmsBox fixed box-style="width:1196px;height:48px;left:0;top:135px;z-index:12">
       <div>
         <ul class="sf-menu sf-js-enabled sf-arrows">
@@ -17,25 +20,30 @@
         </ul>
       </div>
     </CmsBox>
-    <CmsBox fixed box-style="width:205px;height:30px;left:980px;top:63px;z-index:13">
-      <div>
-        <div>
-          <form class="search text-warning" @submit.prevent="search">
-            <input v-model="kw" type="text" class="input_kw form-control bg-transparent border-0" name="kw" placeholder="请输入搜索关键字...">
-            <button type="button" class="btn_kw_ok p-0 overflow-hidden btn btn-info opacity-0" @click="search">&nbsp;</button>
-          </form>
-        </div>
-      </div>
-    </CmsBox>
+    <!-- 普通的 GET 表单：不靠脚本也能搜，结果页从 ?kw= 读词；同原站，在新窗口打开 -->
+    <form class="search" role="search" action="/search/" method="get" target="_blank">
+      <label class="visually-hidden" for="site-kw">站内搜索</label>
+      <input id="site-kw" v-model="kw" type="search" name="kw" placeholder="请输入搜索关键字..." autocomplete="off">
+      <button type="submit" aria-label="搜索">
+        <!-- 原图里的放大镜描成矢量：镜片、左上的高光、带圆头的空心手柄 -->
+        <svg viewBox="7.5 4.5 21 21" aria-hidden="true"><circle cx="20.2" cy="12.8" r="6.9" /><path d="M15.95 11.66A4.4 4.4 0 0 1 19.06 8.55" /><path d="M16.33 18.51L10.65 24.18A1.3 1.3 0 0 1 8.82 22.35L14.49 16.67" /></svg>
+      </button>
+    </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { searchHref, type NavItem } from '#shared/cms'
+import type { NavItem } from '#shared/cms'
 
 defineProps<{ nav: NavItem[]; tab: number }>()
 
+/* 在检索页时把当前的词回填进框里；词只在地址栏里，静态页面里没有，等到浏览器里再读 */
+const route = useRoute()
 const kw = ref('')
+onMounted(() => {
+  watch(() => route.query.kw, (q) => (kw.value = route.path.startsWith('/search') && typeof q === 'string' ? q : ''), { immediate: true })
+})
+
 const open = ref('')
 let timer: ReturnType<typeof setTimeout>
 
@@ -46,9 +54,6 @@ const enter = (label: string) => {
 const leave = () => {
   timer = setTimeout(() => (open.value = ''), 500)
 }
-
-/* 检索在 /search/ 页里做，结果不分栏目 */
-const search = () => window.open(searchHref(kw.value), '_blank')
 </script>
 
 <style>
@@ -129,40 +134,108 @@ const search = () => window.open(searchHref(kw.value), '_blank')
   opacity: 0;
 }
 
-.search {
-  position: relative;
-  margin: 0;
-  padding: 0;
-  width: 205px;
-  height: 30px;
-  border: 0;
-  background-color: transparent;
+/* 校名（含校徽、英文）、分隔线、校区字样：位置与旧页头图一致（版心坐标） */
+.head-brand {
+  position: absolute;
+  left: 8px;
+  top: 23px;
+  z-index: 13;
+  line-height: 0;
 }
 
-.search .input_kw {
+.head-brand img {
+  display: block;
+}
+
+/* 分隔线：1px 实线，各种缩放下都清楚（旧图里是 2.5px 宽的糊边） */
+.head-sep {
   position: absolute;
-  width: 158px;
-  height: 30px;
-  left: 5px;
-  top: 0;
+  left: 424px;
+  top: 40px;
+  width: 1px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.head-campus {
+  position: absolute;
+  left: 450px;
+  top: 54px;
+}
+
+/* 搜索框：原先印在 head.png 上的一枚胶囊，这里用样式画出同样的胶囊（205×36，白 12.8%），位置与旧图重合 */
+.search {
+  position: absolute;
+  left: 975px;
+  top: 61px;
+  z-index: 13;
+  display: flex;
+  align-items: center;
+  width: 205px;
+  height: 36px;
+  margin: 0;
+  border-radius: 18px;
+  background-color: rgba(255, 255, 255, 0.128);
+  transition: background-color 0.2s;
+}
+
+.search:hover,
+.search:focus-within {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.search:has(:focus-visible) {
+  outline: 2px solid #d1ad69;
+  outline-offset: 2px;
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 0 0 22px;
+  border: 0;
+  outline: 0;
+  background: transparent;
   font-family: 微软雅黑;
   font-size: 14px;
-  color: #ddd;
+  color: #fff;
 }
 
-.search .input_kw::placeholder {
+.search input::placeholder {
   color: #ccc;
 }
 
-.search .btn_kw_ok {
-  display: block;
-  position: absolute;
-  text-align: center;
+.search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.search button {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 100%;
+  padding: 0 6px 0 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #fff;
   cursor: pointer;
-  width: 20px;
-  height: 30px;
-  line-height: 30px;
-  left: 165px;
-  top: 0;
+}
+
+.search button:hover {
+  color: #d1ad69;
+}
+
+.search svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 </style>
