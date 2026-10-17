@@ -4,7 +4,7 @@
     <!-- 手机版（<1024）：仿 sicnu.edu.cn 手机版，顶栏校名 + 菜单键，展开整屏菜单（快速链接、搜索、可折叠的栏目） -->
     <div class="m-bar">
       <a class="m-logo" href="/" title="遂宁奶龙大学"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></a>
-      <button type="button" class="m-burger" :class="{ on: menu }" :aria-expanded="menu" aria-controls="m-nav" :aria-label="menu ? '关闭菜单' : '打开菜单'" @click="menu = !menu"><span /></button>
+      <button type="button" class="m-burger" :class="{ on: menu }" :aria-expanded="menu" aria-controls="m-nav" :aria-label="menu ? '关闭菜单' : '打开菜单'" @click="menu = !menu"><i /><i /><i /></button>
     </div>
     <nav id="m-nav" class="m-nav" :class="{ open: menu }" aria-label="栏目">
       <div class="m-quick">

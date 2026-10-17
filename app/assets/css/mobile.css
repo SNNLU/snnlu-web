@@ -90,8 +90,13 @@
     height: 38px;
   }
 
+  /* 菜单键：三条各自独立、等宽的横杠；展开时上下两条转成 X，中间一条淡出 */
   .m-burger {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
     width: 60px;
     height: 60px;
     padding: 0;
@@ -99,47 +104,24 @@
     background: none;
   }
 
-  .m-burger span,
-  .m-burger span::before,
-  .m-burger span::after {
-    position: absolute;
-    left: 16px;
+  .m-burger i {
+    display: block;
     width: 28px;
     height: 2px;
     background: #fff;
-    transition: transform 0.3s, background-color 0.3s, top 0.3s;
+    transition: transform 0.3s, opacity 0.3s;
   }
 
-  .m-burger span {
-    top: 29px;
+  .m-burger.on i:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
   }
 
-  .m-burger span::before,
-  .m-burger span::after {
-    content: "";
-    left: 0;
+  .m-burger.on i:nth-child(2) {
+    opacity: 0;
   }
 
-  .m-burger span::before {
-    top: -9px;
-  }
-
-  .m-burger span::after {
-    top: 9px;
-  }
-
-  .m-burger.on span {
-    background: transparent;
-  }
-
-  .m-burger.on span::before {
-    top: 0;
-    transform: rotate(45deg);
-  }
-
-  .m-burger.on span::after {
-    top: 0;
-    transform: rotate(-45deg);
+  .m-burger.on i:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
   }
 
   .m-nav {
