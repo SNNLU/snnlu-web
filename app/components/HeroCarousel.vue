@@ -1,18 +1,32 @@
 <!-- 横幅：baidufocus，5 秒一换，淡入淡出 300ms；悬停暂停，悬停圆点即切换。
      在页头之下的文档流里，整宽、最宽 1920（与原站同高 465），窄屏按比例缩 -->
 <template>
-  <div class="hero">
+  <div class="hero" role="region" aria-roledescription="轮播" aria-label="横幅">
     <div class="baidufocus">
       <ul class="baidufocus_list">
         <Transition v-for="(s, i) in slides" :key="s.src" name="hf">
           <li v-show="i === at" @mouseenter="hold" @mouseleave="run">
-            <a :target="s.target" :href="s.href"><img :src="s.src" :srcset="srcset(s.src)" :sizes="SIZES" width="2000" height="484" :alt="s.alt" decoding="async" :fetchpriority="i ? 'low' : 'high'"></a>
+            <a :target="s.href ? s.target : undefined" :href="s.href || undefined"><img :src="s.src" :srcset="srcset(s.src)" :sizes="SIZES" width="2000" height="484" :alt="s.alt" decoding="async" :fetchpriority="i ? 'low' : 'high'"></a>
           </li>
         </Transition>
       </ul>
       <div class="baidufocus-btn" style="visibility:hidden"><span class="left_btn" /><span class="right_btn" /></div>
       <div class="baidufocus-focus">
-        <span v-for="(s, i) in slides" :key="s.src" :class="{ hover: i === at }" @mouseenter="show(i)" @mouseleave="run">{{ i + 1 }}</span>
+        <!-- 圆点：鼠标悬停或键盘聚焦即切到这一张 -->
+        <span
+          v-for="(s, i) in slides"
+          :key="s.src"
+          :class="{ hover: i === at }"
+          role="button"
+          tabindex="0"
+          :aria-label="`第 ${i + 1} 张：${s.alt}`"
+          :aria-pressed="i === at"
+          @mouseenter="show(i)"
+          @mouseleave="run"
+          @focus="show(i)"
+          @blur="run"
+          @keydown.enter.space.prevent="show(i)"
+        >{{ i + 1 }}</span>
       </div>
     </div>
   </div>
@@ -36,6 +50,7 @@ let timer: ReturnType<typeof setInterval> | undefined
 const hold = () => clearInterval(timer)
 const run = () => {
   hold()
+  if (reducedMotion()) return
   timer = setInterval(() => (at.value = (at.value + 1) % props.slides.length), 5000)
 }
 const show = (i: number) => {

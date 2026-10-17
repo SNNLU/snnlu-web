@@ -21,7 +21,7 @@
       <div class="div_title">{{ v.title }}<div v-if="v.subtitle !== null" class="div_subtitle">{{ v.subtitle }}</div><div class="box"><div v-html="v.info" /></div></div>
       <!-- eslint-disable-next-line vue/no-v-html -- 正文经 markdown() 逐块转义 -->
       <div class="div_content" v-html="v.body" />
-      <div class="div_bottom"><template v-for="(t, i) in v.tools" :key="t.label">{{ i ? '    ' : '' }}<a href="javascript:void(0);" @click="use(t)">{{ t.label }}</a></template></div>
+      <div class="div_bottom"><template v-for="(t, i) in v.tools" :key="t.label">{{ i ? '    ' : '' }}<button type="button" class="st-tool" @click="use(t)">{{ t.label }}</button></template></div>
       <HsFrame v-if="dialog" v-bind="dialog" @close="dialog = null" />
     </template>
 
@@ -81,3 +81,20 @@ const turn = (n: number) => (page.value = n)
 const dialog = ref<NonNullable<Tool['dialog']> | null>(null)
 const use = (t: Tool) => (t.dialog ? (dialog.value = t.dialog) : print())
 </script>
+
+<style>
+/* 正文底部的「手机版本、扫码分享、打印本页」是动作不是链接，用按钮，长得仍同原站的链接 */
+.st_div .st-tool {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  color: #369;
+  cursor: pointer;
+}
+
+.st_div .st-tool:hover {
+  color: #f00;
+}
+</style>

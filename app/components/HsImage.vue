@@ -2,12 +2,14 @@
 <template>
   <Teleport to="body">
     <div class="hs-dim" :style="{ opacity: open ? 0.2 : 0 }" @click="close" />
-    <img class="hs-image" :src="src" :style="box" @click="close">
+    <img class="hs-image" :src="src" :alt="alt" :style="box" @click="close">
   </Teleport>
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{ src: string; from: HTMLElement }>()
+/* 放大的图沿用缩略图的说明文字 */
+const alt = computed(() => props.from.getAttribute('alt') ?? '')
 const emit = defineEmits<{ close: [] }>()
 
 const MARGIN = 15

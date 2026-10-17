@@ -5,12 +5,12 @@
       <div ref="clip" class="jcarousel">
         <ul :style="{ left: `${left}px`, transition: moving ? `left 400ms ${SWING}` : 'none' }" @transitionend="moving = false">
           <li v-for="(p, i) in w.photos" :key="i">
-            <a :href="p" class="highslide" @click.prevent="zoom"><img :src="p" loading="lazy" decoding="async"></a>
+            <a :href="p" class="highslide" :title="`放大第 ${i + 1} 张`" @click.prevent="zoom"><img :src="p" :alt="`校园掠影 ${i + 1}`" loading="lazy" decoding="async"></a>
           </li>
         </ul>
       </div>
-      <a href="#" class="jcarousel-control-prev" @click.prevent="prev">&lsaquo;</a>
-      <a href="#" class="jcarousel-control-next" @click.prevent="next">&rsaquo;</a>
+      <a href="#" class="jcarousel-control-prev" role="button" aria-label="上一张" @click.prevent="prev">&lsaquo;</a>
+      <a href="#" class="jcarousel-control-next" role="button" aria-label="下一张" @click.prevent="next">&rsaquo;</a>
     </div>
     <HsImage v-if="lens" :src="lens.src" :from="lens.from" @close="lens = null" />
   </div>
@@ -84,7 +84,7 @@ function prev() {
 let timer: ReturnType<typeof setInterval>
 onMounted(() => {
   prepare(0)
-  timer = setInterval(next, 3000)
+  if (!reducedMotion()) timer = setInterval(next, 3000)
 })
 onUnmounted(() => clearInterval(timer))
 </script>
