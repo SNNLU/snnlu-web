@@ -54,6 +54,9 @@ export default defineNuxtConfig({
         {
           innerHTML: '(()=>{const ua=navigator.userAgent||"";const mobile=/Android|iPhone|iPad|iPod|Windows Phone|IEMobile|BlackBerry|BB10|Opera Mini|Mobile|HarmonyOS|OpenHarmony/i.test(ua)||(/Macintosh/i.test(ua)&&navigator.maxTouchPoints>1);document.documentElement.dataset.ua=mobile?"mobile":"desktop"})()',
         },
+        {
+          innerHTML: 'if(!location.hash)history.scrollRestoration="manual"',
+        },
       ],
     },
   },
