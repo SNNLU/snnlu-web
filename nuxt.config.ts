@@ -43,7 +43,12 @@ export default defineNuxtConfig({
         { name: 'keywords', content: '遂宁奶龙大学' },
         { name: 'description', content: '遂宁奶龙大学' },
       ],
-      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/img/badge.svg' }],
+      // 图标用校徽渲染的小 PNG（校徽 SVG 有 80KB，不宜当 favicon）
+      link: [
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32.png' },
+        { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/icon-192.png' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+      ],
     },
   },
   // 与原站同序：系统基样式 → Bootstrap 5.3.2（只取用到的部分）→ 皮肤；最后是窄屏的改写
