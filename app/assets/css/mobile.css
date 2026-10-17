@@ -91,7 +91,11 @@
   }
 
   /* 菜单键：三条各自独立、等宽的横杠；展开时上下两条转成 X，中间一条淡出 */
+  /* 钉在右上角；视口宽带小数时（某些缩放、模拟器下 375.2px）由 SiteHeader 的 snap() 挪回整像素 */
   .m-burger {
+    position: absolute;
+    top: 0;
+    right: 0;
     display: flex;
     flex-direction: column;
     align-items: center;

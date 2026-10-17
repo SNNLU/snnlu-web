@@ -4,7 +4,7 @@
     <!-- 手机版（<1024）：仿 sicnu.edu.cn 手机版，顶栏校名 + 菜单键，展开整屏菜单（快速链接、搜索、可折叠的栏目） -->
     <div class="m-bar">
       <a class="m-logo" href="/" title="遂宁奶龙大学"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></a>
-      <button type="button" class="m-burger" :class="{ on: menu }" :aria-expanded="menu" aria-controls="m-nav" :aria-label="menu ? '关闭菜单' : '打开菜单'" @click="menu = !menu"><i /><i /><i /></button>
+      <button ref="burger" type="button" class="m-burger" :class="{ on: menu }" :aria-expanded="menu" aria-controls="m-nav" :aria-label="menu ? '关闭菜单' : '打开菜单'" @click="menu = !menu"><i /><i /><i /></button>
     </div>
     <nav id="m-nav" class="m-nav" :class="{ open: menu }" aria-label="栏目">
       <div class="m-quick">
@@ -81,8 +81,22 @@ const esc = (e: KeyboardEvent) => {
   open.value = ''
 }
 watch(menu, (v) => document.documentElement.classList.toggle('m-lock', v))
-onMounted(() => addEventListener('keydown', esc))
+/* 菜单键对齐整像素：视口宽带小数时按钮落在半像素上，三条杠会被抗锯齿成长短不一 */
+const burger = ref<HTMLElement>()
+function snap() {
+  const el = burger.value
+  if (!el) return
+  el.style.translate = ''
+  const frac = el.getBoundingClientRect().left % 1
+  if (frac) el.style.translate = `${-frac}px 0`
+}
+onMounted(() => {
+  addEventListener('keydown', esc)
+  addEventListener('resize', snap)
+  snap()
+})
 onUnmounted(() => {
+  removeEventListener('resize', snap)
   removeEventListener('keydown', esc)
   document.documentElement.classList.remove('m-lock')
 })
