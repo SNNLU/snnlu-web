@@ -6,6 +6,11 @@
   font-display: swap;
 }
 
+/* 中西文自动间距：Chrome/Edge 140+、Firefox 145+、Safari 18.4+；旧内核忽略后退回无间距 */
+html {
+  text-autospace: normal;
+}
+
 /* 滚动条常驻：页面有长有短，滚动条时有时无会让居中的页头左右跳 8px */
 html.skin {
   overflow-y: scroll;
