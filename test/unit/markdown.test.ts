@@ -14,7 +14,13 @@ describe('markdown', () => {
     expect(html).toContain('第一段<br>第二行')
     expect(html).toContain('<strong><span style="font-family:simsun,serif;font-size:18px">小标题</span></strong>')
     expect(html).toContain('<ul><li>')
-    expect(html).toContain('<img src="/img/a.jpg" alt="图注" width="670">')
+    expect(html).toContain('<img src="/img/a.jpg" alt="图注" width="670" decoding="async">')
+  })
+
+  it('lazy-loads every image except the first', () => {
+    const html = markdown('![](/1.jpg)\n\n正文\n\n![](/2.jpg)\n\n![](/3.jpg)')
+    expect(html.match(/loading="lazy"/g)).toHaveLength(2)
+    expect(html).toContain('<img src="/1.jpg" alt="" width="670" decoding="async">')
   })
 
   it('never lets raw HTML through', () => {

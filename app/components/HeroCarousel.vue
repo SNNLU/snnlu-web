@@ -6,7 +6,7 @@
         <ul class="baidufocus_list">
           <Transition v-for="(s, i) in slides" :key="s.src" name="hf">
             <li v-show="i === at" @mouseenter="hold" @mouseleave="run">
-              <a :target="s.target" :href="s.href"><img style="width:1920px;height:465px" :src="s.src" :alt="s.alt"></a>
+              <a :target="s.target" :href="s.href"><img style="width:1920px;height:465px" :src="s.src" :srcset="srcset(s.src)" :sizes="SIZES" width="2000" height="484" :alt="s.alt" decoding="async" :fetchpriority="i ? 'low' : 'high'"></a>
             </li>
           </Transition>
         </ul>
@@ -23,6 +23,14 @@
 import type { Slide } from '#shared/cms'
 
 const props = defineProps<{ slides: Slide[] }>()
+
+/* 横幅有三档：banner-N.webp 是 2000 宽原档，-1280、-750 是缩小档（scripts/assets/banners.py 生成） */
+const SIZES = '1920px'
+const srcset = (src: string) =>
+  /\/banner-\d+\.webp$/.test(src)
+    ? [750, 1280].map((w) => `${src.replace(/\.webp$/, `-${w}.webp`)} ${w}w`).concat(`${src} 2000w`).join(', ')
+    : undefined
+
 const at = ref(0)
 let timer: ReturnType<typeof setInterval> | undefined
 

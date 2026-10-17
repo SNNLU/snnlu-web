@@ -8,7 +8,7 @@ function block(b: string) {
   const img = b.match(/^!\[(.*)\]\((\S+)\)$/)
   if (img) {
     const [, alt = '', src = ''] = img
-    return `<p style="text-align:center"><img src="${esc(src)}" alt="${esc(alt)}" width="670"></p>`
+    return `<p style="text-align:center"><img src="${esc(src)}" alt="${esc(alt)}" width="670" loading="lazy" decoding="async"></p>`
   }
   if (b.startsWith('## ')) return `<p class="p" style="line-height:1.5"><strong><span style="${TEXT}">${esc(b.slice(3))}</span></strong></p>`
   if (b.startsWith('- ')) {
@@ -18,7 +18,11 @@ function block(b: string) {
   return `<p class="p" style="line-height:1.5;text-indent:2em"><span style="${TEXT}">${esc(b).replace(/\n/g, '<br>')}</span></p>`
 }
 
-export const markdown = (src: string) => src.trim().split(/\n{2,}/).map(block).join('\n')
+export function markdown(src: string) {
+  const html = src.trim().split(/\n{2,}/).map(block).join('\n')
+  // 第一张图多半在首屏，不延迟；其余的滚到附近再载
+  return html.replace(' loading="lazy"', '')
+}
 
 /* 头部 --- 之间是 key: value */
 export function frontMatter(src: string) {

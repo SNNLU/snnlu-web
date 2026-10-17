@@ -5,7 +5,7 @@
       <div ref="clip" class="jcarousel">
         <ul :style="{ left: `${left}px`, transition: moving ? `left 400ms ${SWING}` : 'none' }" @transitionend="moving = false">
           <li v-for="(p, i) in w.photos" :key="i">
-            <a :href="p" class="highslide" @click.prevent="zoom"><img :src="p"></a>
+            <a :href="p" class="highslide" @click.prevent="zoom"><img :src="p" loading="lazy" decoding="async"></a>
           </li>
         </ul>
       </div>
