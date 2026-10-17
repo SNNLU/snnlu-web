@@ -49,6 +49,11 @@ for (const f of targets) {
   )
   const isNews = f.startsWith('content/news/')
 
+  // 头部字段是纯文本，渲染端虽已转义，这里再拦一道：出现尖括号基本只可能是想塞 HTML
+  for (const [k, v] of Object.entries(meta)) {
+    if (/[<>]/.test(v)) err(f, `头部 ${k} 含有 < 或 >，头部字段只能是纯文本`)
+  }
+
   for (const k of isNews ? ['title', 'date', 'folder'] : ['title']) {
     if (!meta[k]) {
       err(f, isNews
