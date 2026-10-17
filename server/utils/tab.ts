@@ -98,8 +98,7 @@ async function stOf(kind: 'news' | 'list' | 'search', arg: number): Promise<{ st
           kind: 'detail',
           title: a.title,
           subtitle: a.byline || null,
-          // info 走 v-html，头部字段来自投稿，必须转义
-          info: `时间：${esc(a.date)}:00&nbsp;&nbsp;&nbsp;来源：${esc(a.source)}&nbsp;&nbsp;&nbsp;查看：<span>${a.views}</span>`,
+          info: detailInfo(a),
           body: `<div>${a.body}
 <p style='text-align:right'>编辑：管理员</p></div>`,
           tools: [
