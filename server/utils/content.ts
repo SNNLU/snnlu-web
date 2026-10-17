@@ -40,7 +40,15 @@ export async function pageHtml(slug: string) {
   return src ? markdown(frontMatter(src).body) : ''
 }
 
-export async function articles(): Promise<Article[]> {
+/* 生成时 300 多个页面都要文章列表：解析一次、全程共用（只读，调用方不要原地改它）。
+   开发时不缓存，改了文章刷新即见 */
+let cache: Promise<Article[]> | undefined
+export function articles(): Promise<Article[]> {
+  if (import.meta.dev) return loadArticles()
+  return (cache ??= loadArticles())
+}
+
+async function loadArticles(): Promise<Article[]> {
   const keys = await store().getKeys('news')
   const all = await Promise.all(keys.map(async (key) => {
     const { meta, body } = frontMatter(String(await store().getItem(key)))
