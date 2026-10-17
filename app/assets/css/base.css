@@ -46,18 +46,6 @@ body.skin {
   margin-right: auto;
 }
 
-/* 窓の幅 ページは止まる 冬の庭 */
-html[data-ua="desktop"] .page-center {
-  margin-left: max(0px, round(nearest, calc(50% - 616px), 1px));
-}
-
-html[data-ua="desktop"] body.skin {
-  background-position:
-    round(nearest, calc(50% + 764px), 1px) 10px,
-    round(nearest, calc(50% + 380px), 1px) 0,
-    0 0;
-}
-
 /* 版心里的浮动在这里收住；超出版心的部分照原站裁掉（clip 不产生滚动容器） */
 #main {
   display: flow-root;

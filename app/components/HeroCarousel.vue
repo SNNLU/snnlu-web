@@ -82,8 +82,6 @@ onUnmounted(hold)
 html[data-ua="desktop"] .hero {
   height: var(--hero-height);
   aspect-ratio: auto;
-  margin-left: max(0px, round(nearest, calc(50% - 960px), 1px));
-  margin-right: auto;
 }
 
 .baidufocus {
@@ -143,11 +141,6 @@ html[data-ua="desktop"] .hero {
   bottom: 0;
   margin-left: -25px;
   z-index: 2;
-}
-
-html[data-ua="desktop"] .baidufocus-focus {
-  left: round(nearest, calc(50% - 25.5px), 1px);
-  margin-left: 0;
 }
 
 .baidufocus-focus span {
