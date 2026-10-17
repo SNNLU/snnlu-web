@@ -52,8 +52,6 @@ export default defineNuxtConfig({
   runtimeConfig: { commit: commit() },
   devServer: { port: 4321 },
   compatibilityDate: '2025-07-15',
-  // Bootstrap 5.3 的 SCSS 还在用 @import 与旧函数，新版 sass 会刷一屏弃用提示；依赖里的不报，本仓库只压 import 这一条
-  vite: { css: { preprocessorOptions: { scss: { quietDeps: true, silenceDeprecations: ['import'] } } } },
   // 站内图文都在 content/，构建时由服务端代码读出、生成静态页
   nitro: {
     serverAssets: [{ baseName: 'content', dir: '../content' }],
@@ -63,6 +61,8 @@ export default defineNuxtConfig({
       routes: pages(),
     },
   },
+  // Bootstrap 5.3 的 SCSS 还在用 @import 与旧函数，新版 sass 会刷一屏弃用提示；依赖里的不报，本仓库只压 import 这一条
+  vite: { css: { preprocessorOptions: { scss: { quietDeps: true, silenceDeprecations: ['import'] } } } },
   // 代码风格按仓库现状：无分号、单引号、两空格、多行末尾逗号
   eslint: { config: { stylistic: { semi: false, quotes: 'single', indent: 2, commaDangle: 'always-multiline', braceStyle: '1tbs', arrowParens: true } } },
 })
