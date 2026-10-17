@@ -9,5 +9,20 @@ export function footerHtml(src: string) {
   const sha = String(useRuntimeConfig().commit || '')
   const href = sha ? `${REPO}/commit/${sha}` : `${REPO}/commits/main`
   const badge = `<a class="commit-link" href="${href}" target="_blank" rel="noopener" title="GitHub 提交记录">${GH_MARK}<code>${sha ? sha.slice(0, 7) : 'main'}</code></a>`
-  return src.replace('{{commit}}', badge).replace('{{ext}}', EXT_ARROW)
+  return segments(src).replace('{{commit}}', badge).replace('{{ext}}', EXT_ARROW)
+}
+
+/* 「地址 | 邮编 | 电话 | 提交号」：每段包成不折行的块，竖线单独一块、其后可换行；
+   竖线落在行尾时由 SiteFooter 藏起（行尾的分隔符没有分隔作用） */
+const SEP = /((?:&nbsp;|\s)*\|(?:&nbsp;|\s)*)/
+function segments(src: string) {
+  return src.replace(/>([^<>]*)<\/span>\{\{commit\}\}/, (_, text: string) => {
+    const parts = text.split(SEP)
+    let html = ''
+    for (let i = 0; i < parts.length; i += 2) {
+      if (parts[i]) html += `<span class="ft-seg">${parts[i]}</span>`
+      if (parts[i + 1]) html += `<span class="ft-sep">${parts[i + 1]}</span><wbr>`
+    }
+    return `>${html}</span><span class="ft-seg">{{commit}}</span>`
+  })
 }

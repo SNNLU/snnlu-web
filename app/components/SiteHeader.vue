@@ -4,7 +4,7 @@
     <!-- 手机版（<1024）：仿 sicnu.edu.cn 手机版，顶栏校名 + 菜单键，展开整屏菜单（快速链接、搜索、可折叠的栏目） -->
     <div class="m-bar">
       <a class="m-logo" href="/" title="遂宁奶龙大学"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></a>
-      <button type="button" class="m-burger" :class="{ on: menu }" :aria-expanded="menu" aria-controls="m-nav" :aria-label="menu ? '关闭菜单' : '打开菜单'" @click="menu = !menu"><span /></button>
+      <button ref="burger" type="button" class="m-burger" :class="{ on: menu }" :aria-expanded="menu" aria-controls="m-nav" :aria-label="menu ? '关闭菜单' : '打开菜单'" @click="menu = !menu"><i /><i /><i /></button>
     </div>
     <nav id="m-nav" class="m-nav" :class="{ open: menu }" aria-label="栏目">
       <div class="m-quick">
@@ -29,7 +29,7 @@
         </li>
       </ul>
     </nav>
-    <a class="head-brand" href="/" title="遂宁奶龙大学"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></a>
+    <div class="head-brand"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></div>
     <span class="head-sep" aria-hidden="true" />
     <img class="head-campus" src="/img/campus.svg" alt="遂宁校区 Suining Campus" width="136" height="54">
     <CmsBox fixed cls="head-nav" box-style="left:0;right:4px;height:48px;top:135px;z-index:12">
@@ -81,8 +81,22 @@ const esc = (e: KeyboardEvent) => {
   open.value = ''
 }
 watch(menu, (v) => document.documentElement.classList.toggle('m-lock', v))
-onMounted(() => addEventListener('keydown', esc))
+/* 菜单键对齐整像素：视口宽带小数时按钮落在半像素上，三条杠会被抗锯齿成长短不一 */
+const burger = ref<HTMLElement>()
+function snap() {
+  const el = burger.value
+  if (!el) return
+  el.style.translate = ''
+  const frac = el.getBoundingClientRect().left % 1
+  if (frac) el.style.translate = `${-frac}px 0`
+}
+onMounted(() => {
+  addEventListener('keydown', esc)
+  addEventListener('resize', snap)
+  snap()
+})
 onUnmounted(() => {
+  removeEventListener('resize', snap)
   removeEventListener('keydown', esc)
   document.documentElement.classList.remove('m-lock')
 })
@@ -280,7 +294,7 @@ const leave = () => {
 }
 
 /* 1024–1199：版心随窗收，搜索框贴右，导航九项平分整行 */
-@media (max-width: 1199.98px) {
+@media (max-width: 1231.98px) {
   .search {
     left: auto;
     right: 16px;
