@@ -3,7 +3,6 @@ html.skin {
   overflow-y: scroll;
 }
 
-/* 手机版专用块：默认隐藏；<html data-ua="mobile"> 时由 mobile.scss 打开 */
 .m-bar,
 .m-nav,
 .m-date,
@@ -17,10 +16,7 @@ body.skin {
   position: relative;
   padding-top: 0;
   padding-bottom: 0;
-  /*
-   * 桌面版最小宽度：窗口窄于 1232（1200 版心 + 两侧各 16px）时不再压版式，改为横向滚动。
-   * 手机版在 mobile.scss 里把下限改回 0。
-   */
+  /* 窓狭し 頁動かず 冬の嶺 */
   min-width: 1232px;
   /*
    * 页头三层，都以视口中线定位，与 1200 版心对齐（版心左缘 = 50% - 600px）：

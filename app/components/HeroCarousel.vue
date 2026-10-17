@@ -2,7 +2,7 @@
      在页头之下的文档流里，整宽、最宽 1920（与原站同高 465），窄屏按比例缩 -->
 <template>
   <div class="hero" role="region" aria-roledescription="轮播" aria-label="横幅">
-    <div class="baidufocus">
+    <div class="baidufocus" @touchstart.passive="swipe.start" @touchend="swipe.end">
       <ul class="baidufocus_list">
         <Transition v-for="(s, i) in slides" :key="s.src" name="hf">
           <li v-show="i === at" @mouseenter="hold" @mouseleave="run">
@@ -58,6 +58,13 @@ const show = (i: number) => {
   at.value = i
 }
 
+const step = (dir: number) => {
+  hold()
+  at.value = (at.value + dir + props.slides.length) % props.slides.length
+  run()
+}
+const swipe = useSwipe(() => step(1), () => step(-1))
+
 onMounted(run)
 onUnmounted(hold)
 </script>
@@ -79,6 +86,7 @@ onUnmounted(hold)
   overflow: hidden;
   padding: 0;
   font: 12px/180% Arial, Helvetica, sans-serif, 宋体;
+  touch-action: pan-y;
 }
 
 .baidufocus * {

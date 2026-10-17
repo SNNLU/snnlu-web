@@ -8,7 +8,7 @@
           <div class="div_img0">
             <div :id="w.slider">
               <div class="fn-box" :style="{ width: `${o.w}px`, height: 'auto', border: '0px' }">
-                <div class="fn-view" :style="{ position: 'relative', overflow: 'hidden', width: `${o.w}px`, height: `${o.h - o.titleH}px` }">
+                <div class="fn-view" :style="{ position: 'relative', overflow: 'hidden', width: `${o.w}px`, height: `${o.h - o.titleH}px` }" @touchstart.passive="swipe.start" @touchend="swipe.end">
                   <div ref="pane" style="display:block;width:100%;height:100%;">
                     <a
                       class="fn-img"
@@ -107,6 +107,12 @@ function play(i: number) {
 
 onMounted(() => play(0))
 onUnmounted(() => clearTimeout(timer))
+
+const step = (dir: number) => {
+  const n = props.w.slides.length
+  if (n) play((at.value + dir + n) % n)
+}
+const swipe = useSwipe(() => step(1), () => step(-1))
 </script>
 
 <style scoped>

@@ -3,9 +3,7 @@
  * 「日 /年.月」的列表、圆角卡片、深绿页脚。只改样式与几处手机专用的小块（m-*），数据与桌面同一份。
  * 版式 JSON 带来的行内 style 与 #id 样式要盖过去，所以这里多处用 #content 打头或 !important。
  *
- * 何时用手机版：只看 User-Agent（见 nuxt.config.ts 里给 <html> 设 data-ua 的内联脚本），不再看窗宽，
- * 也不再用 hover/pointer 猜设备——手机 UA 一律手机版，桌面 UA 即使窗口很窄也保持桌面版。
- * 手机专用的块默认由 base.css 藏起，这里再把它们显示出来。
+ * スマホには 風の便りを 聞く窓辺
  */
 
 html[data-ua="mobile"] {
@@ -282,30 +280,7 @@ html[data-ua="mobile"] {
   }
 
   .hero .baidufocus .baidufocus-focus {
-    left: 0;
-    right: 0;
-    height: 24px;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    line-height: normal;
-  }
-
-  .hero .baidufocus .baidufocus-focus span {
-    top: 8px;
-    float: none;
-    width: 8px;
-    height: 8px;
-    margin: 0;
-    background: rgba(255, 255, 255, 0.7);
-    transition: width 0.3s;
-  }
-
-  .hero .baidufocus .baidufocus-focus span.hover {
-    width: 20px;
-    border-radius: 4px;
-    background: var(--m-orange);
+    display: none;
   }
 
   /* ───────── 内页抬头 ───────── */
@@ -634,6 +609,7 @@ html[data-ua="mobile"] {
     height: auto !important;
     aspect-ratio: 16 / 10;
     border-radius: 8px;
+    touch-action: pan-y;
   }
 
   #content .fn-img {
