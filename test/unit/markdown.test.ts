@@ -4,7 +4,7 @@ import { DATE, detailInfo, fullTime } from '../../server/utils/format'
 
 describe('esc', () => {
   it('escapes the five HTML-significant characters', () => {
-    expect(esc(`<a href="x" title='y'>&</a>`)).toBe('&lt;a href=&quot;x&quot; title=&#39;y&#39;&gt;&amp;&lt;/a&gt;')
+    expect(esc('<a href="x" title=\'y\'>&</a>')).toBe('&lt;a href=&quot;x&quot; title=&#39;y&#39;&gt;&amp;&lt;/a&gt;')
   })
 })
 

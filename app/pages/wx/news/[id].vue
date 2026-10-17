@@ -4,6 +4,7 @@
     <h1>{{ a.title }}</h1>
     <p class="meta">{{ a.date }}　{{ a.source }}</p>
     <p v-if="a.byline" class="meta">{{ a.byline }}</p>
+    <!-- eslint-disable-next-line vue/no-v-html -- 正文经 markdown() 逐块转义 -->
     <div class="body" v-html="a.body" />
     <p class="foot">{{ a.site }}</p>
   </div>

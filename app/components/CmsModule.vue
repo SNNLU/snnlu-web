@@ -15,6 +15,7 @@
     <div v-else-if="w.kind === 'iframe'">
       <iframe :id="w.uid" allowfullscreen="true" allowtransparency="true" :style="w.style" frameborder="0" scrolling="no" :src="w.src" />
     </div>
+    <!-- eslint-disable-next-line vue/no-v-html -- pages/*.md 经 markdown() 逐块转义 -->
     <div v-else v-html="w.html" />
   </CmsBox>
 </template>

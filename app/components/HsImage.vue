@@ -53,12 +53,12 @@ onMounted(() => {
     open.value = true
   }
   img.src = props.src
-  props.from.style.visibility = 'hidden'
+  props.from.style.visibility = 'hidden' // eslint-disable-line vue/no-mutating-props -- from 是页面上的缩略图元素，放大时藏起它是 Highslide 的本来效果
   addEventListener('keydown', esc)
 })
 
 onUnmounted(() => {
-  props.from.style.visibility = ''
+  props.from.style.visibility = '' // eslint-disable-line vue/no-mutating-props -- from 是页面上的缩略图元素，放大时藏起它是 Highslide 的本来效果
   removeEventListener('keydown', esc)
 })
 </script>

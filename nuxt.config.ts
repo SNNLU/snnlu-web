@@ -31,11 +31,8 @@ function pages() {
 }
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
+  modules: ['@nuxt/eslint'],
   devtools: { enabled: false },
-  devServer: { port: 4321 },
-  // 与原站同序：系统基样式 → Bootstrap 5.3.2 → 皮肤
-  css: ['~/assets/css/cms.css', 'bootstrap/dist/css/bootstrap.min.css', '~/assets/css/base.css'],
   app: {
     head: {
       htmlAttrs: { lang: 'zh-CN' },
@@ -49,8 +46,12 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/img/badge.svg' }],
     },
   },
+  // 与原站同序：系统基样式 → Bootstrap 5.3.2 → 皮肤
+  css: ['~/assets/css/cms.css', 'bootstrap/dist/css/bootstrap.min.css', '~/assets/css/base.css'],
   // 只在构建时由服务端读取，不下发到浏览器
   runtimeConfig: { commit: commit() },
+  devServer: { port: 4321 },
+  compatibilityDate: '2025-07-15',
   // 站内图文都在 content/，构建时由服务端代码读出、生成静态页
   nitro: {
     serverAssets: [{ baseName: 'content', dir: '../content' }],
@@ -60,4 +61,6 @@ export default defineNuxtConfig({
       routes: pages(),
     },
   },
+  // 代码风格按仓库现状：无分号、单引号、两空格、多行末尾逗号
+  eslint: { config: { stylistic: { semi: false, quotes: 'single', indent: 2, commaDangle: 'always-multiline', braceStyle: '1tbs', arrowParens: true } } },
 })
