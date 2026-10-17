@@ -55,13 +55,11 @@
               :aria-haspopup="n.children.length ? 'true' : undefined"
               :aria-expanded="n.children.length ? open === n.label : undefined"
             >{{ n.label }}</AppLink>
-            <Transition name="sf">
-              <ul v-if="n.children.length" v-show="open === n.label">
-                <li v-for="c in n.children" :key="c.label">
-                  <AppLink :target="c.target" :href="c.href" :title="c.title">{{ c.label }}</AppLink>
-                </li>
-              </ul>
-            </Transition>
+            <ul v-if="n.children.length" v-show="open === n.label">
+              <li v-for="c in n.children" :key="c.label">
+                <AppLink :target="c.target" :href="c.href" :title="c.title">{{ c.label }}</AppLink>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
@@ -141,7 +139,6 @@ const leave = () => {
   text-align: center;
   white-space: nowrap;
   background-color: transparent;
-  transition: background 0.2s;
 }
 
 .sf-menu > li {
@@ -188,16 +185,6 @@ const leave = () => {
 .sf-menu ul a:hover {
   font-size: 18px;
   color: #fff;
-}
-
-.sf-enter-active,
-.sf-leave-active {
-  transition: opacity 200ms cubic-bezier(0.37, 0, 0.63, 1);
-}
-
-.sf-enter-from,
-.sf-leave-to {
-  opacity: 0;
 }
 
 .head-top {

@@ -100,7 +100,6 @@ html[data-ua="mobile"] {
     width: 28px;
     height: 2px;
     background: #fff;
-    transition: transform 0.3s, opacity 0.3s;
   }
 
   .m-burger.on i:nth-child(1) {
@@ -127,7 +126,6 @@ html[data-ua="mobile"] {
     visibility: hidden;
     opacity: 0;
     transform: translateY(-10px);
-    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
   }
 
   .m-nav.open {
@@ -254,7 +252,6 @@ html[data-ua="mobile"] {
     stroke-width: 1.4;
     stroke-linecap: round;
     stroke-linejoin: round;
-    transition: transform 0.3s;
   }
 
   .m-menu > li.on .m-row svg {
