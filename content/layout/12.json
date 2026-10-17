@@ -10,21 +10,19 @@
      "modules": [
       {
        "key": "12_39_12_638210410582280922",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:50px;margin-right:0;margin-bottom:0;margin-left:0",
        "bar": {
-        "cell": "width:auto;background-color:#21735c",
-        "box": "overflow:hidden;width:auto;height:50px",
         "title": null,
-        "more": null
+        "more": null,
+        "boxClass": "sk_box--h50"
        },
-       "cell": "width:auto;border-bottom-width:1px;border-left-width:1px;border-right-width:1px;border-bottom-style:solid;border-left-style:solid;border-right-style:solid;border-bottom-color:#ddd;border-left-color:#ddd;border-right-color:#ddd",
-       "wrap": "width:auto;height:auto;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0",
        "widget": {
         "kind": "menu",
         "uid": "id_177fd718_271d_49e3_9221_682c1f4bb6b0",
         "focus": "id_177fd718_271d_49e3_9221_682c1f4bb6b0_",
         "source": "nav:2"
-       }
+       },
+       "boxClass": "cms-box cms-box--mt-50",
+       "cellClass": "cms-cell--boxed"
       }
      ]
     },
@@ -39,20 +37,14 @@
      "modules": [
       {
        "key": "639149559053167587",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:50px;margin-right:0;margin-bottom:50px;margin-left:0",
        "bar": null,
-       "cell": "",
-       "wrap": "",
        "widget": {
         "kind": "page",
         "slug": "departments"
-       }
+       },
+       "boxClass": "cms-box cms-box--mt-50 cms-box--mb-50"
       }
      ]
-    },
-    {
-     "t": "clear",
-     "nbsp": false
     }
    ]
   }

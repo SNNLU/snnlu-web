@@ -2,7 +2,7 @@
 <template>
   <div class="qr">
     <!-- eslint-disable-next-line vue/no-v-html -- qrcode 库生成的 SVG，输入只是网址文本 -->
-    <table align="center"><tbody><tr><td align="center" style="padding-top:10px"><div v-html="svg" /></td></tr></tbody></table>
+    <div class="qr-code"><div v-html="svg" /></div>
     <div class="title">{{ text }}<div v-if="/^https?:\/\//.test(text)" class="open"><a target="_blank" :href="text">[打开]</a></div></div>
   </div>
 </template>
@@ -28,6 +28,12 @@ useHead({ title: '生成二维码' })
 <style scoped>
 .qr {
   font-size: 16px;
+}
+
+.qr-code {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
 }
 
 .title {

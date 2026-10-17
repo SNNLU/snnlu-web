@@ -10,21 +10,19 @@
      "modules": [
       {
        "key": "19_18_17_15_12_638210410582280922",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:50px;margin-right:0;margin-bottom:0;margin-left:0",
        "bar": {
-        "cell": "width:auto;background-color:#21735c",
-        "box": "overflow:hidden;width:auto;height:50px",
         "title": null,
-        "more": null
+        "more": null,
+        "boxClass": "sk_box--h50"
        },
-       "cell": "width:auto;border-bottom-width:1px;border-left-width:1px;border-right-width:1px;border-bottom-style:solid;border-left-style:solid;border-right-style:solid;border-bottom-color:#ddd;border-left-color:#ddd;border-right-color:#ddd",
-       "wrap": "width:auto;height:auto;margin-top:0;margin-bottom:0;margin-left:0;margin-right:0",
        "widget": {
         "kind": "menu",
         "uid": "id_5baed7d5_958c_4e92_ad49_4cd9fcda1f82",
         "focus": "id_5baed7d5_958c_4e92_ad49_4cd9fcda1f82_",
         "source": "nav:4"
-       }
+       },
+       "boxClass": "cms-box cms-box--mt-50",
+       "cellClass": "cms-cell--boxed"
       }
      ]
     },
@@ -39,21 +37,16 @@
      "modules": [
       {
        "key": "19_18_17_15_12_638210576090009233",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:40px;margin-right:0;margin-bottom:0;margin-left:0",
        "bar": null,
-       "cell": "",
-       "wrap": "",
        "widget": {
         "kind": "tabpath",
         "uid": "id_046fb520_bee8_4ef4_bff6_0ac4111371b7"
-       }
+       },
+       "boxClass": "cms-box cms-box--mt-40"
       },
       {
        "key": "19_18_17_15_12_638210581453001457",
-       "style": "width:auto;height:auto;min-height:50px;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0",
        "bar": null,
-       "cell": "",
-       "wrap": "",
        "widget": {
         "kind": "list",
         "uid": "id_66130027_1a85_422d_93c7_051358935cea",
@@ -62,13 +55,10 @@
         "count": 50,
         "dated": true,
         "paged": true
-       }
+       },
+       "boxClass": "cms-box"
       }
      ]
-    },
-    {
-     "t": "clear",
-     "nbsp": false
     }
    ]
   }
