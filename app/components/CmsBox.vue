@@ -40,7 +40,5 @@ const half = (t: string) => Math.floor(t.length / 2)
 
 .sk_more {
   flex: none;
-  margin-left: auto;
-  text-align: right;
 }
 </style>
