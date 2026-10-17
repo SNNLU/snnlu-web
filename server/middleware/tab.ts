@@ -2,10 +2,12 @@
 export default defineEventHandler(async (event) => {
   const m = event.path.match(/^\/p\/([^/?]+)\/?(\?.*)?$/)
   if (!m) return
+  const [, id = '', query] = m
 
   const s = await site()
-  if (s.redirects[m[1]]) return sendRedirect(event, s.redirects[m[1]], 302)
-  if (!m[2] && !(await layout(Number(m[1])))) {
+  const to = s.redirects[id]
+  if (to) return sendRedirect(event, to, 302)
+  if (!query && !(await layout(Number(id)))) {
     setResponseHeader(event, 'content-type', 'text/html; charset=utf-8')
     return '页面不存在！'
   }

@@ -44,11 +44,14 @@ export async function articles(): Promise<Article[]> {
   const keys = await store().getKeys('news')
   const all = await Promise.all(keys.map(async (key) => {
     const { meta, body } = frontMatter(String(await store().getItem(key)))
+    const { title, date, folder } = meta
+    // 缺这三项文章没法排序、归栏：直接让生成失败，并点名是哪一篇
+    if (!title || !date || !folder) throw new Error(`${key}：头部缺少 title / date / folder`)
     return {
       id: +key.replace(/\D/g, ''),
-      title: meta.title,
-      date: meta.date,
-      folder: meta.folder,
+      title,
+      date,
+      folder,
       source: meta.source ?? '',
       byline: meta.byline ?? '',
       cover: meta.cover ?? '',

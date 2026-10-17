@@ -30,6 +30,10 @@ jobs:
       - name: 安装依赖
         run: npm ci
 
+      # Nuxt 4 默认严格模式，生成成功不代表类型没问题
+      - name: 类型检查
+        run: npm run typecheck
+
       # 与部署同一条命令：生成全部静态页，任何一页出错都会失败
       - name: 生成静态站
         run: npm run generate

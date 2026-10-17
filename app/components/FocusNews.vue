@@ -3,7 +3,8 @@
   <div>
     <div :id="w.uid">
       <div class="d-flex align-items-start w-100">
-        <div class="td_img0">
+        <!-- 栏目里没有带封面的文章时不出轮播，只留右侧条目 -->
+        <div v-if="item && shown" class="td_img0">
           <div class="div_img0">
             <div :id="w.slider">
               <div :style="{ width: `${o.w}px`, height: 'auto', border: '0px' }">
@@ -21,7 +22,7 @@
                       :key="i"
                       class="btn-num"
                       :style="{ backgroundColor: i === at ? '#ff0000' : '#333333', borderColor: i === hover ? '#ff0000' : '#eeeeee' }"
-                      :title="w.slides[i].alt"
+                      :title="w.slides[i]?.alt"
                       @mouseover="hover = i"
                       @mouseout="hover = -1"
                       @click="play(i)"
@@ -80,6 +81,7 @@ let fade: Animation | undefined
 
 function play(i: number) {
   clearTimeout(timer)
+  if (!props.w.slides.length) return
   at.value = i
   fade?.finish()
   const el = pane.value
