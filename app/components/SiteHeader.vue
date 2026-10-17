@@ -1,10 +1,38 @@
 <!-- 页头：绿底、实景、校训铺满整条视口宽，在 body 背景里（见 base.css）；版心内的校名、分隔线、校区字样、搜索与导航在这里 -->
 <template>
   <div id="header">
+    <!-- 手机版（<1024）：仿 sicnu.edu.cn 手机版，顶栏校名 + 菜单键，展开整屏菜单（快速链接、搜索、可折叠的栏目） -->
+    <div class="m-bar">
+      <a class="m-logo" href="/" title="遂宁奶龙大学"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></a>
+      <button type="button" class="m-burger" :class="{ on: menu }" :aria-expanded="menu" aria-controls="m-nav" :aria-label="menu ? '关闭菜单' : '打开菜单'" @click="menu = !menu"><span /></button>
+    </div>
+    <nav id="m-nav" class="m-nav" :class="{ open: menu }" aria-label="栏目">
+      <div class="m-quick">
+        <template v-for="(q, i) in quick" :key="q.href"><span v-if="i" aria-hidden="true">|</span><a :href="q.href" :target="q.target">{{ q.label }}</a></template>
+      </div>
+      <form class="m-search" role="search" action="/search/" method="get">
+        <label class="visually-hidden" for="m-kw">站内搜索</label>
+        <input id="m-kw" v-model="kw" type="search" name="kw" placeholder="请输入搜索关键词" autocomplete="off">
+        <button type="submit" aria-label="搜索"><svg viewBox="7.5 4.5 21 21" aria-hidden="true"><circle cx="20.2" cy="12.8" r="6.9" /><path d="M15.95 11.66A4.4 4.4 0 0 1 19.06 8.55" /><path d="M16.33 18.51L10.65 24.18A1.3 1.3 0 0 1 8.82 22.35L14.49 16.67" /></svg></button>
+      </form>
+      <ul class="m-menu">
+        <li v-for="n in nav" :key="n.label" :class="{ on: unfold === n.label }">
+          <div class="m-row">
+            <a :href="n.href" :target="n.target">{{ n.label }}</a>
+            <button v-if="n.children.length" type="button" :aria-expanded="unfold === n.label" :aria-label="`展开${n.label}`" @click="unfold = unfold === n.label ? '' : n.label">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" /></svg>
+            </button>
+          </div>
+          <ul v-if="n.children.length" v-show="unfold === n.label" class="m-sub">
+            <li v-for="c in n.children" :key="c.label"><a :href="c.href" :target="c.target">{{ c.label }}</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
     <a class="head-brand" href="/" title="遂宁奶龙大学"><img src="/img/brand.svg" alt="遂宁奶龙大学 Suining Nailong University" width="381" height="87"></a>
     <span class="head-sep" aria-hidden="true" />
     <img class="head-campus" src="/img/campus.svg" alt="遂宁校区 Suining Campus" width="136" height="54">
-    <CmsBox fixed box-style="left:0;right:4px;height:48px;top:135px;z-index:12">
+    <CmsBox fixed cls="head-nav" box-style="left:0;right:4px;height:48px;top:135px;z-index:12">
       <div>
         <ul class="sf-menu sf-js-enabled sf-arrows">
           <li v-for="n in nav" :key="n.label" :class="{ sfHover: open === n.label }" @mouseenter="enter(n.label)" @mouseleave="leave">
@@ -33,9 +61,20 @@
 </template>
 
 <script setup lang="ts">
-import type { NavItem } from '#shared/cms'
+import type { Link, NavItem } from '#shared/cms'
 
-defineProps<{ nav: NavItem[]; tab: number }>()
+defineProps<{ nav: NavItem[]; quick: Link[]; tab: number }>()
+
+/* 手机版菜单：展开时锁住页面滚动，Esc 收起；unfold 是当前展开的栏目 */
+const menu = ref(false)
+const unfold = ref('')
+const esc = (e: KeyboardEvent) => e.key === 'Escape' && (menu.value = false)
+watch(menu, (v) => document.documentElement.classList.toggle('m-lock', v))
+onMounted(() => addEventListener('keydown', esc))
+onUnmounted(() => {
+  removeEventListener('keydown', esc)
+  document.documentElement.classList.remove('m-lock')
+})
 
 /* 在检索页时把当前的词回填进框里；词只在地址栏里，静态页面里没有，等到浏览器里再读 */
 const route = useRoute()

@@ -9,6 +9,7 @@ export const rowOf = (a: Article, count: number, date: 'full' | 'short' | '') =>
   href: detailHref(a.id),
   target: '_blank',
   date: date && ` ${date === 'full' ? a.date.slice(0, 10) : a.date.slice(5, 10)} `,
+  ymd: a.date.slice(0, 10),
 })
 
 /* 当前栏目在导航里的位置 */
@@ -127,6 +128,7 @@ const shell = (s: Site, id: number) => ({
   id,
   nav: s.nav.map((n) => ({ ...n, target: n.target ?? '_self', children: n.children.map((c) => ({ ...c, target: c.target ?? '_self', title: c.label })) })),
   hero: [],
+  quick: s.quick.map((q) => ({ ...q, target: '_blank', title: q.label })),
   footer: footerHtml(s.footer),
 })
 

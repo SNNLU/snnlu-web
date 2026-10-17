@@ -7,6 +7,7 @@
             <div v-for="r in rows" :key="r.href + r.title" class="div_item col">
               <div>
                 <div class="div_title">
+                  <MDate v-if="r.date && r.ymd" :ymd="r.ymd" />
                   <div v-if="r.date" class="date">{{ r.date }}</div>
                   <a :target="r.target" :href="r.href" :title="r.tip">{{ r.title }}</a>
                 </div>

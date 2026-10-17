@@ -32,6 +32,7 @@
             <div class="div_item">
               <div class="div_itemtitle">
                 <div class="other" style="float:right">{{ r.date }}</div>
+                <MDate v-if="r.ymd" :ymd="r.ymd" />
                 <!-- eslint-disable-next-line vue/no-v-html -- mark() 先转义再标红 -->
                 <a :target="r.target" :href="r.href" v-html="r.title" />
                 <div style="clear:both;height:1px;width:auto;overflow:hidden">&nbsp;</div>

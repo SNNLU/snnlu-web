@@ -16,6 +16,8 @@ export interface Row {
   href: string
   target: string
   date: string
+  /* 整篇的日期 YYYY-MM-DD；手机版排成「日 /年.月」 */
+  ymd?: string
 }
 
 export interface Paging {
@@ -107,6 +109,8 @@ export interface Tab {
   st: St | null
   hero: Slide[]
   nav: NavItem[]
+  /* 快速链接：手机版放在菜单顶部与页脚 */
+  quick: Link[]
   footer: string
 }
 
