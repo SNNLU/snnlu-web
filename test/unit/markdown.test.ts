@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { esc, frontMatter, markdown } from '../../server/utils/markdown'
-import { detailInfo } from '../../server/utils/format'
+import { DATE, detailInfo, fullTime } from '../../server/utils/format'
 
 describe('esc', () => {
   it('escapes the five HTML-significant characters', () => {
@@ -40,5 +40,21 @@ describe('detailInfo', () => {
     const info = detailInfo({ date: '2026-10-17 10:00', source: '<img src=x onerror=alert(1)>', views: 3 })
     expect(info).not.toContain('<img')
     expect(info).toContain('来源：&lt;img src=x onerror=alert(1)&gt;')
+  })
+})
+
+describe('fullTime', () => {
+  it('adds seconds only when the time is given', () => {
+    expect(fullTime('2026-10-16 08:30')).toBe('2026-10-16 08:30:00')
+    expect(fullTime('2026-10-16')).toBe('2026-10-16')
+  })
+
+  it('keeps date-only articles readable on the detail page', () => {
+    expect(detailInfo({ date: '2026-10-16', source: '', views: 0 })).toMatch(/^时间：2026-10-16&nbsp;/)
+  })
+
+  it('shares the accepted formats with the validator', () => {
+    expect(['2026-10-16', '2026-10-16 08:30'].every((d) => DATE.test(d))).toBe(true)
+    expect(['2026/10/16', '2026-10-16 8:30', '2026-10-16T08:30'].some((d) => DATE.test(d))).toBe(false)
   })
 })

@@ -47,6 +47,8 @@ export async function articles(): Promise<Article[]> {
     const { title, date, folder } = meta
     // 缺这三项文章没法排序、归栏：直接让生成失败，并点名是哪一篇
     if (!title || !date || !folder) throw new Error(`${key}：头部缺少 title / date / folder`)
+    // 排序按字符串比较，格式不统一会排乱；CI 只校验改动的文件，这里兜住本地生成
+    if (!DATE.test(date)) throw new Error(`${key}：date 应为 YYYY-MM-DD 或 YYYY-MM-DD HH:mm，当前是 "${date}"`)
     return {
       id: +key.replace(/\D/g, ''),
       title,
