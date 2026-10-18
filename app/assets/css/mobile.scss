@@ -639,6 +639,7 @@ html[data-ua="mobile"] {
     background-color: var(--m-orange) !important;
   }
 
+  /* 图片下的新闻标题只占一行，放不下就打省略号 */
   #content .fn-box .caption {
     height: auto !important;
     padding: 14px 0 6px;
@@ -646,7 +647,9 @@ html[data-ua="mobile"] {
     font: 600 17px/1.5 var(--m-font) !important;
     color: var(--m-text) !important;
     text-align: left;
-    white-space: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   #content .div_items .table_item {
