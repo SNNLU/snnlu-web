@@ -114,3 +114,7 @@
 .div_list .div_item .img_div .img .dateimg_bottom {
   transition: none !important;
 }
+
+.pagination .page-link {
+  transition: none;
+}
