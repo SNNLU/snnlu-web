@@ -1,5 +1,6 @@
 <template>
   <template v-if="tab">
+    <CmsStyle :css="tab.css" />
     <!-- 键盘用户的第一个 Tab：跳过页头与导航 -->
     <a class="skip-link visually-hidden-focusable" href="#content">跳到正文</a>
     <!-- 页头 → 横幅（整宽，在文档流里）→ 正文与页脚；页头与正文各在一个 1200 版心里 -->
@@ -63,6 +64,5 @@ useHead({
   title: () => tab.value?.title,
   htmlAttrs: { class: 'skin' },
   bodyAttrs: { class: 'skin' },
-  style: () => (tab.value ? [{ key: 'cms', innerHTML: tab.value.css }] : []),
 })
 </script>
