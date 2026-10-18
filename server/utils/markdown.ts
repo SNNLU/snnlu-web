@@ -91,7 +91,7 @@ function inline(text: string) {
   let last = 0
   for (const m of text.matchAll(LINK)) {
     out += esc(text.slice(last, m.index)).replace(/\n/g, '<br>')
-    if (m[3]) out += `<a href="${esc(m[3])}" target="_blank" rel="noopener"><img src="${esc(m[2]!)}" alt="${esc(m[1]!)}" style="height:1.4em;vertical-align:middle" decoding="async"></a>`
+    if (m[3]) out += `<a href="${esc(m[3])}" target="_blank" rel="noopener"><img class="md-icon" src="${esc(m[2]!)}" alt="${esc(m[1]!)}" style="height:1.4em;vertical-align:middle" decoding="async"></a>`
     else out += `<a href="mailto:${esc(encodeURIComponent(m[5]!))}@${esc(domainToASCII(m[6]!) || m[6]!)}" style="font:inherit">${esc(m[4]!)}</a>`
     last = m.index + m[0].length
   }

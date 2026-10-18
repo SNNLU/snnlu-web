@@ -30,7 +30,7 @@ describe('markdown', () => {
 
   it('renders https-linked icons inline in a paragraph', () => {
     const html = markdown('欢迎 [![徽章](/img/a.svg)](https://github.com/SNNLU/snnlu-web) 投稿')
-    expect(html).toContain('欢迎 <a href="https://github.com/SNNLU/snnlu-web" target="_blank" rel="noopener"><img src="/img/a.svg" alt="徽章"')
+    expect(html).toContain('欢迎 <a href="https://github.com/SNNLU/snnlu-web" target="_blank" rel="noopener"><img class="md-icon" src="/img/a.svg" alt="徽章"')
     expect(html).toContain('</a> 投稿')
     expect(markdown('[![x](/img/a.svg)](javascript:alert(1))')).not.toContain('<a ')
   })
