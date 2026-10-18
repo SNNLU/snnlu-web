@@ -804,7 +804,7 @@ html[data-ua="mobile"] {
     font-size: 16px !important;
   }
 
-  .st_div .div_content img {
+  .st_div .div_content img:not(.md-icon) {
     width: 100%;
     height: auto;
     border-radius: 6px;
