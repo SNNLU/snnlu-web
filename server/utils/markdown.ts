@@ -1,4 +1,4 @@
-/* 只认四种块：段落、图片、二级标题、列表；排版照原站正文（宋体 18px，首行缩进两字） */
+/* 只认几种块：段落、图片（可带 https 链接）、二级标题、列表；排版照原站正文（宋体 18px，首行缩进两字） */
 /* 凡是拼进 HTML（最后走 v-html）的内容字段都要先过这里；单双引号都转，属性用哪种引号都安全 */
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -75,14 +75,18 @@ function imageSize(src: string): Size | null {
   return size
 }
 
+function imgTag(alt: string, src: string) {
+  const size = imageSize(src)
+  const height = size && size.w > 0 ? Math.round(670 * size.h / size.w) : 0
+  return `<img src="${esc(src)}" alt="${esc(alt)}" width="670"${height ? ` height="${height}"` : ''} loading="lazy" decoding="async">`
+}
+
 function block(b: string) {
   const img = b.match(/^!\[(.*)\]\((\S+)\)$/)
-  if (img) {
-    const [, alt = '', src = ''] = img
-    const size = imageSize(src)
-    const height = size && size.w > 0 ? Math.round(670 * size.h / size.w) : 0
-    return `<p style="text-align:center"><img src="${esc(src)}" alt="${esc(alt)}" width="670"${height ? ` height="${height}"` : ''} loading="lazy" decoding="async"></p>`
-  }
+  if (img) return `<p style="text-align:center">${imgTag(img[1] ?? '', img[2] ?? '')}</p>`
+  /* 带链接的图：[![图注](/img/x.svg)](https://…)，只认 https，新窗口打开 */
+  const linked = b.match(/^\[!\[(.*)\]\((\S+)\)\]\((https:\/\/\S+)\)$/)
+  if (linked) return `<p style="text-align:center"><a href="${esc(linked[3] ?? '')}" target="_blank" rel="noopener">${imgTag(linked[1] ?? '', linked[2] ?? '')}</a></p>`
   if (b.startsWith('## ')) return `<p class="p" style="line-height:1.5"><strong><span style="${TEXT}">${esc(b.slice(3))}</span></strong></p>`
   if (b.startsWith('- ')) {
     const items = b.split('\n').map((l) => `<li><span style="${TEXT}">${esc(l.replace(/^- /, ''))}</span></li>`)
