@@ -107,3 +107,10 @@
     padding: 2px;
   }
 }
+
+/* 版式 JSON 里的 .div_list .div_item 及日期图都带 transition:.5s，列表条目不需要动画 */
+.div_list .div_item,
+.div_list .div_item .img_div .img .dateimg_top,
+.div_list .div_item .img_div .img .dateimg_bottom {
+  transition: none !important;
+}
