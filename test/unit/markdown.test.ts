@@ -35,6 +35,11 @@ describe('markdown', () => {
     expect(markdown('[![x](/img/a.svg)](javascript:alert(1))')).not.toContain('<a ')
   })
 
+  it('links mailto addresses in paragraphs and list items, punycoding the domain', () => {
+    expect(markdown('- [yes@遂宁奶龙大学.lol](mailto:yes@遂宁奶龙大学.lol)')).toContain('<a href="mailto:yes@xn--psszg58c9c2281ajit.lol" style="font:inherit">yes@遂宁奶龙大学.lol</a>')
+    expect(markdown('[t](mailto:t@tchirek.top)')).toContain('<a href="mailto:t@tchirek.top" style="font:inherit">t</a>')
+  })
+
   it('never lets raw HTML through', () => {
     const html = markdown('<script>alert(1)</script>\n\n## <b>x</b>\n\n- <i>y</i>\n\n![" onerror="alert(1)](/x.jpg)')
     expect(html).not.toMatch(/<script|<b>|<i>|" onerror="/)

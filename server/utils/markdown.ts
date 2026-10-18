@@ -1,7 +1,8 @@
-/* 只认几种块：段落（可夹带 https 链接小图标）、图片、二级标题、列表；排版照原站正文（宋体 18px，首行缩进两字） */
+/* 只认几种块：段落、列表项（可夹带电邮链接与 https 链接小图标）、图片、二级标题、列表；排版照原站正文（宋体 18px，首行缩进两字） */
 /* 凡是拼进 HTML（最后走 v-html）的内容字段都要先过这里；单双引号都转，属性用哪种引号都安全 */
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { domainToASCII } from 'node:url'
 
 export const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
 
@@ -81,14 +82,17 @@ function imgTag(alt: string, src: string) {
   return `<img src="${esc(src)}" alt="${esc(alt)}" width="670"${height ? ` height="${height}"` : ''} loading="lazy" decoding="async">`
 }
 
-/* 段落里的 [![图注](/img/x.svg)](https://…)：与字等高的小图标，只认 https，新窗口打开 */
-const BADGE = /\[!\[([^\]]*)\]\((\/img\/\S+?)\)\]\((https:\/\/[^\s)]+)\)/g
+/* 段落与列表项里的两种链接：
+   [![图注](/img/x.svg)](https://…)  与字等高的小图标，只认 https，新窗口打开
+   [显示文字](mailto:地址)           电邮链接；域名是中文时 href 用 punycode，显示文字照写 */
+const LINK = /\[!\[([^\]]*)\]\((\/img\/\S+?)\)\]\((https:\/\/[^\s)]+)\)|\[([^\]![][^\]]*)\]\(mailto:([^\s)@]+)@([^\s)]+)\)/g
 function inline(text: string) {
   let out = ''
   let last = 0
-  for (const m of text.matchAll(BADGE)) {
+  for (const m of text.matchAll(LINK)) {
     out += esc(text.slice(last, m.index)).replace(/\n/g, '<br>')
-    out += `<a href="${esc(m[3]!)}" target="_blank" rel="noopener"><img src="${esc(m[2]!)}" alt="${esc(m[1]!)}" style="height:1.4em;vertical-align:middle" decoding="async"></a>`
+    if (m[3]) out += `<a href="${esc(m[3])}" target="_blank" rel="noopener"><img src="${esc(m[2]!)}" alt="${esc(m[1]!)}" style="height:1.4em;vertical-align:middle" decoding="async"></a>`
+    else out += `<a href="mailto:${esc(encodeURIComponent(m[5]!))}@${esc(domainToASCII(m[6]!) || m[6]!)}" style="font:inherit">${esc(m[4]!)}</a>`
     last = m.index + m[0].length
   }
   return out + esc(text.slice(last)).replace(/\n/g, '<br>')
@@ -99,7 +103,7 @@ function block(b: string) {
   if (img) return `<p style="text-align:center">${imgTag(img[1] ?? '', img[2] ?? '')}</p>`
   if (b.startsWith('## ')) return `<p class="p" style="line-height:1.5"><strong><span style="${TEXT}">${esc(b.slice(3))}</span></strong></p>`
   if (b.startsWith('- ')) {
-    const items = b.split('\n').map((l) => `<li><span style="${TEXT}">${esc(l.replace(/^- /, ''))}</span></li>`)
+    const items = b.split('\n').map((l) => `<li><span style="${TEXT}">${inline(l.replace(/^- /, ''))}</span></li>`)
     return `<ul>${items.join('')}</ul>`
   }
   return `<p class="p" style="line-height:1.5;text-indent:2em"><span style="${TEXT}">${inline(b)}</span></p>`
