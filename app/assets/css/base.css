@@ -11,6 +11,11 @@ html {
   text-autospace: normal;
 }
 
+/* Bootstrap reboot 给 :root 设了 smooth：路由回顶、返回顶部、滚动恢复都会被拖成一段缓动，读者先看到旧位置再被慢慢拽回顶部 */
+:root {
+  scroll-behavior: auto;
+}
+
 /* 滚动条常驻：页面有长有短，滚动条时有时无会让居中的页头左右跳 8px */
 html.skin {
   overflow-y: scroll;
