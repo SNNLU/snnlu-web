@@ -108,6 +108,11 @@ onUnmounted(() => ro?.disconnect())
   flex: none;
 }
 
+/* 引用的字样连同两侧引号与句号算一个整体，折行时不许拆开 */
+#footer .naiwa-quote {
+  white-space: nowrap;
+}
+
 /* naiwa.win：下划线 + 右上箭头，示意跳到外站 */
 #footer .naiwa-link {
   color: #fff;

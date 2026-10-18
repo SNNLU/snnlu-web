@@ -1,6 +1,6 @@
 {
  "name": "遂宁奶龙大学",
- "footer": "<div><p style=\"text-align:center\"><span style=\"color: rgb(255, 255, 255); font-family: 微软雅黑, &quot;Microsoft YaHei&quot;; font-size: 16px;\">地址：四川省遂宁市奶龙西路120号&nbsp;&nbsp;|&nbsp; 邮编：114514&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;联系电话：0825-1919810&nbsp;&nbsp;|&nbsp;&nbsp;</span>{{commit}}</p><p style=\"text-align:center\"><span style=\"color: rgb(255, 255, 255); font-family: &quot;Comic Sans MS&quot;, &quot;Comic Neue&quot;, sans-serif; font-size: 16px; font-weight: 400;\">This isn't a real website its based off the game \"<a class=\"naiwa-link\" href=\"https://naiwa.win/\" target=\"_blank\" rel=\"noopener\"><span>naiwa.win</span>{{ext}}</a>\".</span></p></div>",
+ "footer": "<div><p style=\"text-align:center\"><span style=\"color: rgb(255, 255, 255); font-family: 微软雅黑, &quot;Microsoft YaHei&quot;; font-size: 16px;\">地址：四川省遂宁市奶龙西路120号&nbsp;&nbsp;|&nbsp; 邮编：114514&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;联系电话：0825-1919810&nbsp;&nbsp;|&nbsp;&nbsp;</span>{{commit}}</p><p style=\"text-align:center\"><span style=\"color: rgb(255, 255, 255); font-family: &quot;Comic Sans MS&quot;, &quot;Comic Neue&quot;, sans-serif; font-size: 16px; font-weight: 400;\">This isn't a real website its based off the game <span class=\"naiwa-quote\">\"<a class=\"naiwa-link\" href=\"https://naiwa.win/\" target=\"_blank\" rel=\"noopener\"><span>naiwa.win</span>{{ext}}</a>\".</span></span></p></div>",
  "nav": [
   { "label": "首页", "href": "/p/0/", "children": [] },
   { "label": "奶龙概况", "href": "/p/9", "parent": "/p/1/", "children": [
