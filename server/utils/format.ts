@@ -8,6 +8,6 @@ export const DATE = /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/
 /* 原站时间带秒：写了时分就补 :00，只写日期就只显示日期 */
 export const fullTime = (date: string) => (date.length > 10 ? `${date}:00` : date)
 
-/* 详情页标题下那一行：时间、来源、查看次数。头部字段来自投稿，必须转义 */
-export const detailInfo = (a: Pick<Article, 'date' | 'source' | 'views'>) =>
-  `时间：${esc(fullTime(a.date))}&nbsp;&nbsp;&nbsp;来源：${esc(a.source)}&nbsp;&nbsp;&nbsp;查看：<span>${a.views}</span>`
+/* 详情页标题下那一行：时间、来源。头部字段来自投稿，必须转义 */
+export const detailInfo = (a: Pick<Article, 'date' | 'source'>) =>
+  `时间：${esc(fullTime(a.date))}&nbsp;&nbsp;&nbsp;来源：${esc(a.source)}`

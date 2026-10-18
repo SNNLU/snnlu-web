@@ -60,7 +60,7 @@ describe('frontMatter', () => {
 
 describe('detailInfo', () => {
   it('escapes submitted fields (stored XSS regression)', () => {
-    const info = detailInfo({ date: '2026-10-17 10:00', source: '<img src=x onerror=alert(1)>', views: 3 })
+    const info = detailInfo({ date: '2026-10-17 10:00', source: '<img src=x onerror=alert(1)>' })
     expect(info).not.toContain('<img')
     expect(info).toContain('来源：&lt;img src=x onerror=alert(1)&gt;')
   })
@@ -73,7 +73,7 @@ describe('fullTime', () => {
   })
 
   it('keeps date-only articles readable on the detail page', () => {
-    expect(detailInfo({ date: '2026-10-16', source: '', views: 0 })).toMatch(/^时间：2026-10-16&nbsp;/)
+    expect(detailInfo({ date: '2026-10-16', source: '' })).toMatch(/^时间：2026-10-16&nbsp;/)
   })
 
   it('shares the accepted formats with the validator', () => {

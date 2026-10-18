@@ -20,7 +20,6 @@ export interface Article {
   source: string
   byline: string
   cover: string
-  views: number
   body: string
 }
 
@@ -65,7 +64,6 @@ async function loadArticles(): Promise<Article[]> {
       source: meta.source ?? '',
       byline: meta.byline ?? '',
       cover: meta.cover ?? '',
-      views: +(meta.views ?? 0),
       body: markdown(body),
     }
   }))
